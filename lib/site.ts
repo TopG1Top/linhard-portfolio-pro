@@ -4,8 +4,8 @@ export const site = {
   email: "linhard79@hotmail.com.com",
   location: "Schweiz",
   github: "https://github.com/TopG1Top",
-  linkedin: "https://www.linkedin.com/in/linhard",
-  cvUrl: "/cv/Linhard_Zejneli_CV.pdf",
+  linkedin: "https://www.linkedin.com/in/linhard-zejneli-8803a4363/",
+  cvUrl: "/cv/CV_Linhard_Zejneli.pdf",
   nav: [
     { href: "/", key: "home" },
     { href: "/about", key: "about" },
