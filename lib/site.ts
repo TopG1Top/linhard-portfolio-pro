@@ -1,7 +1,7 @@
 export const site = {
   name: "Linhard Zejneli",
   tagline: "Entwicklung • Kreativer Problemlöser • Zielorientiert",
-  email: "linhard79@hotmail.com.com",
+  email: "linhard79@hotmail.com.",
   location: "Schweiz",
   github: "https://github.com/TopG1Top",
   linkedin: "https://www.linkedin.com/in/linhard-zejneli-8803a4363/",
