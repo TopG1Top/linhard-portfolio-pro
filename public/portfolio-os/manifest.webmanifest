@@ -1,0 +1,11 @@
+{
+  "name": "Linhard Zejneli Portfolio OS",
+  "short_name": "Linhard OS",
+  "description": "Interaktives Portfolio von Linhard Zejneli als modernes Desktop-Erlebnis.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#061018",
+  "theme_color": "#071018",
+  "lang": "de",
+  "orientation": "any"
+}

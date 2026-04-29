@@ -1,0 +1,68 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Portfolio OS preview</title>
+  <desc id="desc">A mobile-friendly desktop operating system style portfolio with windows, dock, command palette, and app cards.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#061018"/>
+      <stop offset=".5" stop-color="#12384A"/>
+      <stop offset="1" stop-color="#E9F8FF"/>
+    </linearGradient>
+    <linearGradient id="card" x1="164" y1="92" x2="1018" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#E0F2FE"/>
+    </linearGradient>
+    <filter id="shadow" x="82" y="54" width="1038" height="676" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="28" stdDeviation="36" flood-color="#020617" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="760" fill="url(#bg)"/>
+  <path d="M0 610C139 548 248 640 402 592C578 536 657 394 837 408C992 420 1068 500 1200 472V760H0V610Z" fill="#38BDF8" opacity=".22"/>
+  <g opacity=".15" stroke="#BAE6FD" stroke-width="2">
+    <path d="M0 180H1200"/>
+    <path d="M0 300H1200"/>
+    <path d="M0 420H1200"/>
+    <path d="M0 540H1200"/>
+    <path d="M160 0V760"/>
+    <path d="M320 0V760"/>
+    <path d="M480 0V760"/>
+    <path d="M640 0V760"/>
+    <path d="M800 0V760"/>
+    <path d="M960 0V760"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="82" width="980" height="584" rx="28" fill="#E0F7FF" opacity=".82"/>
+    <rect x="148" y="122" width="904" height="448" rx="20" fill="url(#card)" stroke="#38BDF8" stroke-width="4"/>
+    <rect x="148" y="122" width="904" height="62" rx="20" fill="#F8FAFC"/>
+    <circle cx="188" cy="154" r="10" fill="#FB7185"/>
+    <circle cx="222" cy="154" r="10" fill="#FBBF24"/>
+    <circle cx="256" cy="154" r="10" fill="#34D399"/>
+    <text x="558" y="162" text-anchor="middle" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="900">Portfolio OS</text>
+
+    <rect x="188" y="222" width="400" height="260" rx="18" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text x="226" y="278" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="900">IMS / WEB / DATA / DESIGN</text>
+    <text x="226" y="340" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="48" font-weight="900">Linhard</text>
+    <text x="226" y="390" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Desktop Portfolio</text>
+    <rect x="226" y="426" width="126" height="44" rx="10" fill="#0EA5E9"/>
+    <rect x="366" y="426" width="126" height="44" rx="10" fill="#F8FAFC" stroke="#CBD5E1"/>
+
+    <rect x="628" y="222" width="364" height="260" rx="18" fill="#0F172A"/>
+    <rect x="660" y="258" width="132" height="72" rx="14" fill="#38BDF8"/>
+    <rect x="816" y="258" width="132" height="72" rx="14" fill="#FB923C"/>
+    <rect x="660" y="354" width="132" height="72" rx="14" fill="#A78BFA"/>
+    <rect x="816" y="354" width="132" height="72" rx="14" fill="#34D399"/>
+    <text x="694" y="304" fill="#082F49" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="900">PR</text>
+    <text x="852" y="304" fill="#431407" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="900">CMD</text>
+    <text x="702" y="400" fill="#2E1065" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="900">T</text>
+    <text x="858" y="400" fill="#052E16" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="900">UX</text>
+
+    <rect x="260" y="600" width="680" height="72" rx="26" fill="#F8FAFC" fill-opacity=".88"/>
+    <rect x="300" y="616" width="46" height="46" rx="14" fill="#0EA5E9"/>
+    <rect x="388" y="616" width="46" height="46" rx="14" fill="#FB923C"/>
+    <rect x="476" y="616" width="46" height="46" rx="14" fill="#A78BFA"/>
+    <rect x="564" y="616" width="46" height="46" rx="14" fill="#34D399"/>
+    <rect x="652" y="616" width="46" height="46" rx="14" fill="#0F172A"/>
+    <rect x="740" y="616" width="46" height="46" rx="14" fill="#F59E0B"/>
+    <rect x="828" y="616" width="46" height="46" rx="14" fill="#14B8A6"/>
+  </g>
+</svg>

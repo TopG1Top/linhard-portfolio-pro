@@ -16,9 +16,9 @@ export function ProjectCard({
   className?: string;
 }) {
   return (
-    <div className={cn("h-full transition-transform will-change-transform hover:-translate-y-1", className)}>
+    <div className={cn("h-full min-w-0 transition-transform will-change-transform hover:-translate-y-1", className)}>
       <Card className="group flex h-full flex-col overflow-hidden rounded-lg border bg-card/85 shadow-sm transition-shadow hover:shadow-xl">
-        <div className={cn("relative overflow-hidden border-b bg-muted", featured ? "h-64" : "h-48")}>
+        <div className={cn("relative overflow-hidden border-b bg-muted", featured ? "h-52 sm:h-64" : "h-44 sm:h-48")}>
           <img
             src={p.image.src}
             alt={p.image.alt}
@@ -30,9 +30,9 @@ export function ProjectCard({
           </div>
         </div>
         <CardHeader className="pb-2">
-          <CardTitle className="flex items-start justify-between gap-2">
-            <span className="leading-tight">{p.title}</span>
-            <div className="flex shrink-0 items-center gap-1">
+          <CardTitle className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <span className="min-w-0 leading-tight">{p.title}</span>
+            <div className="flex flex-wrap items-center gap-1 sm:shrink-0">
               {p.demo && (
                 <a href={p.demo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs transition hover:bg-accent">
                   <ExternalLink className="h-4 w-4" /> Demo

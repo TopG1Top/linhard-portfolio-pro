@@ -1,0 +1,2488 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#071018">
+  <meta name="description" content="Linhard Zejneli Portfolio OS - ein interaktives Web-Portfolio mit Desktop, Apps, Projekten, Skills und Kontakt.">
+  <meta property="og:title" content="Linhard Zejneli | Portfolio OS">
+  <meta property="og:description" content="Ein interaktives Portfolio als modernes Mini-Betriebssystem.">
+  <meta property="og:type" content="website">
+  <title>Linhard Zejneli | Portfolio OS</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bg: #061018;
+      --bg-2: #0b1721;
+      --surface: rgba(10, 22, 31, 0.78);
+      --surface-strong: rgba(13, 27, 39, 0.94);
+      --surface-soft: rgba(255, 255, 255, 0.06);
+      --line: rgba(255, 255, 255, 0.14);
+      --line-strong: rgba(255, 255, 255, 0.24);
+      --text: #f3f7fb;
+      --muted: #9eb0bf;
+      --quiet: #698193;
+      --accent: #22d3ee;
+      --accent-2: #f59e0b;
+      --accent-3: #34d399;
+      --accent-4: #f472b6;
+      --danger: #fb7185;
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.48);
+      --radius: 8px;
+      --window-radius: 14px;
+      --menu-h: 34px;
+      --dock-h: 78px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    html[data-theme="summit"] {
+      --bg: #07130d;
+      --bg-2: #0e1b13;
+      --surface: rgba(11, 24, 17, 0.78);
+      --surface-strong: rgba(13, 31, 23, 0.94);
+      --accent: #38bdf8;
+      --accent-2: #f97316;
+      --accent-3: #84cc16;
+      --accent-4: #eab308;
+    }
+
+    html[data-theme="atelier"] {
+      --bg: #120d11;
+      --bg-2: #1b1419;
+      --surface: rgba(28, 19, 25, 0.8);
+      --surface-strong: rgba(35, 24, 31, 0.95);
+      --accent: #2dd4bf;
+      --accent-2: #f43f5e;
+      --accent-3: #a3e635;
+      --accent-4: #f59e0b;
+    }
+
+    html[data-theme="daylight"] {
+      --bg: #e8eef3;
+      --bg-2: #dbe7ee;
+      --surface: rgba(255, 255, 255, 0.76);
+      --surface-strong: rgba(255, 255, 255, 0.94);
+      --surface-soft: rgba(5, 18, 28, 0.06);
+      --line: rgba(8, 22, 33, 0.14);
+      --line-strong: rgba(8, 22, 33, 0.24);
+      --text: #0c1821;
+      --muted: #415565;
+      --quiet: #72808a;
+      --accent: #0369a1;
+      --accent-2: #c2410c;
+      --accent-3: #047857;
+      --accent-4: #be185d;
+      --shadow: 0 26px 70px rgba(26, 46, 61, 0.24);
+    }
+
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.45 var(--font);
+      letter-spacing: 0;
+      user-select: none;
+    }
+
+    button, input, textarea {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    a { color: inherit; }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    #wallpaper {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    #grain {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.16;
+      background-image:
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at 50% 50%, black, transparent 75%);
+    }
+
+    .menubar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--menu-h);
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      background: color-mix(in srgb, var(--surface-strong) 82%, transparent);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(22px) saturate(1.35);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: max-content;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-mark,
+    .dock-icon,
+    .desktop-icon-mark {
+      display: grid;
+      place-items: center;
+      color: #041016;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.9), transparent 28%),
+        linear-gradient(135deg, var(--accent), var(--accent-2) 54%, var(--accent-3));
+    }
+
+    .brand-mark {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      font-size: 0.72rem;
+      font-weight: 900;
+    }
+
+    .menu-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .menu-button,
+    .icon-button,
+    .pill-button,
+    .window-control,
+    .dock-button,
+    .desktop-icon,
+    .palette-item,
+    .seg-button {
+      transition: transform 140ms ease, background 140ms ease, border-color 140ms ease, color 140ms ease, opacity 140ms ease;
+    }
+
+    .menu-button {
+      height: 26px;
+      padding: 0 10px;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .menu-button:hover,
+    .menu-button.is-active {
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    .system-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: max-content;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-3);
+      box-shadow: 0 0 18px var(--accent-3);
+    }
+
+    #desktop {
+      position: fixed;
+      inset: var(--menu-h) 0 var(--dock-h) 0;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    .desktop-grid {
+      position: absolute;
+      inset: 22px auto auto 22px;
+      display: grid;
+      grid-template-columns: repeat(2, 82px);
+      gap: 14px;
+      z-index: 1;
+    }
+
+    .desktop-icon {
+      width: 82px;
+      padding: 8px 6px;
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--text);
+      text-align: center;
+    }
+
+    .desktop-icon:hover,
+    .desktop-icon:focus-visible {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .desktop-icon-mark {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 7px;
+      border-radius: 12px;
+      font-weight: 900;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+    }
+
+    .desktop-icon span:last-child {
+      display: block;
+      overflow-wrap: anywhere;
+      font-size: 0.72rem;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.42);
+    }
+
+    .window {
+      position: absolute;
+      min-width: 320px;
+      min-height: 238px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--window-radius);
+      background: var(--surface);
+      box-shadow: var(--shadow), inset 0 1px rgba(255,255,255,0.12);
+      backdrop-filter: blur(26px) saturate(1.45);
+      transform-origin: 50% 50%;
+    }
+
+    .window.is-opening { animation: pop 190ms cubic-bezier(.2, .8, .2, 1); }
+    .window.is-focused {
+      border-color: color-mix(in srgb, var(--accent) 62%, var(--line));
+      box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--accent) 28%, transparent), inset 0 1px rgba(255,255,255,0.14);
+    }
+
+    @keyframes pop {
+      from { opacity: 0; transform: translateY(8px) scale(0.96); }
+    }
+
+    .titlebar {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 10px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface-strong) 62%, transparent);
+      cursor: grab;
+    }
+
+    .titlebar:active { cursor: grabbing; }
+
+    .window-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 60px;
+      flex: 0 0 auto;
+    }
+
+    .window-control {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      padding: 0;
+      border: 1px solid rgba(0,0,0,0.18);
+    }
+
+    .window-control.close { background: #fb7185; }
+    .window-control.min { background: #fbbf24; }
+    .window-control.max { background: #34d399; }
+    .window-control:hover { transform: scale(1.16); }
+
+    .window-title {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .window-title b { color: var(--text); font-weight: 800; }
+    .title-spacer { width: 60px; flex: 0 0 auto; }
+
+    .window-body {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      background: linear-gradient(180deg, rgba(255,255,255,0.035), transparent 160px);
+    }
+
+    .resize-handle {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 18px;
+      height: 18px;
+      cursor: nwse-resize;
+      z-index: 5;
+    }
+
+    .resize-handle::after {
+      content: "";
+      position: absolute;
+      right: 5px;
+      bottom: 5px;
+      width: 7px;
+      height: 7px;
+      border-right: 2px solid var(--line-strong);
+      border-bottom: 2px solid var(--line-strong);
+    }
+
+    .app {
+      min-height: 100%;
+      padding: 18px;
+    }
+
+    .app-tight { padding: 0; }
+
+    .stack { display: grid; gap: 14px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) 220px;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .panel,
+    .metric,
+    .project-card,
+    .skill-row,
+    .note-list,
+    .finder-side,
+    .finder-main,
+    .music-stage,
+    .setting-row,
+    .contact-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.055);
+    }
+
+    .hero-copy {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 9px;
+      font-size: 2.6rem;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    h2 { margin-bottom: 10px; font-size: 1.25rem; letter-spacing: 0; }
+    h3 { margin-bottom: 6px; font-size: 0.98rem; letter-spacing: 0; }
+    p { color: var(--muted); }
+
+    .lead {
+      max-width: 62ch;
+      margin-bottom: 16px;
+      color: color-mix(in srgb, var(--text) 76%, var(--muted));
+      font-size: 1rem;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .pill-button,
+    .icon-button,
+    .seg-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.07);
+      color: var(--text);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .pill-button.primary {
+      color: #041016;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      font-weight: 900;
+    }
+
+    .pill-button:hover,
+    .icon-button:hover,
+    .seg-button:hover {
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-1px);
+    }
+
+    .pill-button.primary:hover {
+      background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
+    }
+
+    .portrait {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      min-height: 245px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 45% 30%, rgba(255,255,255,0.24), transparent 24%),
+        linear-gradient(145deg, color-mix(in srgb, var(--accent) 78%, black), color-mix(in srgb, var(--accent-2) 70%, black) 55%, color-mix(in srgb, var(--accent-3) 60%, black));
+    }
+
+    .portrait::before {
+      content: "LZ";
+      position: absolute;
+      inset: 20px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.32);
+      border-radius: var(--radius);
+      color: rgba(255,255,255,0.92);
+      font-size: 4.6rem;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .portrait::after {
+      content: "";
+      position: absolute;
+      inset: auto 18px 18px;
+      height: 54px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.22) 0 18%, transparent 18% 24%, rgba(255,255,255,0.18) 24% 60%, transparent 60% 66%, rgba(255,255,255,0.16) 66%);
+    }
+
+    .metric {
+      padding: 12px;
+      min-width: 0;
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text);
+      font-size: 1.45rem;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric span,
+    .meta {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .section-title h2 { margin: 0; }
+
+    .project-card,
+    .panel,
+    .contact-card {
+      padding: 13px;
+    }
+
+    .project-card {
+      display: grid;
+      gap: 10px;
+      min-height: 168px;
+    }
+
+    .project-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 0 8px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--accent) 48%, var(--line));
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 0 7px;
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      color: color-mix(in srgb, var(--accent) 82%, var(--text));
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .skill-row {
+      padding: 10px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .skill-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.84rem;
+    }
+
+    .meter {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .meter span {
+      display: block;
+      width: var(--value);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+      transform-origin: left;
+      animation: grow 800ms cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    @keyframes grow { from { transform: scaleX(0); } }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 22px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 6px;
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      box-shadow: 0 0 16px var(--accent-2);
+    }
+
+    .timeline-item::after {
+      content: "";
+      position: absolute;
+      left: 9px;
+      top: 20px;
+      bottom: -10px;
+      width: 1px;
+      background: var(--line);
+    }
+
+    .timeline-item:last-child::after { display: none; }
+
+    .finder {
+      height: 100%;
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+    }
+
+    .finder-side {
+      border-radius: 0;
+      border-width: 0 1px 0 0;
+      padding: 12px;
+      overflow: auto;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .finder-main {
+      border: 0;
+      border-radius: 0;
+      padding: 14px;
+      overflow: auto;
+      background: transparent;
+    }
+
+    .side-label {
+      margin: 8px 0 6px;
+      color: var(--quiet);
+      font-size: 0.7rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .side-button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 32px;
+      margin-bottom: 4px;
+      padding: 0 8px;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+    }
+
+    .side-button:hover,
+    .side-button.is-active {
+      color: var(--text);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(106px, 1fr));
+      gap: 10px;
+    }
+
+    .file-tile {
+      min-height: 104px;
+      padding: 11px 8px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.045);
+      color: var(--text);
+      text-align: center;
+    }
+
+    .file-tile:hover {
+      border-color: var(--line);
+      background: rgba(255,255,255,0.085);
+      transform: translateY(-1px);
+    }
+
+    .file-mark {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 8px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-4));
+      color: #041016;
+      font-weight: 950;
+    }
+
+    .file-name {
+      font-size: 0.78rem;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .terminal {
+      height: 100%;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      background: #05090d;
+      color: #d7e7f3;
+      font-family: var(--mono);
+    }
+
+    html[data-theme="daylight"] .terminal {
+      background: #071018;
+      color: #d7e7f3;
+    }
+
+    .terminal-output {
+      padding: 14px;
+      overflow: auto;
+      user-select: text;
+    }
+
+    .terminal-line { margin: 0 0 7px; }
+    .terminal-line .prompt { color: #38bdf8; }
+    .terminal-line .ok { color: #34d399; }
+    .terminal-line .warn { color: #fbbf24; }
+    .terminal-line .err { color: #fb7185; }
+
+    .terminal-form {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.035);
+    }
+
+    .terminal-form span { color: #38bdf8; }
+    .terminal-input {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: inherit;
+      font-family: inherit;
+    }
+
+    .notes {
+      height: 100%;
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+    }
+
+    .note-list {
+      border-radius: 0;
+      border-width: 0 1px 0 0;
+      padding: 10px;
+      overflow: auto;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .note-button {
+      width: 100%;
+      min-height: 48px;
+      margin-bottom: 6px;
+      padding: 7px 8px;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+    }
+
+    .note-button:hover,
+    .note-button.is-active {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+    }
+
+    .note-title {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 800;
+    }
+
+    .note-preview {
+      display: block;
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--quiet);
+      font-size: 0.75rem;
+    }
+
+    .editor {
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .editor-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .note-editor {
+      width: 100%;
+      height: 100%;
+      padding: 16px;
+      border: 0;
+      outline: 0;
+      resize: none;
+      background: transparent;
+      color: var(--text);
+      font: 0.95rem/1.7 var(--font);
+      user-select: text;
+    }
+
+    .music {
+      display: grid;
+      gap: 14px;
+    }
+
+    .music-stage {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .music-canvas {
+      width: 100%;
+      height: 150px;
+      border-radius: var(--radius);
+      background: #071018;
+      display: block;
+    }
+
+    .track-row {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) 48px;
+      gap: 9px;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 9px;
+      border-radius: 7px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid transparent;
+      text-align: left;
+    }
+
+    .track-row:hover,
+    .track-row.is-active {
+      border-color: var(--line);
+      background: rgba(255,255,255,0.085);
+    }
+
+    .track-num {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--accent) 22%, transparent);
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .track-title { display: block; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .track-artist { display: block; color: var(--quiet); font-size: 0.76rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .track-time { color: var(--quiet); font-family: var(--mono); font-size: 0.76rem; }
+
+    .progress {
+      height: 7px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .progress span {
+      display: block;
+      width: var(--progress, 0%);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .calculator {
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      background: rgba(255,255,255,0.025);
+    }
+
+    .calc-display {
+      padding: 18px;
+      text-align: right;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono);
+    }
+
+    .calc-expression {
+      min-height: 20px;
+      color: var(--quiet);
+      font-size: 0.82rem;
+    }
+
+    .calc-value {
+      margin-top: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 2.2rem;
+      line-height: 1.1;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+    }
+
+    .calc-key {
+      min-height: 54px;
+      background: color-mix(in srgb, var(--surface-strong) 82%, black);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .calc-key:hover { background: color-mix(in srgb, var(--accent) 14%, var(--surface-strong)); }
+    .calc-key.op { color: var(--accent); font-weight: 900; }
+    .calc-key.eq { background: var(--accent); color: #041016; font-weight: 950; }
+    .calc-key.wide { grid-column: span 2; }
+
+    .settings {
+      display: grid;
+      gap: 12px;
+    }
+
+    .setting-row {
+      min-height: 52px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .setting-row strong { display: block; margin-bottom: 2px; }
+
+    .segmented {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .seg-button.is-active {
+      background: color-mix(in srgb, var(--accent) 24%, transparent);
+      border-color: color-mix(in srgb, var(--accent) 58%, var(--line));
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .switch {
+      width: 44px;
+      height: 24px;
+      padding: 2px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .switch span {
+      display: block;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--muted);
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .switch[aria-pressed="true"] span {
+      transform: translateX(20px);
+      background: var(--accent-3);
+    }
+
+    #dock {
+      position: fixed;
+      left: 50%;
+      bottom: 10px;
+      z-index: 90;
+      display: flex;
+      align-items: end;
+      gap: 8px;
+      max-width: min(94vw, 820px);
+      padding: 8px 10px;
+      border: 1px solid var(--line-strong);
+      border-radius: 18px;
+      background: color-mix(in srgb, var(--surface-strong) 78%, transparent);
+      box-shadow: 0 18px 48px rgba(0,0,0,0.34);
+      backdrop-filter: blur(24px) saturate(1.35);
+      transform: translateX(-50%);
+      scrollbar-width: none;
+    }
+
+    #dock::-webkit-scrollbar { display: none; }
+
+    .dock-button {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      padding: 0;
+      border-radius: 14px;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .dock-button:hover {
+      transform: translateY(-7px);
+    }
+
+    .dock-button.is-open::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 2px;
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: var(--accent);
+      transform: translateX(-50%);
+    }
+
+    .dock-icon {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto;
+      border-radius: 13px;
+      font-weight: 950;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.24);
+    }
+
+    .tooltip {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 9px);
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface-strong);
+      color: var(--text);
+      font-size: 0.72rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(4px);
+      transition: opacity 140ms ease, transform 140ms ease;
+    }
+
+    .dock-button:hover .tooltip,
+    .icon-button:hover .tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #notices {
+      position: fixed;
+      top: calc(var(--menu-h) + 12px);
+      right: 12px;
+      z-index: 120;
+      display: grid;
+      gap: 8px;
+      width: min(310px, calc(100vw - 24px));
+      pointer-events: none;
+    }
+
+    .notice {
+      padding: 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      background: var(--surface-strong);
+      box-shadow: 0 14px 38px rgba(0,0,0,0.28);
+      pointer-events: auto;
+      animation: notice-in 220ms ease both;
+    }
+
+    @keyframes notice-in {
+      from { opacity: 0; transform: translateX(20px); }
+    }
+
+    .notice strong { display: block; margin-bottom: 3px; }
+    .notice span { color: var(--muted); font-size: 0.82rem; }
+
+    .palette {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      place-items: start center;
+      padding-top: 11vh;
+      background: rgba(0,0,0,0.42);
+      backdrop-filter: blur(8px);
+    }
+
+    .palette.is-open { display: grid; }
+
+    .palette-box {
+      width: min(620px, calc(100vw - 26px));
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      background: var(--surface-strong);
+      box-shadow: var(--shadow);
+    }
+
+    .palette-input {
+      width: 100%;
+      height: 58px;
+      padding: 0 18px;
+      border: 0;
+      outline: 0;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .palette-list {
+      max-height: 360px;
+      overflow: auto;
+      padding: 8px;
+    }
+
+    .palette-item {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 48px;
+      padding: 0 9px;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+    }
+
+    .palette-item:hover,
+    .palette-item.is-active {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .palette-item small {
+      color: var(--quiet);
+      white-space: nowrap;
+    }
+
+    .empty {
+      padding: 24px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .motion-off *,
+    .motion-off *::before,
+    .motion-off *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .portrait { min-height: 180px; }
+      .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      :root { --menu-h: 42px; --dock-h: 86px; }
+      body { font-size: 13px; }
+      .menu-tabs .menu-button:not([data-command="palette"]) { display: none; }
+      .system-area .status-text { display: none; }
+      .desktop-grid { display: none; }
+      .window {
+        position: fixed !important;
+        left: 8px !important;
+        right: 8px !important;
+        top: calc(var(--menu-h) + 8px) !important;
+        bottom: calc(var(--dock-h) + 8px) !important;
+        width: auto !important;
+        height: auto !important;
+        min-width: 0;
+        min-height: 0;
+        border-radius: 12px;
+      }
+      .resize-handle { display: none; }
+      .grid-2,
+      .grid-3,
+      .notes,
+      .finder { grid-template-columns: 1fr; }
+      .finder-side,
+      .note-list {
+        border-width: 0 0 1px;
+        max-height: 156px;
+      }
+      .note-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+      .note-button { margin: 0; }
+      h1 { font-size: 2rem; }
+      #dock {
+        width: calc(100vw - 16px);
+        justify-content: space-between;
+        overflow-x: auto;
+      }
+      .dock-button { flex: 0 0 54px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="wallpaper" aria-hidden="true"></canvas>
+  <div id="grain" aria-hidden="true"></div>
+
+  <header class="menubar">
+    <button class="brand menu-button" data-open="home" aria-label="Home öffnen">
+      <span class="brand-mark">LZ</span>
+      <span>Portfolio OS</span>
+    </button>
+    <nav class="menu-tabs" aria-label="Systemnavigation">
+      <button class="menu-button is-active" data-open="home">Home</button>
+      <button class="menu-button" data-open="portfolio">Portfolio</button>
+      <button class="menu-button" data-open="projects">Projekte</button>
+      <button class="menu-button" data-command="arrange">Anordnen</button>
+      <button class="menu-button" data-command="palette">Command</button>
+    </nav>
+    <div class="system-area">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="status-text">GitHub ready</span>
+      <span id="clock">--:--</span>
+    </div>
+  </header>
+
+  <main id="desktop" aria-label="Desktop">
+    <div class="desktop-grid" id="desktopIcons"></div>
+  </main>
+
+  <nav id="dock" aria-label="Dock"></nav>
+  <div id="notices" aria-live="polite" aria-atomic="true"></div>
+
+  <section class="palette" id="palette" role="dialog" aria-modal="true" aria-label="Command Palette">
+    <div class="palette-box">
+      <label class="sr-only" for="paletteInput">Befehl suchen</label>
+      <input class="palette-input" id="paletteInput" autocomplete="off" spellcheck="false" placeholder="Befehl oder App suchen">
+      <div class="palette-list" id="paletteList"></div>
+    </div>
+  </section>
+
+  <noscript>
+    <main style="padding: 32px; max-width: 760px; margin: auto; font-family: system-ui, sans-serif;">
+      <h1>Linhard Zejneli</h1>
+      <p>IMS Schueler aus Brugg mit Fokus auf Webentwicklung, Datenanalyse, UI/UX und digitale Projekte.</p>
+      <p><a href="/">Portfolio öffnen</a></p>
+    </main>
+  </noscript>
+
+  <script>
+    "use strict";
+
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+    const storeKey = "linhard-portfolio-os-v5";
+    const notesKey = "linhard-portfolio-notes-v5";
+
+    const personal = {
+      name: "Linhard Zejneli",
+      role: "IMS Schueler / Webentwicklung / Portfolio",
+      place: "Brugg, Schweiz",
+      website: "/",
+      kaggle: "https://www.kaggle.com/linhardzejneli",
+      linkedin: "https://www.linkedin.com/pub/dir/Linhard/Zejneli",
+      contact: "/contact"
+    };
+
+    const skills = [
+      ["HTML / CSS", 94, "Semantische Seiten, responsives Layout, Animationen"],
+      ["JavaScript", 88, "Interaktion, State, Canvas, LocalStorage"],
+      ["UI / UX Design", 84, "Klare Screens, schnelle Wege, starke Praesentation"],
+      ["Python / Daten", 76, "Analyse, Automatisierung, saubere Auswertung"],
+      ["Kommunikation", 90, "Teamwork, Struktur, Feedback, Verantwortung"],
+      ["Sportlicher Fokus", 92, "Disziplin, Ausdauer, Spielverstaendnis"]
+    ];
+
+    const projects = [
+      {
+        title: "Portfolio OS",
+        status: "Live",
+        body: "Dieses Projekt: ein interaktives Web-Portfolio als Desktop mit Apps, Fenster-Manager, Terminal, Notizen, Themes und Canvas-Visuals.",
+        tags: ["HTML", "CSS", "JavaScript", "Canvas", "Vercel"],
+        link: personal.website
+      },
+      {
+        title: "IMS Project Lab",
+        status: "Build",
+        body: "Sammlung für Schul- und Praxisprojekte: Web-Prototypen, Datenideen, kleine Tools und sauber dokumentierte Experimente.",
+        tags: ["IMS", "Web", "Dokumentation", "Prototyping"]
+      },
+      {
+        title: "Data Story Dashboard",
+        status: "Concept",
+        body: "Ein Dashboard-Konzept für Datenanalyse mit klaren Kennzahlen, Filtern und visuellem Storytelling.",
+        tags: ["Python", "Data", "Charts", "Insights"],
+        link: personal.kaggle
+      },
+      {
+        title: "FC Brugg Performance",
+        status: "Concept",
+        body: "Idee für ein Trainings- und Match-Tracking: Ziele, Fortschritt, Team-Momente und persoenliche Entwicklung.",
+        tags: ["Sport", "Teamwork", "Tracking", "Focus"]
+      }
+    ];
+
+    const timeline = [
+      ["Aktuell", "IMS Schueler", "Kantonsschule Baden / Brugg"],
+      ["Laufend", "Web & Portfolio Projekte", "Frontend, Design, Daten und digitale Tools"],
+      ["Aktuell", "FC Brugg", "Teamgeist, Disziplin und Wettkampf"],
+      ["Naechster Schritt", "GitHub & Live Deploy", "Repository, Vercel, README und saubere Versionierung"]
+    ];
+
+    const tracks = [
+      ["Launch Sequence", "Focus Desk", "3:24"],
+      ["Clean Build", "Night Sprint", "4:08"],
+      ["Data Lines", "Signal Lab", "3:56"],
+      ["Brugg Lights", "Portfolio Radio", "4:32"],
+      ["Final Push", "Deploy Mode", "3:48"]
+    ];
+
+    const appMeta = {
+      home: { title: "Home", icon: "LH", width: 790, height: 560, x: 76, y: 46 },
+      portfolio: { title: "Portfolio", icon: "P", width: 660, height: 570, x: 118, y: 64 },
+      projects: { title: "Projekte", icon: "PR", width: 760, height: 560, x: 150, y: 72 },
+      finder: { title: "Finder", icon: "F", width: 650, height: 430, x: 86, y: 86 },
+      terminal: { title: "Terminal", icon: "T", width: 660, height: 420, x: 162, y: 102 },
+      notes: { title: "Notizen", icon: "N", width: 610, height: 470, x: 132, y: 92 },
+      music: { title: "Music", icon: "M", width: 520, height: 560, x: 214, y: 58 },
+      calc: { title: "Rechner", icon: "C", width: 320, height: 440, x: 330, y: 106 },
+      settings: { title: "Settings", icon: "S", width: 550, height: 470, x: 248, y: 88 }
+    };
+
+    const state = {
+      windows: new Map(),
+      active: null,
+      z: 30,
+      theme: "aurora",
+      motion: true,
+      particles: [],
+      music: { track: 0, playing: false, progress: 0, timer: null, raf: null },
+      calc: { value: "0", expression: "", operator: "", previous: "", reset: false },
+      notes: [],
+      activeNote: null,
+      paletteIndex: 0
+    };
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storeKey) || "{}");
+        if (saved.theme) state.theme = saved.theme;
+        if (typeof saved.motion === "boolean") state.motion = saved.motion;
+      } catch (error) {}
+
+      try {
+        state.notes = JSON.parse(localStorage.getItem(notesKey) || "null") || defaultNotes();
+      } catch (error) {
+        state.notes = defaultNotes();
+      }
+      state.activeNote = state.notes[0] && state.notes[0].id;
+      applyTheme();
+    }
+
+    function saveState() {
+      localStorage.setItem(storeKey, JSON.stringify({ theme: state.theme, motion: state.motion }));
+    }
+
+    function saveNotes() {
+      localStorage.setItem(notesKey, JSON.stringify(state.notes));
+    }
+
+    function defaultNotes() {
+      return [
+        {
+          id: "vision",
+          title: "Portfolio Vision",
+          body: "Ziel: Ein Portfolio, das sofort aufauffällt, aber trotzdem sauber, schnell und serioes bleibt.\n\n- klare Projekte\n- echte Kontaktwege\n- GitHub-ready Struktur\n- Fokus auf Lernen, Teamwork und Fortschritt"
+        },
+        {
+          id: "deploy",
+          title: "Deploy Check",
+          body: "1. index.html im Repository lassen\n2. README pruefen\n3. Vercel aktivieren\n4. Live-Link im Profil teilen"
+        }
+      ];
+    }
+
+    function applyTheme() {
+      document.documentElement.dataset.theme = state.theme;
+      document.body.classList.toggle("motion-off", !state.motion);
+      saveState();
+      renderThemeButtons();
+    }
+
+    function initWallpaper() {
+      const canvas = $("#wallpaper");
+      const ctx = canvas.getContext("2d");
+      const colors = {
+        aurora: ["#061018", "#102538", "#0a2d2f", "#d97706"],
+        summit: ["#06130d", "#12301f", "#06354c", "#d97706"],
+        atelier: ["#120d11", "#341b2a", "#06333a", "#be123c"],
+        daylight: ["#dce8ef", "#f6fbff", "#b9d7e6", "#f97316"]
+      };
+
+      function resize() {
+        const scale = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.floor(innerWidth * scale);
+        canvas.height = Math.floor(innerHeight * scale);
+        canvas.style.width = innerWidth + "px";
+        canvas.style.height = innerHeight + "px";
+        ctx.setTransform(scale, 0, 0, scale, 0, 0);
+        state.particles = Array.from({ length: Math.min(74, Math.max(34, Math.floor(innerWidth / 18))) }, () => ({
+          x: Math.random() * innerWidth,
+          y: Math.random() * innerHeight,
+          vx: (Math.random() - 0.5) * 0.36,
+          vy: (Math.random() - 0.5) * 0.36,
+          r: 1 + Math.random() * 2.3
+        }));
+      }
+
+      function draw() {
+        const palette = colors[state.theme] || colors.aurora;
+        const gradient = ctx.createLinearGradient(0, 0, innerWidth, innerHeight);
+        gradient.addColorStop(0, palette[0]);
+        gradient.addColorStop(0.45, palette[1]);
+        gradient.addColorStop(1, palette[2]);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, innerWidth, innerHeight);
+
+        const pulse = state.motion ? Math.sin(Date.now() / 1800) * 0.12 + 0.88 : 0.86;
+        const halo = ctx.createRadialGradient(innerWidth * 0.72, innerHeight * 0.25, 0, innerWidth * 0.72, innerHeight * 0.25, Math.max(innerWidth, innerHeight) * 0.55);
+        halo.addColorStop(0, palette[3] + "55");
+        halo.addColorStop(0.45, palette[3] + "18");
+        halo.addColorStop(1, "transparent");
+        ctx.globalAlpha = pulse;
+        ctx.fillStyle = halo;
+        ctx.fillRect(0, 0, innerWidth, innerHeight);
+        ctx.globalAlpha = 1;
+
+        for (let i = 0; i < state.particles.length; i += 1) {
+          const p = state.particles[i];
+          if (state.motion) {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < -20) p.x = innerWidth + 20;
+            if (p.x > innerWidth + 20) p.x = -20;
+            if (p.y < -20) p.y = innerHeight + 20;
+            if (p.y > innerHeight + 20) p.y = -20;
+          }
+          ctx.beginPath();
+          ctx.fillStyle = i % 4 === 0 ? "rgba(245,158,11,0.78)" : "rgba(255,255,255,0.72)";
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          for (let j = i + 1; j < state.particles.length; j += 1) {
+            const q = state.particles[j];
+            const dx = p.x - q.x;
+            const dy = p.y - q.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 108) {
+              ctx.strokeStyle = "rgba(255,255,255," + (0.13 - dist / 940) + ")";
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(q.x, q.y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      window.addEventListener("resize", resize);
+      draw();
+    }
+
+    function tickClock() {
+      const now = new Date();
+      const day = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"][now.getDay()];
+      $("#clock").textContent = day + " " + String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
+    }
+
+    function renderDesktop() {
+      const ids = ["home", "portfolio", "projects", "finder", "terminal", "notes"];
+      $("#desktopIcons").innerHTML = ids.map(id => {
+        const app = appMeta[id];
+        return `<button class="desktop-icon" data-open="${id}">
+          <span class="desktop-icon-mark">${app.icon}</span>
+          <span>${app.title}</span>
+        </button>`;
+      }).join("");
+
+      $("#dock").innerHTML = Object.entries(appMeta).map(([id, app]) => `
+        <button class="dock-button" data-open="${id}" aria-label="${app.title} öffnen" id="dock-${id}">
+          <span class="dock-icon">${app.icon}</span>
+          <span class="tooltip">${app.title}</span>
+        </button>
+      `).join("");
+    }
+
+    function openWindow(id) {
+      const app = appMeta[id];
+      if (!app) return;
+      const existing = state.windows.get(id);
+      if (existing) {
+        existing.hidden = false;
+        existing.classList.remove("is-minimized");
+        focusWindow(id);
+        runAppInit(id);
+        return;
+      }
+
+      const win = document.createElement("article");
+      win.className = "window is-opening";
+      win.dataset.app = id;
+      win.style.width = app.width + "px";
+      win.style.height = app.height + "px";
+      win.style.left = Math.min(app.x + Math.random() * 30, innerWidth - app.width - 20) + "px";
+      win.style.top = Math.min(app.y + Math.random() * 22, innerHeight - app.height - 120) + "px";
+      win.style.zIndex = String(++state.z);
+      win.innerHTML = `
+        <div class="titlebar" data-drag-handle>
+          <div class="window-controls">
+            <button class="window-control close" data-window-action="close" aria-label="Schliessen"></button>
+            <button class="window-control min" data-window-action="minimize" aria-label="Minimieren"></button>
+            <button class="window-control max" data-window-action="maximize" aria-label="Maximieren"></button>
+          </div>
+          <div class="window-title"><span>${app.icon}</span><b>${app.title}</b></div>
+          <div class="title-spacer"></div>
+        </div>
+        <div class="window-body">${renderApp(id)}</div>
+        <div class="resize-handle" data-resize-handle></div>
+      `;
+      $("#desktop").appendChild(win);
+      state.windows.set(id, win);
+      makeDraggable(win);
+      makeResizable(win);
+      win.addEventListener("pointerdown", () => focusWindow(id));
+      focusWindow(id);
+      updateDock();
+      runAppInit(id);
+      setTimeout(() => win.classList.remove("is-opening"), 240);
+    }
+
+    function focusWindow(id) {
+      const win = state.windows.get(id);
+      if (!win) return;
+      state.active = id;
+      $$(".window").forEach(item => item.classList.remove("is-focused"));
+      win.classList.add("is-focused");
+      win.style.zIndex = String(++state.z);
+      $$(".menu-button[data-open]").forEach(btn => btn.classList.toggle("is-active", btn.dataset.open === id));
+    }
+
+    function closeWindow(id) {
+      const win = state.windows.get(id);
+      if (!win) return;
+      if (id === "music") stopMusic();
+      win.style.opacity = "0";
+      win.style.transform = "scale(0.96)";
+      setTimeout(() => {
+        win.remove();
+        state.windows.delete(id);
+        state.active = state.windows.size ? Array.from(state.windows.keys()).pop() : null;
+        updateDock();
+      }, 130);
+    }
+
+    function minimizeWindow(id) {
+      const win = state.windows.get(id);
+      if (!win) return;
+      win.hidden = true;
+      updateDock();
+    }
+
+    function maximizeWindow(id) {
+      const win = state.windows.get(id);
+      if (!win) return;
+      if (win.dataset.maximized === "true") {
+        const prev = JSON.parse(win.dataset.prev || "{}");
+        Object.assign(win.style, prev);
+        win.dataset.maximized = "false";
+      } else {
+        win.dataset.prev = JSON.stringify({
+          left: win.style.left,
+          top: win.style.top,
+          width: win.style.width,
+          height: win.style.height
+        });
+        Object.assign(win.style, {
+          left: "10px",
+          top: "10px",
+          width: "calc(100% - 20px)",
+          height: "calc(100% - 20px)"
+        });
+        win.dataset.maximized = "true";
+      }
+      focusWindow(id);
+    }
+
+    function arrangeWindows() {
+      const visible = Array.from(state.windows.entries()).filter(([, win]) => !win.hidden);
+      visible.forEach(([id, win], index) => {
+        const cols = innerWidth > 980 ? 2 : 1;
+        const col = index % cols;
+        const row = Math.floor(index / cols);
+        const width = cols === 2 ? Math.min(560, Math.floor((innerWidth - 90) / 2)) : Math.min(620, innerWidth - 40);
+        const height = Math.min(420, innerHeight - 160);
+        Object.assign(win.style, {
+          width: width + "px",
+          height: height + "px",
+          left: (24 + col * (width + 20)) + "px",
+          top: (24 + row * 38) + "px"
+        });
+        win.dataset.maximized = "false";
+        focusWindow(id);
+      });
+      notice("Fenster", "Layout neu angeordnet.");
+    }
+
+    function updateDock() {
+      Object.keys(appMeta).forEach(id => {
+        const btn = $("#dock-" + id);
+        if (btn) btn.classList.toggle("is-open", state.windows.has(id));
+      });
+    }
+
+    function makeDraggable(win) {
+      const handle = $("[data-drag-handle]", win);
+      let start = null;
+      handle.addEventListener("pointerdown", event => {
+        if (event.target.closest("button") || matchMedia("(max-width: 720px)").matches) return;
+        if (win.dataset.maximized === "true") return;
+        start = {
+          x: event.clientX,
+          y: event.clientY,
+          left: parseFloat(win.style.left),
+          top: parseFloat(win.style.top)
+        };
+        handle.setPointerCapture(event.pointerId);
+      });
+      handle.addEventListener("pointermove", event => {
+        if (!start) return;
+        const nextLeft = Math.max(0, Math.min(innerWidth - 80, start.left + event.clientX - start.x));
+        const nextTop = Math.max(0, Math.min(innerHeight - 150, start.top + event.clientY - start.y));
+        win.style.left = nextLeft + "px";
+        win.style.top = nextTop + "px";
+      });
+      handle.addEventListener("pointerup", () => { start = null; });
+      handle.addEventListener("pointercancel", () => { start = null; });
+    }
+
+    function makeResizable(win) {
+      const handle = $("[data-resize-handle]", win);
+      let start = null;
+      handle.addEventListener("pointerdown", event => {
+        if (matchMedia("(max-width: 720px)").matches) return;
+        event.stopPropagation();
+        start = {
+          x: event.clientX,
+          y: event.clientY,
+          width: win.offsetWidth,
+          height: win.offsetHeight
+        };
+        handle.setPointerCapture(event.pointerId);
+      });
+      handle.addEventListener("pointermove", event => {
+        if (!start) return;
+        win.style.width = Math.max(320, start.width + event.clientX - start.x) + "px";
+        win.style.height = Math.max(238, start.height + event.clientY - start.y) + "px";
+      });
+      handle.addEventListener("pointerup", () => { start = null; });
+      handle.addEventListener("pointercancel", () => { start = null; });
+    }
+
+    function renderApp(id) {
+      const renderers = {
+        home: renderHome,
+        portfolio: renderPortfolio,
+        projects: renderProjects,
+        finder: renderFinder,
+        terminal: renderTerminal,
+        notes: renderNotes,
+        music: renderMusic,
+        calc: renderCalc,
+        settings: renderSettings
+      };
+      return (renderers[id] || renderHome)();
+    }
+
+    function renderHome() {
+      return `<div class="app stack">
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">IMS / Web / Data / Design</p>
+            <h1>${personal.name}</h1>
+            <p class="lead">Ein interaktives Portfolio als Desktop-Erlebnis: direkt, schnell, sauber gebaut und bereit für Vercel.</p>
+            <div class="action-row">
+              <button class="pill-button primary" data-open="portfolio">Portfolio</button>
+              <button class="pill-button" data-open="projects">Projekte</button>
+              <button class="pill-button" data-open="terminal">Terminal</button>
+              <a class="pill-button" href="${personal.contact}" target="_blank" rel="noreferrer">Kontakt</a>
+            </div>
+          </div>
+          <div class="portrait" aria-label="Linhard Zejneli Signaturgrafik"></div>
+        </section>
+        <section class="grid-3">
+          <div class="metric"><strong>${skills.length}</strong><span>Skill-Felder</span></div>
+          <div class="metric"><strong>${projects.length}</strong><span>Projekt-Spots</span></div>
+          <div class="metric"><strong>100%</strong><span>Statisch hostbar</span></div>
+        </section>
+        <section class="grid-2">
+          <div class="panel">
+            <div class="section-title"><h2>Fokus</h2><span class="badge">2026</span></div>
+            <p>Webentwicklung, Datenanalyse, sauberes UI, Lernfortschritt und starke Praesentation.</p>
+            <div class="tags">
+              <span class="tag">Frontend</span><span class="tag">Data</span><span class="tag">Design</span><span class="tag">Teamwork</span>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="section-title"><h2>Publish</h2><span class="badge">Ready</span></div>
+            <p>Die Seite läuft ohne Build-Prozess als reine Static Site und passt damit perfekt zu Vercel, Vercel oder Netlify.</p>
+          </div>
+        </section>
+      </div>`;
+    }
+
+    function renderPortfolio() {
+      return `<div class="app stack">
+        <section class="grid-2">
+          <div class="panel">
+            <p class="eyebrow">Profil</p>
+            <h2>${personal.name}</h2>
+            <p>${personal.role} aus ${personal.place}. Ich baue digitale Projekte mit klarem Aufbau, sauberem Design und dem Ziel, jedes Release sichtbar besser zu machen.</p>
+            <div class="action-row">
+              <a class="pill-button primary" href="${personal.website}" target="_blank" rel="noreferrer">Live Website</a>
+              <button class="pill-button" data-copy-profile>Profil kopieren</button>
+            </div>
+          </div>
+          <div class="contact-card">
+            <p class="eyebrow">Kontakt</p>
+            <h2>Links</h2>
+            <div class="stack">
+              <a class="pill-button" href="${personal.linkedin}" target="_blank" rel="noreferrer">LinkedIn</a>
+              <a class="pill-button" href="${personal.kaggle}" target="_blank" rel="noreferrer">Kaggle</a>
+              <a class="pill-button" href="${personal.contact}" target="_blank" rel="noreferrer">Kontaktformular</a>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div class="section-title"><h2>Skills</h2><span class="meta">Praesentationsprofil</span></div>
+          <div class="grid-2">${skills.map(([name, value, text]) => `
+            <div class="skill-row">
+              <div class="skill-head"><strong>${name}</strong><span>${value}%</span></div>
+              <div class="meter" style="--value:${value}%"><span></span></div>
+              <span class="meta">${text}</span>
+            </div>
+          `).join("")}</div>
+        </section>
+        <section>
+          <div class="section-title"><h2>Timeline</h2><span class="meta">Weg & Richtung</span></div>
+          <div class="timeline">${timeline.map(([date, title, body]) => `
+            <div class="timeline-item"><strong>${title}</strong><div class="meta">${date} / ${body}</div></div>
+          `).join("")}</div>
+        </section>
+      </div>`;
+    }
+
+    function renderProjects() {
+      return `<div class="app stack">
+        <div class="section-title">
+          <h2>Projekt Showcase</h2>
+          <button class="pill-button" data-open="finder">Finder</button>
+        </div>
+        <div class="grid-2">${projects.map(project => `
+          <article class="project-card">
+            <div class="project-top">
+              <h3>${project.title}</h3>
+              <span class="badge">${project.status}</span>
+            </div>
+            <p>${project.body}</p>
+            <div class="tags">${project.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+            <div class="action-row">
+              ${project.link ? `<a class="pill-button" href="${project.link}" target="_blank" rel="noreferrer">Öffnen</a>` : `<button class="pill-button" data-open="notes">Notiz</button>`}
+              <button class="pill-button" data-project-info="${escapeHtml(project.title)}">Details</button>
+            </div>
+          </article>
+        `).join("")}</div>
+      </div>`;
+    }
+
+    function renderFinder() {
+      const files = [
+        ["portfolio.app", "portfolio", "P"],
+        ["projects.app", "projects", "PR"],
+        ["terminal.app", "terminal", "T"],
+        ["notes.app", "notes", "N"],
+        ["music.app", "music", "M"],
+        ["settings.app", "settings", "S"],
+        ["README.md", "readme", "MD"],
+        ["deploy.check", "deploy", "OK"]
+      ];
+      return `<div class="finder">
+        <aside class="finder-side">
+          <div class="side-label">Orte</div>
+          ${["home", "portfolio", "projects", "terminal", "notes", "settings"].map(id => `<button class="side-button" data-open="${id}"><span>${appMeta[id].icon}</span>${appMeta[id].title}</button>`).join("")}
+          <div class="side-label">Status</div>
+          <button class="side-button is-active" data-command="deploy">GitHub ready</button>
+          <button class="side-button" data-command="palette">Command</button>
+        </aside>
+        <section class="finder-main">
+          <div class="file-grid">${files.map(([name, target, mark]) => `
+            <button class="file-tile" data-file-target="${target}">
+              <span class="file-mark">${mark}</span>
+              <span class="file-name">${name}</span>
+            </button>
+          `).join("")}</div>
+        </section>
+      </div>`;
+    }
+
+    function renderTerminal() {
+      return `<div class="terminal">
+        <div class="terminal-output" id="terminalOutput">
+          <p class="terminal-line"><span class="ok">linhard-os</span> boot complete.</p>
+          <p class="terminal-line">commands: help, about, skills, projects, open, theme, deploy, contact, clear</p>
+        </div>
+        <form class="terminal-form" id="terminalForm">
+          <span>lz@portfolio $</span>
+          <input class="terminal-input" id="terminalInput" autocomplete="off" spellcheck="false" aria-label="Terminal Eingabe">
+        </form>
+      </div>`;
+    }
+
+    function renderNotes() {
+      if (!state.activeNote && state.notes[0]) state.activeNote = state.notes[0].id;
+      const active = state.notes.find(note => note.id === state.activeNote) || state.notes[0];
+      return `<div class="notes">
+        <aside class="note-list">
+          <button class="pill-button primary" data-note-action="new" style="width:100%; margin-bottom:8px;">Neue Notiz</button>
+          ${state.notes.map(note => `<button class="note-button ${note.id === state.activeNote ? "is-active" : ""}" data-note-id="${note.id}">
+            <span class="note-title">${escapeHtml(note.title)}</span>
+            <span class="note-preview">${escapeHtml(note.body.slice(0, 56) || "Leer")}</span>
+          </button>`).join("")}
+        </aside>
+        <section class="editor">
+          <div class="editor-bar">
+            <button class="pill-button" data-note-action="title">Titel</button>
+            <button class="pill-button" data-note-action="bullet">Liste</button>
+            <button class="pill-button" data-note-action="delete">Loeschen</button>
+            <span class="meta" style="margin-left:auto;">Autosave</span>
+          </div>
+          <textarea class="note-editor" id="noteEditor" spellcheck="true">${escapeHtml(active ? active.body : "")}</textarea>
+        </section>
+      </div>`;
+    }
+
+    function renderMusic() {
+      const active = tracks[state.music.track];
+      return `<div class="app music">
+        <section class="music-stage">
+          <canvas class="music-canvas" id="musicCanvas"></canvas>
+          <div class="section-title">
+            <div><h2>${active[0]}</h2><span class="meta">${active[1]}</span></div>
+            <button class="pill-button primary" data-music="toggle" id="musicToggle">${state.music.playing ? "Pause" : "Play"}</button>
+          </div>
+          <div class="progress" id="musicProgress" style="--progress:${state.music.progress}%"><span></span></div>
+          <div class="action-row">
+            <button class="pill-button" data-music="prev">Zurueck</button>
+            <button class="pill-button" data-music="next">Weiter</button>
+          </div>
+        </section>
+        <section class="stack">${tracks.map((track, index) => `
+          <button class="track-row ${index === state.music.track ? "is-active" : ""}" data-track="${index}">
+            <span class="track-num">${index + 1}</span>
+            <span><span class="track-title">${track[0]}</span><span class="track-artist">${track[1]}</span></span>
+            <span class="track-time">${track[2]}</span>
+          </button>
+        `).join("")}</section>
+      </div>`;
+    }
+
+    function renderCalc() {
+      const keys = ["AC", "+/-", "%", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", "0", ".", "="];
+      return `<div class="calculator">
+        <div class="calc-display">
+          <div class="calc-expression" id="calcExpression">${escapeHtml(state.calc.expression)}</div>
+          <div class="calc-value" id="calcValue">${escapeHtml(state.calc.value)}</div>
+        </div>
+        <div class="calc-grid">${keys.map(key => `
+          <button class="calc-key ${["/", "*", "-", "+", "%"].includes(key) ? "op" : ""} ${key === "=" ? "eq" : ""} ${key === "0" ? "wide" : ""}" data-calc="${key}">${key}</button>
+        `).join("")}</div>
+      </div>`;
+    }
+
+    function renderSettings() {
+      return `<div class="app settings">
+        <div class="setting-row">
+          <div><strong>Theme</strong><span class="meta">Farbwelt für das Portfolio OS</span></div>
+          <div class="segmented" id="themeButtons"></div>
+        </div>
+        <div class="setting-row">
+          <div><strong>Animationen</strong><span class="meta">Canvas, Fenster und Mikrointeraktionen</span></div>
+          <button class="switch" data-setting="motion" aria-pressed="${state.motion}"><span></span></button>
+        </div>
+        <div class="setting-row">
+          <div><strong>Profiltext</strong><span class="meta">Kurzprofil für Bewerbungen und Bio</span></div>
+          <button class="pill-button" data-copy-profile>Kopieren</button>
+        </div>
+        <div class="setting-row">
+          <div><strong>Deploy</strong><span class="meta">Static Site, README, Manifest</span></div>
+          <button class="pill-button" data-command="deploy">Check</button>
+        </div>
+      </div>`;
+    }
+
+    function renderThemeButtons() {
+      const holder = $("#themeButtons");
+      if (!holder) return;
+      const themes = [["aurora", "Aurora"], ["summit", "Summit"], ["atelier", "Atelier"], ["daylight", "Daylight"]];
+      holder.innerHTML = themes.map(([id, label]) => `<button class="seg-button ${state.theme === id ? "is-active" : ""}" data-theme="${id}">${label}</button>`).join("");
+    }
+
+    function runAppInit(id) {
+      if (id === "terminal") initTerminal();
+      if (id === "notes") initNotes();
+      if (id === "music") initMusic();
+      if (id === "settings") renderThemeButtons();
+    }
+
+    function initTerminal() {
+      const form = $("#terminalForm");
+      const input = $("#terminalInput");
+      if (!form || form.dataset.ready) return;
+      form.dataset.ready = "true";
+      input.focus();
+      const submitCommand = event => {
+        event.preventDefault();
+        const command = input.value.trim();
+        input.value = "";
+        runTerminal(command);
+      };
+      form.addEventListener("submit", submitCommand);
+      input.addEventListener("keydown", event => {
+        if (event.key === "Enter") submitCommand(event);
+      });
+    }
+
+    function terminalPrint(html) {
+      const output = $("#terminalOutput");
+      if (!output) return;
+      output.insertAdjacentHTML("beforeend", `<p class="terminal-line">${html}</p>`);
+      output.scrollTop = output.scrollHeight;
+    }
+
+    function runTerminal(command) {
+      const cmd = command || "help";
+      terminalPrint(`<span class="prompt">lz@portfolio $</span> ${escapeHtml(cmd)}`);
+      const [head, ...args] = cmd.toLowerCase().split(/\s+/);
+      if (head === "clear") {
+        $("#terminalOutput").innerHTML = "";
+        return;
+      }
+      if (head === "help") {
+        terminalPrint(`help / about / skills / projects / open [app] / theme [name] / deploy / contact / clear`);
+      } else if (head === "about") {
+        terminalPrint(`<span class="ok">${personal.name}</span> - ${personal.role}, ${personal.place}.`);
+      } else if (head === "skills") {
+        terminalPrint(skills.map(skill => `<span class="ok">${skill[0]}</span> ${skill[1]}%`).join(" &nbsp; "));
+      } else if (head === "projects") {
+        terminalPrint(projects.map(project => `<span class="warn">${project.status}</span> ${project.title}`).join(" &nbsp; "));
+      } else if (head === "open") {
+        const target = args[0] || "portfolio";
+        if (appMeta[target]) {
+          openWindow(target);
+          terminalPrint(`<span class="ok">${target}</span> geoeffnet.`);
+        } else {
+          terminalPrint(`<span class="err">App nicht gefunden:</span> ${escapeHtml(target)}`);
+        }
+      } else if (head === "theme") {
+        const target = args[0] || "aurora";
+        if (["aurora", "summit", "atelier", "daylight"].includes(target)) {
+          state.theme = target;
+          applyTheme();
+          terminalPrint(`<span class="ok">Theme aktiv:</span> ${target}`);
+        } else {
+          terminalPrint(`<span class="err">Themes:</span> aurora, summit, atelier, daylight`);
+        }
+      } else if (head === "deploy") {
+        terminalPrint(`<span class="ok">Deploy ready:</span> index.html, README.md, manifest.webmanifest, keine Build-Tools.`);
+      } else if (head === "contact") {
+        window.open(personal.contact, "_blank", "noopener");
+        terminalPrint(`<span class="ok">Kontakt geoeffnet.</span>`);
+      } else if (head === "date") {
+        terminalPrint(new Date().toLocaleString());
+      } else {
+        terminalPrint(`<span class="err">Unbekannt:</span> ${escapeHtml(head)}. Tipp: help`);
+      }
+    }
+
+    function initNotes() {
+      const editor = $("#noteEditor");
+      if (!editor || editor.dataset.ready) return;
+      editor.dataset.ready = "true";
+      editor.addEventListener("input", () => {
+        const note = state.notes.find(item => item.id === state.activeNote);
+        if (!note) return;
+        note.body = editor.value;
+        const firstLine = editor.value.split("\n").find(Boolean);
+        if (firstLine && note.title === "Neue Notiz") note.title = firstLine.slice(0, 34);
+        saveNotes();
+      });
+    }
+
+    function refreshNotes() {
+      const win = state.windows.get("notes");
+      if (!win) return;
+      $(".window-body", win).innerHTML = renderNotes();
+      initNotes();
+    }
+
+    function noteAction(action) {
+      const active = state.notes.find(note => note.id === state.activeNote);
+      if (action === "new") {
+        const note = { id: "note-" + Date.now(), title: "Neue Notiz", body: "" };
+        state.notes.unshift(note);
+        state.activeNote = note.id;
+        saveNotes();
+        refreshNotes();
+        return;
+      }
+      if (!active) return;
+      if (action === "title") {
+        active.body = "# " + (active.title || "Notiz") + "\n\n" + active.body;
+      }
+      if (action === "bullet") {
+        active.body += (active.body.endsWith("\n") ? "" : "\n") + "- ";
+      }
+      if (action === "delete") {
+        if (state.notes.length <= 1) {
+          active.body = "";
+        } else {
+          state.notes = state.notes.filter(note => note.id !== state.activeNote);
+          state.activeNote = state.notes[0].id;
+        }
+      }
+      saveNotes();
+      refreshNotes();
+    }
+
+    function initMusic() {
+      const canvas = $("#musicCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        const scale = Math.min(devicePixelRatio || 1, 2);
+        canvas.width = Math.max(1, Math.floor(rect.width * scale));
+        canvas.height = Math.max(1, Math.floor(rect.height * scale));
+        ctx.setTransform(scale, 0, 0, scale, 0, 0);
+      }
+      function draw() {
+        const rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        const gradient = ctx.createLinearGradient(0, 0, rect.width, rect.height);
+        gradient.addColorStop(0, getComputedStyle(document.documentElement).getPropertyValue("--accent").trim());
+        gradient.addColorStop(1, getComputedStyle(document.documentElement).getPropertyValue("--accent-2").trim());
+        ctx.fillStyle = "rgba(255,255,255,0.05)";
+        ctx.fillRect(0, 0, rect.width, rect.height);
+        const bars = 58;
+        const time = Date.now() / 480;
+        for (let i = 0; i < bars; i += 1) {
+          const base = state.music.playing ? Math.sin(time + i * 0.62) * 0.42 + Math.sin(time * 0.58 + i) * 0.24 + 0.62 : 0.18 + Math.sin(i) * 0.05;
+          const height = Math.max(8, base * rect.height * 0.72);
+          const width = rect.width / bars - 2;
+          ctx.fillStyle = gradient;
+          ctx.fillRect(i * (rect.width / bars) + 1, rect.height - height, width, height);
+        }
+        state.music.raf = requestAnimationFrame(draw);
+      }
+      if (state.music.raf) cancelAnimationFrame(state.music.raf);
+      resize();
+      draw();
+      window.addEventListener("resize", resize, { passive: true });
+    }
+
+    function stopMusic() {
+      state.music.playing = false;
+      clearInterval(state.music.timer);
+      if (state.music.raf) cancelAnimationFrame(state.music.raf);
+      state.music.timer = null;
+      state.music.raf = null;
+    }
+
+    function musicAction(action, value) {
+      if (action === "track") {
+        state.music.track = Number(value);
+        state.music.progress = 0;
+      }
+      if (action === "toggle") {
+        state.music.playing = !state.music.playing;
+      }
+      if (action === "next") {
+        state.music.track = (state.music.track + 1) % tracks.length;
+        state.music.progress = 0;
+        state.music.playing = true;
+      }
+      if (action === "prev") {
+        state.music.track = (state.music.track - 1 + tracks.length) % tracks.length;
+        state.music.progress = 0;
+        state.music.playing = true;
+      }
+      clearInterval(state.music.timer);
+      if (state.music.playing) {
+        state.music.timer = setInterval(() => {
+          state.music.progress += 1.1;
+          if (state.music.progress >= 100) {
+            state.music.progress = 0;
+            state.music.track = (state.music.track + 1) % tracks.length;
+          }
+          refreshMusic(false);
+        }, 420);
+      }
+      refreshMusic(true);
+    }
+
+    function refreshMusic(full) {
+      const win = state.windows.get("music");
+      if (!win) return;
+      if (full) {
+        $(".window-body", win).innerHTML = renderMusic();
+        initMusic();
+      } else {
+        const progress = $("#musicProgress");
+        if (progress) progress.style.setProperty("--progress", state.music.progress + "%");
+      }
+    }
+
+    function calcPress(key) {
+      const calc = state.calc;
+      const number = Number(calc.value);
+      if (key === "AC") {
+        Object.assign(calc, { value: "0", expression: "", operator: "", previous: "", reset: false });
+      } else if (key === "+/-") {
+        calc.value = String(number * -1);
+      } else if (key === "%") {
+        calc.value = String(number / 100);
+      } else if (["/", "*", "-", "+"].includes(key)) {
+        calc.operator = key;
+        calc.previous = calc.value;
+        calc.expression = calc.value + " " + key;
+        calc.reset = true;
+      } else if (key === "=") {
+        if (!calc.operator) return;
+        const a = Number(calc.previous);
+        const b = Number(calc.value);
+        const result = {
+          "/": b === 0 ? "Error" : a / b,
+          "*": a * b,
+          "-": a - b,
+          "+": a + b
+        }[calc.operator];
+        calc.expression = calc.previous + " " + calc.operator + " " + calc.value + " =";
+        calc.value = result === "Error" ? "Error" : String(Math.round(result * 100000000) / 100000000);
+        calc.operator = "";
+        calc.reset = true;
+      } else if (key === ".") {
+        if (!calc.value.includes(".")) calc.value += ".";
+      } else {
+        calc.value = calc.reset || calc.value === "0" || calc.value === "Error" ? key : calc.value + key;
+        calc.reset = false;
+      }
+      const win = state.windows.get("calc");
+      if (win) $(".window-body", win).innerHTML = renderCalc();
+    }
+
+    function profileText() {
+      return `${personal.name} - ${personal.role}. Standort: ${personal.place}. Fokus: Webentwicklung, Datenanalyse, UI/UX, Teamwork und stetige Verbesserung. Portfolio: ${personal.website}`;
+    }
+
+    async function copyProfile() {
+      try {
+        await navigator.clipboard.writeText(profileText());
+        notice("Kopiert", "Profiltext liegt in der Zwischenablage.");
+      } catch (error) {
+        notice("Profil", profileText());
+      }
+    }
+
+    function notice(title, message) {
+      const item = document.createElement("div");
+      item.className = "notice";
+      item.innerHTML = `<strong>${escapeHtml(title)}</strong><span>${escapeHtml(message)}</span>`;
+      $("#notices").appendChild(item);
+      setTimeout(() => {
+        item.style.opacity = "0";
+        item.style.transform = "translateX(20px)";
+        setTimeout(() => item.remove(), 180);
+      }, 3200);
+    }
+
+    const commands = [
+      ["Home öffnen", "App", () => openWindow("home")],
+      ["Portfolio öffnen", "App", () => openWindow("portfolio")],
+      ["Projekte öffnen", "App", () => openWindow("projects")],
+      ["Finder öffnen", "App", () => openWindow("finder")],
+      ["Terminal öffnen", "App", () => openWindow("terminal")],
+      ["Notizen öffnen", "App", () => openWindow("notes")],
+      ["Music öffnen", "App", () => openWindow("music")],
+      ["Rechner öffnen", "App", () => openWindow("calc")],
+      ["Settings öffnen", "App", () => openWindow("settings")],
+      ["Fenster anordnen", "System", arrangeWindows],
+      ["Profil kopieren", "Aktion", copyProfile],
+      ["Deploy Check", "GitHub", () => notice("Deploy", "index.html + README.md + manifest.webmanifest sind bereit.")],
+      ["Theme Aurora", "Theme", () => { state.theme = "aurora"; applyTheme(); }],
+      ["Theme Daylight", "Theme", () => { state.theme = "daylight"; applyTheme(); }]
+    ];
+
+    function openPalette() {
+      $("#palette").classList.add("is-open");
+      $("#paletteInput").value = "";
+      state.paletteIndex = 0;
+      renderPalette();
+      setTimeout(() => $("#paletteInput").focus(), 20);
+    }
+
+    function closePalette() {
+      $("#palette").classList.remove("is-open");
+    }
+
+    function renderPalette() {
+      const query = $("#paletteInput").value.trim().toLowerCase();
+      const filtered = commands.filter(([label, group]) => (label + " " + group).toLowerCase().includes(query));
+      state.paletteIndex = Math.min(state.paletteIndex, Math.max(0, filtered.length - 1));
+      $("#paletteList").innerHTML = filtered.length ? filtered.map(([label, group], index) => `
+        <button class="palette-item ${index === state.paletteIndex ? "is-active" : ""}" data-command-index="${commands.findIndex(command => command[0] === label)}">
+          <span class="dock-icon" style="width:30px;height:30px;border-radius:8px;font-size:.72rem;">${group.slice(0,2).toUpperCase()}</span>
+          <span>${label}</span>
+          <small>${group}</small>
+        </button>
+      `).join("") : `<div class="empty">Kein Treffer</div>`;
+    }
+
+    function runCommandIndex(index) {
+      const command = commands[index];
+      if (!command) return;
+      closePalette();
+      command[2]();
+    }
+
+    function handleCommand(name) {
+      if (name === "palette") openPalette();
+      if (name === "arrange") arrangeWindows();
+      if (name === "deploy") notice("Deploy", "Bereit für Vercel: Repository erstellen, Dateien pushen, Pages aktivieren.");
+    }
+
+    document.addEventListener("click", event => {
+      const open = event.target.closest("[data-open]");
+      if (open) openWindow(open.dataset.open);
+
+      const command = event.target.closest("[data-command]");
+      if (command) handleCommand(command.dataset.command);
+
+      const windowAction = event.target.closest("[data-window-action]");
+      if (windowAction) {
+        const win = windowAction.closest(".window");
+        const id = win && win.dataset.app;
+        if (windowAction.dataset.windowAction === "close") closeWindow(id);
+        if (windowAction.dataset.windowAction === "minimize") minimizeWindow(id);
+        if (windowAction.dataset.windowAction === "maximize") maximizeWindow(id);
+      }
+
+      const file = event.target.closest("[data-file-target]");
+      if (file) {
+        const target = file.dataset.fileTarget;
+        if (appMeta[target]) openWindow(target);
+        if (target === "readme") notice("README", "README.md liegt neben der index.html im Projektordner.");
+        if (target === "deploy") handleCommand("deploy");
+      }
+
+      const project = event.target.closest("[data-project-info]");
+      if (project) notice("Projekt", project.dataset.projectInfo + " ist als Showcase-Karte vorbereitet.");
+
+      const copy = event.target.closest("[data-copy-profile]");
+      if (copy) copyProfile();
+
+      const theme = event.target.closest("button[data-theme]");
+      if (theme) {
+        state.theme = theme.dataset.theme;
+        applyTheme();
+        notice("Theme", theme.textContent + " aktiviert.");
+      }
+
+      const setting = event.target.closest("[data-setting='motion']");
+      if (setting) {
+        state.motion = !state.motion;
+        setting.setAttribute("aria-pressed", String(state.motion));
+        applyTheme();
+      }
+
+      const noteButton = event.target.closest("[data-note-id]");
+      if (noteButton) {
+        state.activeNote = noteButton.dataset.noteId;
+        refreshNotes();
+      }
+
+      const noteActionButton = event.target.closest("[data-note-action]");
+      if (noteActionButton) noteAction(noteActionButton.dataset.noteAction);
+
+      const music = event.target.closest("[data-music]");
+      if (music) musicAction(music.dataset.music);
+
+      const track = event.target.closest("[data-track]");
+      if (track) musicAction("track", track.dataset.track);
+
+      const calc = event.target.closest("[data-calc]");
+      if (calc) calcPress(calc.dataset.calc);
+
+      const paletteItem = event.target.closest("[data-command-index]");
+      if (paletteItem) runCommandIndex(Number(paletteItem.dataset.commandIndex));
+    });
+
+    document.addEventListener("keydown", event => {
+      const key = event.key.toLowerCase();
+      if ((event.ctrlKey || event.metaKey) && key === "k") {
+        event.preventDefault();
+        openPalette();
+      }
+      if (event.key === "Escape") closePalette();
+      if ((event.ctrlKey || event.metaKey) && key === "w" && state.active) {
+        event.preventDefault();
+        closeWindow(state.active);
+      }
+      if ((event.ctrlKey || event.metaKey) && key === "1") openWindow("home");
+      if ((event.ctrlKey || event.metaKey) && key === "2") openWindow("portfolio");
+      if ((event.ctrlKey || event.metaKey) && key === "3") openWindow("projects");
+
+      if ($("#palette").classList.contains("is-open")) {
+        const count = $$(".palette-item").length;
+        if (event.key === "ArrowDown") {
+          event.preventDefault();
+          state.paletteIndex = Math.min(count - 1, state.paletteIndex + 1);
+          renderPalette();
+        }
+        if (event.key === "ArrowUp") {
+          event.preventDefault();
+          state.paletteIndex = Math.max(0, state.paletteIndex - 1);
+          renderPalette();
+        }
+        if (event.key === "Enter") {
+          const active = $(".palette-item.is-active");
+          if (active) runCommandIndex(Number(active.dataset.commandIndex));
+        }
+      }
+    });
+
+    $("#palette").addEventListener("click", event => {
+      if (event.target.id === "palette") closePalette();
+    });
+
+    $("#paletteInput").addEventListener("input", () => {
+      state.paletteIndex = 0;
+      renderPalette();
+    });
+
+    window.addEventListener("load", () => {
+      loadState();
+      renderDesktop();
+      initWallpaper();
+      tickClock();
+      setInterval(tickClock, 15000);
+      openWindow("home");
+      setTimeout(() => {
+        if (state.active === "home" && state.windows.size === 1 && innerWidth > 720) openWindow("portfolio");
+      }, 320);
+      setTimeout(() => notice("Portfolio OS", "Bereit für GitHub, Live-Hosting und Feinschliff."), 700);
+    });
+  </script>
+</body>
+</html>
+

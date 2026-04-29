@@ -27,7 +27,7 @@ import { ProjectCard } from "@/components/project-card";
 import { cn } from "@/lib/utils";
 
 const stats = [
-  { value: "4", label: "ausgewählte Projekte" },
+  { value: "5", label: "ausgewählte Projekte" },
   { value: "2+", label: "Jahre Praxis" },
   { value: "10+", label: "Tools & Technologien" },
   { value: "CH", label: "Fokus & Ausbildung" },
@@ -67,8 +67,8 @@ export default function HomePage() {
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(120deg,hsl(var(--background))_0%,hsl(var(--muted))_45%,hsl(var(--background))_100%)]" />
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(rgba(99,102,241,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.08)_1px,transparent_1px)] bg-[size:44px_44px]" />
 
-        <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_0.98fr]">
-          <div>
+        <div className="grid min-w-0 items-center gap-10 lg:grid-cols-[1.02fr_0.98fr]">
+          <div className="min-w-0">
             <div className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-3 py-1 text-xs shadow-sm md:text-sm">
               <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
               <span className="font-medium text-muted-foreground">{t("hero.available")}</span>
@@ -82,19 +82,19 @@ export default function HomePage() {
               mit klarem UI, sauberem Code und Fokus auf echte Wirkung.
             </p>
 
-            <div className="mt-7 flex flex-wrap items-center gap-3">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <a
                 href={site.cvUrl}
                 target="_blank"
                 rel="noreferrer"
-                className={cn(buttonVariants({ size: "lg" }), "rounded-lg")}
+                className={cn(buttonVariants({ size: "lg" }), "w-full rounded-lg sm:w-auto")}
               >
                 <Download className="mr-2 h-5 w-5" /> {t("hero.cv")}
               </a>
 
               <Link
                 href="/contact"
-                className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "rounded-lg")}
+                className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "w-full rounded-lg sm:w-auto")}
               >
                 <Mail className="mr-2 h-5 w-5" /> {t("hero.contact")}
               </Link>
@@ -103,7 +103,7 @@ export default function HomePage() {
                 href={site.github}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-medium"
+                className="inline-flex w-fit items-center gap-2 text-sm font-medium"
               >
                 <Github className="h-4 w-4" />
                 <span className="underline-offset-4 hover:underline">{t("hero.viewGithub")}</span>
@@ -114,7 +114,7 @@ export default function HomePage() {
                 href={site.linkedin}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-medium"
+                className="inline-flex w-fit items-center gap-2 text-sm font-medium"
               >
                 <Linkedin className="h-4 w-4" />
                 <span className="underline-offset-4 hover:underline">{t("hero.viewLinkedIn")}</span>
@@ -122,14 +122,14 @@ export default function HomePage() {
               </a>
             </div>
 
-            <div className="mt-7 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-              <span className="inline-flex items-center gap-2">
+            <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+              <span className="inline-flex min-w-0 items-center gap-2">
                 <MapPin className="h-4 w-4" /> {site.location}
               </span>
-              <span className="inline-flex items-center gap-2">
+              <span className="inline-flex min-w-0 items-center gap-2">
                 <GraduationCap className="h-4 w-4" /> EFZ Applikationsentwicklung
               </span>
-              <span className="inline-flex items-center gap-2">
+              <span className="inline-flex min-w-0 items-center gap-2">
                 <Code className="h-4 w-4" /> Sauberer Code, starke UX
               </span>
             </div>
@@ -146,7 +146,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative min-w-0">
             <div className="overflow-hidden rounded-lg border bg-card/90 shadow-2xl">
               <div className="flex items-center gap-2 border-b bg-muted/70 px-4 py-3">
                 <span className="h-3 w-3 rounded-full bg-rose-500" />
@@ -157,16 +157,16 @@ export default function HomePage() {
                 </span>
               </div>
 
-              <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
-                <div className="border-b p-5 lg:border-b-0 lg:border-r">
+              <div className="grid min-w-0 lg:grid-cols-[0.95fr_1.05fr]">
+                <div className="min-w-0 border-b p-4 sm:p-5 lg:border-b-0 lg:border-r">
                   <div className="mb-4 inline-flex items-center gap-2 rounded-md border bg-background px-3 py-1 text-xs font-semibold">
                     <Sparkles className="h-4 w-4 text-primary" /> build mode
                   </div>
-                  <div className="space-y-3 font-mono text-xs leading-6 text-muted-foreground">
+                  <div className="min-w-0 space-y-3 font-mono text-xs leading-6 text-muted-foreground">
                     {codeLines.map((line, index) => (
-                      <div key={line} className="rounded-md bg-slate-950 px-3 py-2 text-slate-200">
+                      <div key={line} className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap rounded-md bg-slate-950 px-3 py-2 text-slate-200">
                         <span className="mr-3 text-slate-500">{String(index + 1).padStart(2, "0")}</span>
-                        {line}
+                        <span>{line}</span>
                       </div>
                     ))}
                   </div>
@@ -175,7 +175,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="p-4">
+                <div className="min-w-0 p-4">
                   <div className="overflow-hidden rounded-md border bg-muted">
                     <img
                       src={featuredProject.image.src}

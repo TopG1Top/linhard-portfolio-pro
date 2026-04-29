@@ -77,4 +77,19 @@ export const projects: Project[] = [
     github: "https://github.com/TopG1Top/Casino-Luxe",
     demo: "https://casinoluxe.netlify.app/",
   },
+  {
+    title: "Portfolio OS",
+    category: "Creative Frontend",
+    year: "2026",
+    image: {
+      src: "/projects/portfolio-os.svg",
+      alt: "Portfolio OS Preview mit Desktop-Fenster, Dock, Apps und Command-Palette.",
+    },
+    impact: "Ein auffälliges Side-Project, das Kreativität, Vanilla-JavaScript und UI-Interaktion zeigt.",
+    highlights: ["Fenster-Manager & Dock", "Command Palette & Terminal", "Statisch hostbar auf Vercel"],
+    blurb:
+      "Interaktives Portfolio als Mini-Betriebssystem mit Apps, Fenster-Manager, Terminal, Notizen, Themes und Canvas-Wallpaper.",
+    tech: ["HTML", "CSS", "JavaScript", "Canvas", "Static Site"],
+    demo: "/portfolio-os",
+  },
 ]
