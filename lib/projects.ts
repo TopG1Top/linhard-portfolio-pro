@@ -32,6 +32,21 @@ export const projects: Project[] = [
     github: "https://github.com/TopG1Top/noten-optimizer-pro",
   },
   {
+    title: "CityPulse Control Room",
+    category: "Live City Dashboard",
+    year: "2026",
+    image: {
+      src: "/projects/citypulse.svg",
+      alt: "CityPulse Dashboard mit Kartenansicht, Wetter, Traffic-Index und Live-City-Signalen.",
+    },
+    impact: "Verwandelt jede Stadt in ein Live-Dashboard mit Wetter, Luftqualität, Karte und smarter Lageeinschätzung.",
+    highlights: ["Stadtsuche mit Geocoding", "Live-Wetter & Luftqualität", "Karte + Traffic Intelligence"],
+    blurb:
+      "Futuristisches City-Control-Dashboard: Stadt eingeben, Karte öffnen, Wetterdaten analysieren und aktuelle City-Signale auf einen Blick sehen.",
+    tech: ["Next.js", "TypeScript", "Open-Meteo", "OpenStreetMap", "Tailwind"],
+    demo: "/citypulse",
+  },
+  {
     title: "FC Brugg – AFV Ergebnisse & Torschützen",
     category: "Sports Dashboard",
     year: "2026",

@@ -27,7 +27,7 @@ import { ProjectCard } from "@/components/project-card";
 import { cn } from "@/lib/utils";
 
 const stats = [
-  { value: "5", label: "ausgewählte Projekte" },
+  { value: "6", label: "ausgewählte Projekte" },
   { value: "2+", label: "Jahre Praxis" },
   { value: "10+", label: "Tools & Technologien" },
   { value: "CH", label: "Fokus & Ausbildung" },
