@@ -1,26 +1,45 @@
-import { Github, ExternalLink } from "lucide-react";
+import { ArrowUpRight, Github, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { projects } from "@/lib/projects";
+import { cn } from "@/lib/utils";
 
 type Project = typeof projects[number]; // <- nimmt den Typ aus deiner Liste
 
-export function ProjectCard({ p }: { p: Project }) {
+export function ProjectCard({
+  p,
+  featured = false,
+  className,
+}: {
+  p: Project;
+  featured?: boolean;
+  className?: string;
+}) {
   return (
-    <div className="transition-transform will-change-transform hover:-translate-y-1 hover:scale-[1.01]">
-      <Card className="group rounded-3xl overflow-hidden">
-        <div className="relative h-40 bg-gradient-to-br from-indigo-500/15 to-emerald-500/15" />
+    <div className={cn("h-full transition-transform will-change-transform hover:-translate-y-1", className)}>
+      <Card className="group flex h-full flex-col overflow-hidden rounded-lg border bg-card/85 shadow-sm transition-shadow hover:shadow-xl">
+        <div className={cn("relative overflow-hidden border-b bg-muted", featured ? "h-64" : "h-48")}>
+          <img
+            src={p.image.src}
+            alt={p.image.alt}
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+          />
+          <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-slate-950/85 to-transparent px-4 pb-4 pt-12 text-xs font-semibold uppercase tracking-wide text-white">
+            <span>{p.category}</span>
+            <span>{p.year}</span>
+          </div>
+        </div>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-start justify-between gap-2">
-            <span>{p.title}</span>
-            <div className="flex items-center gap-1">
+            <span className="leading-tight">{p.title}</span>
+            <div className="flex shrink-0 items-center gap-1">
               {p.demo && (
-                <a href={p.demo} target="_blank" rel="noreferrer" className="rounded-xl border px-2 py-1 text-xs inline-flex items-center gap-1">
+                <a href={p.demo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs transition hover:bg-accent">
                   <ExternalLink className="h-4 w-4" /> Demo
                 </a>
               )}
               {p.github && (
-                <a href={p.github} target="_blank" rel="noreferrer" className="rounded-xl border px-2 py-1 text-xs inline-flex items-center gap-1">
+                <a href={p.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs transition hover:bg-accent">
                   <Github className="h-4 w-4" /> Code
                 </a>
               )}
@@ -28,10 +47,19 @@ export function ProjectCard({ p }: { p: Project }) {
           </CardTitle>
           <CardDescription>{p.blurb}</CardDescription>
         </CardHeader>
-        <CardContent className="pt-2">
+        <CardContent className="flex flex-1 flex-col gap-4 pt-2">
+          <p className="text-sm font-medium text-foreground">{p.impact}</p>
+          <div className="grid gap-2 text-sm text-muted-foreground">
+            {p.highlights.map((item) => (
+              <div key={item} className="flex items-start gap-2">
+                <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
           <div className="flex flex-wrap gap-2">
             {p.tech.map((t) => (
-              <Badge key={t} className="rounded-xl">
+              <Badge key={t} className="rounded-md">
                 {t}
               </Badge>
             ))}

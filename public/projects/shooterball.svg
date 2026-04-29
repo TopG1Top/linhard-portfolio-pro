@@ -1,0 +1,70 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Shooterball HTML5 game preview</title>
+  <desc id="desc">A neon arcade shooter scene with player, enemies, bullets, particles, and boss health bar.</desc>
+  <defs>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(614 373) rotate(90) scale(520 820)">
+      <stop stop-color="#312E81"/>
+      <stop offset=".45" stop-color="#111827"/>
+      <stop offset="1" stop-color="#030712"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="760" fill="url(#bg)"/>
+  <g opacity=".22" stroke="#67E8F9" stroke-width="2">
+    <path d="M0 600H1200"/>
+    <path d="M0 500H1200"/>
+    <path d="M0 400H1200"/>
+    <path d="M0 300H1200"/>
+    <path d="M0 200H1200"/>
+    <path d="M140 0L0 760"/>
+    <path d="M330 0L246 760"/>
+    <path d="M520 0L500 760"/>
+    <path d="M710 0L754 760"/>
+    <path d="M900 0L1010 760"/>
+    <path d="M1090 0L1200 760"/>
+  </g>
+
+  <rect x="126" y="86" width="948" height="588" rx="18" fill="#020617" stroke="#22D3EE" stroke-width="3"/>
+  <rect x="170" y="128" width="860" height="18" rx="9" fill="#172554"/>
+  <rect x="170" y="128" width="642" height="18" rx="9" fill="#EC4899"/>
+  <text x="170" y="182" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="900">ULTRAKRASS SHOOTERBALL</text>
+  <text x="850" y="182" fill="#22D3EE" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="900">LEVEL 05</text>
+
+  <g filter="url(#glow)">
+    <circle cx="592" cy="512" r="44" fill="#22D3EE"/>
+    <circle cx="592" cy="512" r="23" fill="#F8FAFC"/>
+    <path d="M592 438L632 504H552L592 438Z" fill="#A78BFA"/>
+  </g>
+  <g filter="url(#glow)" fill="#FDE047">
+    <rect x="585" y="348" width="14" height="70" rx="7"/>
+    <rect x="585" y="254" width="14" height="50" rx="7"/>
+    <rect x="585" y="204" width="14" height="28" rx="7"/>
+  </g>
+
+  <g filter="url(#glow)">
+    <circle cx="392" cy="312" r="36" fill="#FB7185"/>
+    <circle cx="776" cy="274" r="44" fill="#FB7185"/>
+    <circle cx="884" cy="438" r="34" fill="#FB7185"/>
+    <circle cx="308" cy="474" r="28" fill="#FB7185"/>
+    <path d="M774 216L838 274L774 332L710 274L774 216Z" fill="#F97316"/>
+  </g>
+
+  <g fill="#67E8F9" opacity=".9">
+    <circle cx="250" cy="250" r="5"/>
+    <circle cx="290" cy="206" r="4"/>
+    <circle cx="950" cy="232" r="5"/>
+    <circle cx="1002" cy="525" r="4"/>
+    <circle cx="452" cy="578" r="4"/>
+    <circle cx="690" cy="612" r="6"/>
+  </g>
+  <rect x="170" y="606" width="148" height="38" rx="8" fill="#111827" stroke="#475569"/>
+  <text x="192" y="631" fill="#E2E8F0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800">ENDLESS READY</text>
+  <rect x="830" y="606" width="200" height="38" rx="8" fill="#111827" stroke="#475569"/>
+  <text x="854" y="631" fill="#E2E8F0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800">SCORE 128450</text>
+</svg>

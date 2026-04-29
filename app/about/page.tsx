@@ -7,7 +7,7 @@ export default function AboutPage() {
   return (
     <Section>
       <div className="grid gap-6 md:grid-cols-3">
-        <Card className="md:col-span-2 rounded-3xl">
+        <Card className="rounded-lg md:col-span-2">
           <CardHeader>
             <CardTitle>Über mich</CardTitle>
             <CardDescription>Kurze Story, klare Werte, Fokus auf Wirkung.</CardDescription>
@@ -42,7 +42,7 @@ export default function AboutPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-3xl">
+        <Card className="rounded-lg">
           <CardHeader>
             <CardTitle>Quick Facts</CardTitle>
             <CardDescription>TL;DR</CardDescription>

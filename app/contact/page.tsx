@@ -52,7 +52,7 @@ export default function ContactPage() {
   return (
     <Section>
       <div className="grid gap-6 md:grid-cols-2">
-        <Card className="rounded-3xl">
+        <Card className="rounded-lg">
           <CardHeader>
             <CardTitle>{t("contact.title")}</CardTitle>
             <CardDescription>{t("contact.subtitle")}</CardDescription>
@@ -86,7 +86,7 @@ export default function ContactPage() {
               />
 
               <div className="flex items-center gap-2">
-                <Button type="submit" className="rounded-2xl" disabled={status === "sending"}>
+                <Button type="submit" className="rounded-lg" disabled={status === "sending"}>
                   {status === "sending" ? "Senden…" : t("contact.send")}
                 </Button>
 
@@ -106,7 +106,7 @@ export default function ContactPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-3xl">
+        <Card className="rounded-lg">
           <CardHeader>
             <CardTitle>{t("contact.alt")}</CardTitle>
             <CardDescription>E-Mail & Socials</CardDescription>

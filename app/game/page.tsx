@@ -354,20 +354,20 @@ export default function GamePage() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button className="rounded-2xl" onClick={togglePause}>
+            <Button className="rounded-lg" onClick={togglePause}>
               {paused ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
               {paused ? "Resume" : "Pause"}
             </Button>
-            <Button className="rounded-2xl" variant="secondary" onClick={reset}>
+            <Button className="rounded-lg" variant="secondary" onClick={reset}>
               <RotateCcw className="mr-2 h-4 w-4" /> Reset
             </Button>
           </div>
         </header>
 
-        <div className="rounded-3xl border bg-gradient-to-b from-background to-muted/40 p-3">
+        <div className="rounded-lg border bg-gradient-to-b from-background to-muted/40 p-3">
           <canvas
             ref={canvasRef}
-            className="block w-full rounded-2xl bg-background"
+            className="block w-full rounded-lg bg-background"
             aria-label="Runner Game Canvas"
           />
         </div>

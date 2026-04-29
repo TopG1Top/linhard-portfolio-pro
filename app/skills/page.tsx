@@ -15,7 +15,7 @@ export default function SkillsPage() {
       <h2 className="text-2xl font-bold tracking-tight">Skills</h2>
       <div className="mt-6 grid gap-6 md:grid-cols-2">
         {Object.entries(SKILLS).map(([cat, items]) => (
-          <Card key={cat} className="rounded-3xl">
+          <Card key={cat} className="rounded-lg">
             <CardHeader>
               <CardTitle>{cat}</CardTitle>
               <CardDescription>Werkzeuge & Technologien</CardDescription>

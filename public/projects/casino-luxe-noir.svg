@@ -1,0 +1,61 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Casino Luxe Noir preview</title>
+  <desc id="desc">A premium casino interface with roulette, blackjack cards, chips, and statistics.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#030712"/>
+      <stop offset=".56" stop-color="#111827"/>
+      <stop offset="1" stop-color="#3B2415"/>
+    </linearGradient>
+    <radialGradient id="table" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(560 414) rotate(90) scale(350 520)">
+      <stop stop-color="#047857"/>
+      <stop offset="1" stop-color="#064E3B"/>
+    </radialGradient>
+    <filter id="shadow" x="76" y="68" width="1048" height="650" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="24" stdDeviation="32" flood-color="#020617" flood-opacity=".55"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="760" fill="url(#bg)"/>
+  <path d="M0 586C170 496 317 598 512 550C698 504 794 396 972 422C1061 435 1128 476 1200 460V760H0V586Z" fill="#F59E0B" opacity=".12"/>
+
+  <g filter="url(#shadow)">
+    <rect x="120" y="92" width="960" height="576" rx="18" fill="#0B1120" stroke="#A16207" stroke-width="3"/>
+    <text x="166" y="156" fill="#F8FAFC" font-family="Georgia, serif" font-size="42" font-weight="700">Casino LUXE NOIR</text>
+    <rect x="858" y="120" width="158" height="44" rx="10" fill="#F59E0B"/>
+    <text x="893" y="148" fill="#111827" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="900">BALANCE</text>
+
+    <ellipse cx="584" cy="438" rx="408" ry="204" fill="url(#table)" stroke="#FBBF24" stroke-width="8"/>
+    <ellipse cx="584" cy="438" rx="304" ry="142" fill="none" stroke="#D97706" stroke-width="3" opacity=".7"/>
+    <text x="474" y="448" fill="#ECFDF5" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="900">BLACKJACK</text>
+
+    <g transform="translate(250 290) rotate(-8)">
+      <rect width="130" height="180" rx="14" fill="#F8FAFC"/>
+      <text x="26" y="58" fill="#DC2626" font-family="Georgia, serif" font-size="44" font-weight="900">A</text>
+      <text x="42" y="124" fill="#DC2626" font-family="Georgia, serif" font-size="54" font-weight="900">♥</text>
+    </g>
+    <g transform="translate(390 278) rotate(6)">
+      <rect width="130" height="180" rx="14" fill="#F8FAFC"/>
+      <text x="28" y="58" fill="#111827" font-family="Georgia, serif" font-size="44" font-weight="900">K</text>
+      <text x="43" y="124" fill="#111827" font-family="Georgia, serif" font-size="54" font-weight="900">♠</text>
+    </g>
+
+    <g transform="translate(722 282)">
+      <circle cx="100" cy="100" r="86" fill="#111827" stroke="#FBBF24" stroke-width="8"/>
+      <circle cx="100" cy="100" r="56" fill="#DC2626" stroke="#F8FAFC" stroke-width="6"/>
+      <circle cx="100" cy="100" r="18" fill="#FBBF24"/>
+      <line x1="100" y1="18" x2="100" y2="182" stroke="#F8FAFC" stroke-width="4"/>
+      <line x1="18" y1="100" x2="182" y2="100" stroke="#F8FAFC" stroke-width="4"/>
+      <line x1="42" y1="42" x2="158" y2="158" stroke="#F8FAFC" stroke-width="4"/>
+      <line x1="158" y1="42" x2="42" y2="158" stroke="#F8FAFC" stroke-width="4"/>
+    </g>
+
+    <g>
+      <circle cx="308" cy="556" r="38" fill="#F59E0B" stroke="#FEF3C7" stroke-width="5"/>
+      <circle cx="360" cy="552" r="38" fill="#A855F7" stroke="#F5D0FE" stroke-width="5"/>
+      <circle cx="412" cy="556" r="38" fill="#14B8A6" stroke="#CCFBF1" stroke-width="5"/>
+    </g>
+    <rect x="742" y="534" width="230" height="62" rx="12" fill="#020617" stroke="#475569"/>
+    <text x="766" y="559" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">SESSION STATS</text>
+    <rect x="766" y="574" width="158" height="8" rx="4" fill="#22C55E"/>
+  </g>
+</svg>

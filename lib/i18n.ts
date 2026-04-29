@@ -14,12 +14,13 @@ export const messages: Record<Locale, Record<string, string>> = {
     "hero.cv": "CV herunterladen",
     "hero.contact": "Kontakt aufnehmen",
     "hero.viewGithub": "GitHub ansehen",
-    "hero.stackNote": "Stack‑Highlights & Lieblings‑Buzzwords",
+    "hero.viewLinkedIn": "LinkedIn ansehen",
+    "hero.stackNote": "Stack-Highlights & Lieblings-Buzzwords",
 
     "projects.title": "Projekte",
     "projects.subtitle": "Eine Auswahl. Mehr auf GitHub.",
     "projects.allRepos": "Alle Repos",
-    "projects.notice": "Kommt noch – Links werden aktualisiert",
+    "projects.notice": "Featured Work",
 
     "contact.title": "Direkt kontaktieren",
     "contact.subtitle": "Ich melde mich in der Regel sehr schnell.",
@@ -39,12 +40,13 @@ export const messages: Record<Locale, Record<string, string>> = {
     "hero.cv": "Download CV",
     "hero.contact": "Get in touch",
     "hero.viewGithub": "View GitHub",
+    "hero.viewLinkedIn": "View LinkedIn",
     "hero.stackNote": "Stack highlights & favorite buzzwords",
 
     "projects.title": "Projects",
     "projects.subtitle": "A selection. See more on GitHub.",
     "projects.allRepos": "All repos",
-    "projects.notice": "More coming – links will be updated",
+    "projects.notice": "Featured Work",
 
     "contact.title": "Contact me",
     "contact.subtitle": "I usually reply very quickly.",

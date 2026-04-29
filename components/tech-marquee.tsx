@@ -9,11 +9,11 @@ export function TechMarquee() {
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
   }, [])
-  const items = ["React","TypeScript","Node.js","Next.js","MongoDB","MySQL","Docker","Tailwind","Clean Code","UCD","Performance"]
+  const items = ["React","TypeScript","Python","Next.js","MongoDB","MySQL","Docker","Tailwind","Clean Code","UX","Performance","Streamlit","Canvas"]
   return (
-    <div className="relative overflow-hidden rounded-3xl border p-4 bg-gradient-to-b from-background to-muted">
+    <div className="relative overflow-hidden rounded-lg border bg-gradient-to-b from-background to-muted p-4">
       <div className="whitespace-nowrap will-change-transform" ref={ref}>
-        {[...items, ...items].map((t,i)=>(<span key={i} className="inline-flex items-center rounded-full border px-3 py-1 text-sm mr-3 opacity-80">{t}</span>))}
+        {[...items, ...items].map((t,i)=>(<span key={i} className="mr-3 inline-flex items-center rounded-md border bg-background/70 px-3 py-1 text-sm opacity-85">{t}</span>))}
       </div>
     </div>
   )

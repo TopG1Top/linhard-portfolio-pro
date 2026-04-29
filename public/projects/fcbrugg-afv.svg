@@ -1,0 +1,54 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">FC Brugg AFV results app preview</title>
+  <desc id="desc">A football results dashboard with a pitch, score cards, and scorers list.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1F1C"/>
+      <stop offset=".55" stop-color="#0F766E"/>
+      <stop offset="1" stop-color="#F7C948"/>
+    </linearGradient>
+    <filter id="shadow" x="78" y="70" width="1044" height="650" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="24" stdDeviation="32" flood-color="#031412" flood-opacity=".36"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="760" fill="url(#bg)"/>
+  <path d="M102 620C280 548 364 660 541 589C696 527 747 404 903 406C1025 408 1094 477 1200 438V760H0V668C36 654 69 634 102 620Z" fill="#FDE68A" opacity=".18"/>
+
+  <g filter="url(#shadow)">
+    <rect x="120" y="92" width="960" height="576" rx="18" fill="#F8FAFC"/>
+    <rect x="120" y="92" width="960" height="84" rx="18" fill="#0F172A"/>
+    <text x="164" y="144" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="900">FC Brugg</text>
+    <text x="344" y="145" fill="#5EEAD4" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">AFV Ergebnisse &amp; Torschuetzen</text>
+    <rect x="902" y="116" width="116" height="36" rx="18" fill="#FACC15"/>
+    <text x="930" y="140" fill="#111827" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="900">LIVE</text>
+
+    <rect x="164" y="218" width="500" height="348" rx="20" fill="#15803D"/>
+    <rect x="188" y="242" width="452" height="300" rx="12" stroke="#DCFCE7" stroke-width="6"/>
+    <line x1="414" y1="242" x2="414" y2="542" stroke="#DCFCE7" stroke-width="5"/>
+    <circle cx="414" cy="392" r="54" stroke="#DCFCE7" stroke-width="5"/>
+    <rect x="188" y="324" width="72" height="136" stroke="#DCFCE7" stroke-width="5"/>
+    <rect x="568" y="324" width="72" height="136" stroke="#DCFCE7" stroke-width="5"/>
+    <circle cx="306" cy="326" r="14" fill="#FFFFFF"/>
+    <circle cx="362" cy="436" r="14" fill="#FACC15"/>
+    <circle cx="478" cy="356" r="14" fill="#FFFFFF"/>
+    <circle cx="526" cy="474" r="14" fill="#FACC15"/>
+    <circle cx="414" cy="392" r="17" fill="#0F172A"/>
+
+    <rect x="706" y="218" width="314" height="96" rx="16" fill="#E0F2FE"/>
+    <text x="734" y="254" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="900">1. Mannschaft</text>
+    <text x="734" y="296" fill="#0369A1" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="900">3 : 1</text>
+    <text x="862" y="292" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800">Heimsieg</text>
+
+    <rect x="706" y="338" width="314" height="96" rx="16" fill="#ECFDF5"/>
+    <text x="734" y="374" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="900">Junioren B1</text>
+    <text x="734" y="416" fill="#047857" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="900">2 : 2</text>
+    <text x="862" y="412" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800">Auswaerts</text>
+
+    <rect x="706" y="458" width="314" height="108" rx="16" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="734" y="494" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="900">Torschuetzen</text>
+    <rect x="734" y="514" width="88" height="12" rx="6" fill="#0F766E"/>
+    <rect x="842" y="514" width="138" height="12" rx="6" fill="#CBD5E1"/>
+    <rect x="734" y="538" width="118" height="12" rx="6" fill="#0F766E"/>
+    <rect x="872" y="538" width="86" height="12" rx="6" fill="#CBD5E1"/>
+  </g>
+</svg>

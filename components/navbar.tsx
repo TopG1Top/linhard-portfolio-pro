@@ -34,17 +34,17 @@ export function Navbar() {
           <LanguageToggle />
           <ThemeToggle />
           <a href={site.github} target="_blank" rel="noreferrer">
-            <Button variant="ghost" className="rounded-2xl"><Github className="h-5 w-5" /></Button>
+            <Button variant="ghost" className="rounded-lg"><Github className="h-5 w-5" /></Button>
           </a>
           <a href={site.linkedin} target="_blank" rel="noreferrer">
-            <Button variant="ghost" className="rounded-2xl"><Linkedin className="h-5 w-5" /></Button>
+            <Button variant="ghost" className="rounded-lg"><Linkedin className="h-5 w-5" /></Button>
           </a>
         </div>
 
         <div className="md:hidden flex items-center gap-2">
           <LanguageToggle />
           <ThemeToggle />
-          <Button variant="ghost" onClick={() => setOpen(true)} className="rounded-2xl"><Menu className="h-6 w-6" /></Button>
+          <Button variant="ghost" onClick={() => setOpen(true)} className="rounded-lg"><Menu className="h-6 w-6" /></Button>
         </div>
       </div>
 

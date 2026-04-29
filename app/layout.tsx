@@ -6,18 +6,19 @@ import { ThemeProvider } from "next-themes"
 import { LangProvider } from "@/components/lang-provider"
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: `${site.name} – Portfolio`,
   description: site.tagline,
   openGraph: {
     title: `${site.name} – Portfolio`,
     description: site.tagline,
-    url: "https://example.com",
+    url: "/",
     siteName: site.name,
-    images: [{ url: "/og.jpg", width: 1200, height: 630 }],
+    images: [{ url: "/og.svg", width: 1200, height: 630 }],
     locale: "de_CH",
     type: "website",
   },
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon.svg" }],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
