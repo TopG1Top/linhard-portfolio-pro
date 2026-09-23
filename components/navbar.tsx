@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { Github, Linkedin, Menu } from "lucide-react"
 import { site } from "@/lib/site"
 import { Button } from "@/components/ui/button"
@@ -12,22 +13,30 @@ import { useI18n } from "@/components/lang-provider"
 export function Navbar() {
   const [open, setOpen] = useState(false)
   const { t } = useI18n()
+  const pathname = usePathname()
 
   useEffect(() => { document.body.style.overflow = open ? "hidden" : "auto" }, [open])
 
   return (
-    <div className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b">
-      <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="h-3 w-3 rounded-full bg-gradient-to-br from-indigo-500 to-emerald-400 animate-pulse" />
-          <span className="font-semibold tracking-tight">{site.name}</span>
+    <div className="sticky top-0 z-40 border-b bg-background/78 backdrop-blur-xl supports-[backdrop-filter]:bg-background/72">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+        <Link href="/" className="group flex items-center gap-3" aria-label={`${site.name} Home`}>
+          <div className="relative grid h-8 w-8 place-items-center rounded-md border bg-card text-[10px] font-black">
+            <span className="relative z-10">LZ</span>
+            <div className="absolute inset-1 rounded-sm bg-gradient-to-br from-indigo-500/30 to-emerald-400/30 transition group-hover:inset-0" />
+          </div>
+          <span className="hidden font-semibold tracking-tight sm:inline">{site.name}</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-2">
           {site.nav.map((n) => (
             <Link key={n.href} href={n.href}>
-              <Button variant="ghost" className="rounded-full">
+              <Button
+                variant="ghost"
+                className={`relative rounded-md px-3 ${pathname === n.href ? "bg-accent text-foreground" : "text-muted-foreground"}`}
+              >
                 {t(`nav.${n.key}`)}
+                {pathname === n.href ? <span className="absolute inset-x-3 -bottom-[13px] h-px bg-secondary" /> : null}
               </Button>
             </Link>
           ))}
@@ -44,7 +53,7 @@ export function Navbar() {
         <div className="md:hidden flex items-center gap-2">
           <LanguageToggle />
           <ThemeToggle />
-          <Button variant="ghost" onClick={() => setOpen(true)} className="rounded-lg"><Menu className="h-6 w-6" /></Button>
+          <Button variant="ghost" onClick={() => setOpen(true)} className="rounded-lg" aria-label="Navigation öffnen"><Menu className="h-6 w-6" /></Button>
         </div>
       </div>
 
@@ -52,7 +61,7 @@ export function Navbar() {
         <div className="grid gap-1">
           {site.nav.map((n) => (
             <Link key={n.href} href={n.href} onClick={() => setOpen(false)} className="w-full">
-              <Button className="w-full justify-start rounded-xl" variant="ghost">{t(`nav.${n.key}`)}</Button>
+              <Button className={`w-full justify-start rounded-lg ${pathname === n.href ? "bg-accent" : ""}`} variant="ghost">{t(`nav.${n.key}`)}</Button>
             </Link>
           ))}
           <div className="flex gap-2 pt-2">

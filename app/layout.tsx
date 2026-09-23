@@ -4,6 +4,7 @@ import { site } from "@/lib/site"
 import { Navbar } from "@/components/navbar"
 import { ThemeProvider } from "next-themes"
 import { LangProvider } from "@/components/lang-provider"
+import { SiteUnlock } from "@/components/site-unlock"
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
@@ -27,11 +28,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LangProvider>
+            <SiteUnlock />
             <Navbar />
             <main>{children}</main>
-            <footer className="border-t">
-              <div className="mx-auto max-w-7xl px-4 py-6 text-sm text-muted-foreground flex flex-col md:flex-row items-center justify-between gap-3">
-                <div>© {new Date().getFullYear()} {site.name}. Alle Rechte vorbehalten.</div>
+            <footer className="mt-12 border-t bg-card/35">
+              <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
+                <div>
+                  <div className="font-semibold text-foreground">{site.name}</div>
+                  <div className="mt-1">© {new Date().getFullYear()} · Entwickelt in der Schweiz.</div>
+                </div>
                 <div className="inline-flex items-center gap-4">
                   <a href={site.github} target="_blank" rel="noreferrer" className="underline-offset-4 hover:underline">GitHub</a>
                   <a href={site.linkedin} target="_blank" rel="noreferrer" className="underline-offset-4 hover:underline">LinkedIn</a>

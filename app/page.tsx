@@ -25,9 +25,10 @@ import { TechMarquee } from "@/components/tech-marquee";
 import { useI18n } from "@/components/lang-provider";
 import { ProjectCard } from "@/components/project-card";
 import { cn } from "@/lib/utils";
+import { SystemPulse } from "@/components/system-pulse";
 
 const stats = [
-  { value: "6", label: "ausgewählte Projekte" },
+  { value: "7", label: "realisierte Projekte" },
   { value: "2+", label: "Jahre Praxis" },
   { value: "10+", label: "Tools & Technologien" },
   { value: "CH", label: "Fokus & Ausbildung" },
@@ -55,6 +56,12 @@ const codeLines = [
   "const focus = ['UX', 'Performance', 'Clean Code'];",
   "ship(project).with({ polish: true, data: readable });",
   "measure(flow).then(improve).repeat();",
+];
+
+const homepageProjects = [
+  projects[0],
+  ...projects.filter((project) => project.placeholder),
+  ...projects.slice(1).filter((project) => !project.placeholder),
 ];
 
 export default function HomePage() {
@@ -87,7 +94,7 @@ export default function HomePage() {
                 href={site.cvUrl}
                 target="_blank"
                 rel="noreferrer"
-                className={cn(buttonVariants({ size: "lg" }), "w-full rounded-lg sm:w-auto")}
+                className={cn(buttonVariants({ size: "lg" }), "signal-button w-full rounded-lg sm:w-auto")}
               >
                 <Download className="mr-2 h-5 w-5" /> {t("hero.cv")}
               </a>
@@ -136,7 +143,7 @@ export default function HomePage() {
 
             <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {stats.map((item) => (
-                <div key={item.label} className="rounded-lg border bg-card/80 p-4 shadow-sm">
+                <div key={item.label} className="rounded-lg border bg-card/80 p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/30">
                   <div className="text-2xl font-black">{item.value}</div>
                   <div className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                     {item.label}
@@ -147,7 +154,7 @@ export default function HomePage() {
           </div>
 
           <div className="relative min-w-0">
-            <div className="overflow-hidden rounded-lg border bg-card/90 shadow-2xl">
+            <div className="corner-lines overflow-hidden rounded-lg border bg-card/90 shadow-2xl">
               <div className="flex items-center gap-2 border-b bg-muted/70 px-4 py-3">
                 <span className="h-3 w-3 rounded-full bg-rose-500" />
                 <span className="h-3 w-3 rounded-full bg-amber-400" />
@@ -169,6 +176,9 @@ export default function HomePage() {
                         <span>{line}</span>
                       </div>
                     ))}
+                  </div>
+                  <div className="mt-4">
+                    <SystemPulse />
                   </div>
                   <div className="mt-4">
                     <TechMarquee />
@@ -206,7 +216,7 @@ export default function HomePage() {
           {focusAreas.map((area) => {
             const Icon = area.icon;
             return (
-              <div key={area.title} className="rounded-lg border bg-card/80 p-5 shadow-sm">
+              <div key={area.title} className="group rounded-lg border bg-card/80 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
                 <Icon className="h-6 w-6 text-primary" />
                 <h2 className="mt-4 text-lg font-bold tracking-tight">{area.title}</h2>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">{area.text}</p>
@@ -224,8 +234,7 @@ export default function HomePage() {
               <Badge className="rounded-md">{t("projects.notice")}</Badge>
             </div>
             <p className="mt-2 max-w-2xl text-muted-foreground">
-              Nicht nur Repo-Links: jedes Projekt zeigt jetzt klarer, was es kann und warum es
-              spannend ist.
+              Echte Builds, klare technische Tiefe und zwei reservierte Slots für das, was als Nächstes kommt.
             </p>
           </div>
 
@@ -240,7 +249,7 @@ export default function HomePage() {
         </div>
 
         <div className="mt-6 grid gap-6 md:grid-cols-2">
-          {projects.map((p, index) => (
+          {homepageProjects.map((p, index) => (
             <ProjectCard key={p.title} p={p} featured={index === 0} />
           ))}
         </div>
