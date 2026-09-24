@@ -1,259 +1,213 @@
 "use client";
 
-import {
-  ArrowRight,
-  Code,
-  Database,
-  Download,
-  Github,
-  GraduationCap,
-  Linkedin,
-  Mail,
-  MapPin,
-  Rocket,
-  ShieldCheck,
-  Sparkles,
-  TerminalSquare,
-} from "lucide-react";
-import Link from "next/link";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowDownRight, ArrowUpRight, Download } from "lucide-react";
+import { useRef } from "react";
 import { site } from "@/lib/site";
-import { Section } from "@/components/section";
-import { buttonVariants } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { projects } from "@/lib/projects";
-import { TechMarquee } from "@/components/tech-marquee";
-import { useI18n } from "@/components/lang-provider";
-import { ProjectCard } from "@/components/project-card";
-import { cn } from "@/lib/utils";
-import { SystemPulse } from "@/components/system-pulse";
+import { projects, type Project } from "@/lib/projects";
 
-const stats = [
-  { value: "7", label: "realisierte Projekte" },
-  { value: "2+", label: "Jahre Praxis" },
-  { value: "10+", label: "Tools & Technologien" },
-  { value: "CH", label: "Fokus & Ausbildung" },
-];
+const intro = "Engineering, Daten und Interface-Design werden zu Produkten, die klar funktionieren und sich präzise anfühlen.";
 
-const focusAreas = [
+const stories = [
   {
-    icon: Rocket,
-    title: "Schnell von Idee zu Demo",
-    text: "MVPs, Web-Apps und kleine Tools mit sichtbarem Fortschritt statt endloser Theorie.",
+    project: projects.find((project) => project.title === "Calc — Private Vault")!,
+    mode: "obsidian",
+    chapter: "Privacy",
+    headline: "Was privat ist, bleibt privat.",
+    text: "Eine Local-first PWA mit doppelter Identität: alltäglich ein präziser Rechner, dahinter ein verschlüsselter Medien-Vault — ohne Cloud und ohne Recovery-Backdoor.",
+    action: "Konzept ansehen",
   },
   {
-    icon: ShieldCheck,
-    title: "Sauber und belastbar",
-    text: "Struktur, Validierung, klare Komponenten und Details, die später Zeit sparen.",
+    project: projects.find((project) => project.title === "CityPulse Control Room")!,
+    mode: "ice",
+    chapter: "Data clarity",
+    headline: "Komplexe Signale. Eine klare Lage.",
+    text: "Wetter, Luftqualität, Karte und lokale Signale werden nicht bloss gesammelt. CityPulse übersetzt sie in eine ruhige, sofort lesbare Entscheidungsebene.",
+    action: "Live-System öffnen",
   },
   {
-    icon: Database,
-    title: "Daten verständlich machen",
-    text: "Dashboards, Datenbanken und UI-Flows, die Informationen wirklich nutzbar machen.",
+    project: projects.find((project) => project.title === "Casino LUXE NOIR")!,
+    mode: "noir",
+    chapter: "Interaction",
+    headline: "Interaktion braucht Haltung.",
+    text: "Roulette, Blackjack und Slots in einer zusammenhängenden Dark-Luxury-Welt. Animation, Session-Logik und Game-Feel folgen derselben Idee: Jede Reaktion muss sich absichtlich anfühlen.",
+    action: "Experience starten",
   },
-];
+] as const;
 
-const codeLines = [
-  "const focus = ['UX', 'Performance', 'Clean Code'];",
-  "ship(project).with({ polish: true, data: readable });",
-  "measure(flow).then(improve).repeat();",
-];
-
-const homepageProjects = [
-  projects[0],
-  ...projects.filter((project) => project.placeholder),
-  ...projects.slice(1).filter((project) => !project.placeholder),
-];
-
-export default function HomePage() {
-  const { t } = useI18n();
-  const featuredProject = projects[0];
+function ProjectScene({
+  project,
+  mode,
+  chapter,
+  headline,
+  text,
+  action,
+}: {
+  project: Project;
+  mode: string;
+  chapter: string;
+  headline: string;
+  text: string;
+  action: string;
+}) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const imageY = useTransform(scrollYProgress, [0, 0.5, 1], [150, 0, -120]);
+  const imageScale = useTransform(scrollYProgress, [0, 0.48, 1], [0.82, 1, 0.9]);
+  const imageRotate = useTransform(scrollYProgress, [0, 0.5, 1], [7, 0, -5]);
+  const copyY = useTransform(scrollYProgress, [0.18, 0.5, 0.82], [70, 0, -45]);
+  const copyOpacity = useTransform(scrollYProgress, [0.17, 0.38, 0.77, 0.92], [0, 1, 1, 0]);
+  const scanY = useTransform(scrollYProgress, [0.22, 0.76], ["-12%", "112%"]);
+  const href = project.demo || project.github;
 
   return (
-    <>
-      <Section className="overflow-hidden pb-12 pt-12 md:pt-16">
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(120deg,hsl(var(--background))_0%,hsl(var(--muted))_45%,hsl(var(--background))_100%)]" />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(rgba(99,102,241,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.08)_1px,transparent_1px)] bg-[size:44px_44px]" />
-
-        <div className="grid min-w-0 items-center gap-10 lg:grid-cols-[1.02fr_0.98fr]">
-          <div className="min-w-0">
-            <div className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-3 py-1 text-xs shadow-sm md:text-sm">
-              <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-              <span className="font-medium text-muted-foreground">{t("hero.available")}</span>
-            </div>
-
-            <h1 className="mt-5 max-w-3xl text-4xl font-extrabold tracking-tight md:text-6xl">
-              {site.name}
-            </h1>
-            <p className="mt-4 max-w-2xl text-lg leading-8 text-muted-foreground md:text-xl">
-              Ich entwickle schnelle Web-Apps, datenbasierte Tools und interaktive Experiences
-              mit klarem UI, sauberem Code und Fokus auf echte Wirkung.
-            </p>
-
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              <a
-                href={site.cvUrl}
-                target="_blank"
-                rel="noreferrer"
-                className={cn(buttonVariants({ size: "lg" }), "signal-button w-full rounded-lg sm:w-auto")}
-              >
-                <Download className="mr-2 h-5 w-5" /> {t("hero.cv")}
-              </a>
-
-              <Link
-                href="/contact"
-                className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "w-full rounded-lg sm:w-auto")}
-              >
-                <Mail className="mr-2 h-5 w-5" /> {t("hero.contact")}
-              </Link>
-
-              <a
-                href={site.github}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex w-fit items-center gap-2 text-sm font-medium"
-              >
-                <Github className="h-4 w-4" />
-                <span className="underline-offset-4 hover:underline">{t("hero.viewGithub")}</span>
-                <ArrowRight className="h-4 w-4" />
-              </a>
-
-              <a
-                href={site.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex w-fit items-center gap-2 text-sm font-medium"
-              >
-                <Linkedin className="h-4 w-4" />
-                <span className="underline-offset-4 hover:underline">{t("hero.viewLinkedIn")}</span>
-                <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
-
-            <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-              <span className="inline-flex min-w-0 items-center gap-2">
-                <MapPin className="h-4 w-4" /> {site.location}
-              </span>
-              <span className="inline-flex min-w-0 items-center gap-2">
-                <GraduationCap className="h-4 w-4" /> EFZ Applikationsentwicklung
-              </span>
-              <span className="inline-flex min-w-0 items-center gap-2">
-                <Code className="h-4 w-4" /> Sauberer Code, starke UX
-              </span>
-            </div>
-
-            <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {stats.map((item) => (
-                <div key={item.label} className="rounded-lg border bg-card/80 p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/30">
-                  <div className="text-2xl font-black">{item.value}</div>
-                  <div className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    {item.label}
-                  </div>
-                </div>
-              ))}
-            </div>
+    <section ref={sectionRef} className={`work-scene work-scene--${mode}`}>
+      <div className="work-sticky">
+        <div className="scene-orbit" aria-hidden="true" />
+        <motion.div className="project-visual" style={{ y: imageY, scale: imageScale, rotateY: imageRotate }}>
+          <div className="project-depth project-depth--back" aria-hidden="true" />
+          <div className="project-depth project-depth--mid" aria-hidden="true" />
+          <div className="project-frame">
+            <img src={project.image.src} alt={project.image.alt} />
+            <motion.i className="project-scan" style={{ y: scanY }} aria-hidden="true" />
           </div>
+        </motion.div>
 
-          <div className="relative min-w-0">
-            <div className="corner-lines overflow-hidden rounded-lg border bg-card/90 shadow-2xl">
-              <div className="flex items-center gap-2 border-b bg-muted/70 px-4 py-3">
-                <span className="h-3 w-3 rounded-full bg-rose-500" />
-                <span className="h-3 w-3 rounded-full bg-amber-400" />
-                <span className="h-3 w-3 rounded-full bg-emerald-500" />
-                <span className="ml-auto inline-flex items-center gap-2 text-xs font-semibold text-muted-foreground">
-                  <TerminalSquare className="h-4 w-4" /> portfolio.tsx
-                </span>
-              </div>
+        <motion.div className="project-copy" style={{ y: copyY, opacity: copyOpacity }}>
+          <p className="scene-chapter">{chapter}</p>
+          <h2>{headline}</h2>
+          <p className="scene-description">{text}</p>
+          <div className="project-proof" aria-label="Technische Schwerpunkte">
+            {project.highlights.map((highlight) => <span key={highlight}>{highlight}</span>)}
+          </div>
+          {href ? (
+            <a className="scene-link" href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined}>
+              {action} <ArrowUpRight aria-hidden="true" />
+            </a>
+          ) : (
+            <span className="scene-link scene-link--quiet">{project.status}</span>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
 
-              <div className="grid min-w-0 lg:grid-cols-[0.95fr_1.05fr]">
-                <div className="min-w-0 border-b p-4 sm:p-5 lg:border-b-0 lg:border-r">
-                  <div className="mb-4 inline-flex items-center gap-2 rounded-md border bg-background px-3 py-1 text-xs font-semibold">
-                    <Sparkles className="h-4 w-4 text-primary" /> build mode
-                  </div>
-                  <div className="min-w-0 space-y-3 font-mono text-xs leading-6 text-muted-foreground">
-                    {codeLines.map((line, index) => (
-                      <div key={line} className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap rounded-md bg-slate-950 px-3 py-2 text-slate-200">
-                        <span className="mr-3 text-slate-500">{String(index + 1).padStart(2, "0")}</span>
-                        <span>{line}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-4">
-                    <SystemPulse />
-                  </div>
-                  <div className="mt-4">
-                    <TechMarquee />
-                  </div>
-                </div>
+export default function HomePage() {
+  const heroRef = useRef<HTMLElement>(null);
+  const bridgeRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const { scrollYProgress: bridgeProgress } = useScroll({
+    target: bridgeRef,
+    offset: ["start end", "end start"],
+  });
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.04, 1.24]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "13%"]);
+  const copyX = useTransform(scrollYProgress, [0, 0.72], ["0%", "-20%"]);
+  const copyOpacity = useTransform(scrollYProgress, [0, 0.58], [1, 0]);
+  const veilOpacity = useTransform(scrollYProgress, [0, 0.86, 1], [0.05, 0.56, 0.82]);
+  const bridgeImageY = useTransform(bridgeProgress, [0, 1], ["-20%", "18%"]);
+  const bridgeTextY = useTransform(bridgeProgress, [0.12, 0.54], [90, 0]);
+  const bridgeTextOpacity = useTransform(bridgeProgress, [0.12, 0.42], [0, 1]);
 
-                <div className="min-w-0 p-4">
-                  <div className="overflow-hidden rounded-md border bg-muted">
-                    <img
-                      src={featuredProject.image.src}
-                      alt={featuredProject.image.alt}
-                      className="aspect-[16/10] w-full object-cover"
-                    />
-                  </div>
-                  <div className="mt-3 grid grid-cols-3 gap-2">
-                    {projects.slice(1, 4).map((project) => (
-                      <div key={project.title} className="overflow-hidden rounded-md border bg-muted">
-                        <img
-                          src={project.image.src}
-                          alt={project.image.alt}
-                          className="aspect-[4/3] w-full object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+  return (
+    <div className="portfolio-stage">
+      <motion.div className="entry-shutter" initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 1.15, delay: 0.55, ease: [0.65, 0, 0.35, 1] }} aria-hidden="true">
+        <motion.i initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.8, ease: "easeInOut" }} />
+      </motion.div>
+
+      <section ref={heroRef} className="hero-sequence" aria-labelledby="hero-title">
+        <div className="hero-sticky">
+          <motion.div className="hero-image-wrap" style={{ scale: imageScale, y: imageY }}>
+            <img src="/linhard-monolith-hero.png" alt="Gläserner Monolith in einem dunklen architektonischen Raum" className="hero-image" />
+          </motion.div>
+          <div className="hero-shade" />
+          <motion.div className="hero-veil" style={{ opacity: veilOpacity }} />
+
+          <motion.div className="hero-copy" style={{ x: copyX, opacity: copyOpacity }}>
+            <motion.h1 id="hero-title" initial={{ clipPath: "inset(0 100% 0 0)" }} animate={{ clipPath: "inset(0 0% 0 0)" }} transition={{ duration: 1.25, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}>
+              Ich baue digitale
+              <span>Systeme, die bleiben.</span>
+            </motion.h1>
+            <div className="hero-intro">
+              <p aria-label={intro}>
+                {intro.split(" ").map((word, index) => (
+                  <motion.span key={`${word}-${index}`} initial={{ opacity: 0.12 }} animate={{ opacity: 1 }} transition={{ duration: 0.42, delay: 1.05 + index * 0.045 }} aria-hidden="true">{word} </motion.span>
+                ))}
+              </p>
+              <a href="#work" className="round-link" aria-label="Zu den ausgewählten Projekten"><ArrowDownRight aria-hidden="true" /></a>
             </div>
+          </motion.div>
+
+          <div className="hero-signature" aria-hidden="true"><span>LZ</span><i /><span>Portfolio · 2026</span></div>
+        </div>
+      </section>
+
+      <section ref={bridgeRef} id="work" className="opening-scene">
+        <motion.div className="bridge-image" style={{ y: bridgeImageY }} aria-hidden="true">
+          <img src="/linhard-monolith-hero.png" alt="" />
+        </motion.div>
+        <motion.div className="opening-copy" style={{ y: bridgeTextY, opacity: bridgeTextOpacity }}>
+          <div className="opening-line" />
+          <p className="opening-overline">Ausgewählte Systeme</p>
+          <h2>Kein Schaufenster.<span>Ein Blick in die Maschine.</span></h2>
+          <a href="#privacy" className="text-link">Geschichte beginnen <ArrowDownRight aria-hidden="true" /></a>
+        </motion.div>
+      </section>
+
+      <div id="privacy">
+        {stories.map((story) => <ProjectScene key={story.project.title} {...story} />)}
+      </div>
+
+      <section className="method-scene" aria-labelledby="method-title">
+        <div className="method-visual" aria-hidden="true">
+          <div className="method-screen method-screen--back"><img src="/projects/noten-optimizer-pro.svg" alt="" /></div>
+          <div className="method-screen method-screen--middle"><img src="/projects/shooterball.svg" alt="" /></div>
+          <div className="method-screen method-screen--front"><img src="/projects/portfolio-os.svg" alt="" /></div>
+        </div>
+        <div className="method-copy">
+          <p className="scene-chapter">Arbeitsweise</p>
+          <h2 id="method-title">Richtung vor Geschwindigkeit.</h2>
+          <p>Ich entwickle vom Nutzen nach innen: zuerst der Flow, dann die Architektur, danach die Bewegung. So wird aus einer Idee ein Produkt statt nur eine Oberfläche.</p>
+          <div className="method-sequence" aria-label="Vorgehen">
+            <span>Verstehen</span><i /><span>Verdichten</span><i /><span>Ausliefern</span>
           </div>
         </div>
-      </Section>
+      </section>
 
-      <Section className="py-8">
-        <div className="grid gap-4 md:grid-cols-3">
-          {focusAreas.map((area) => {
-            const Icon = area.icon;
-            return (
-              <div key={area.title} className="group rounded-lg border bg-card/80 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
-                <Icon className="h-6 w-6 text-primary" />
-                <h2 className="mt-4 text-lg font-bold tracking-tight">{area.title}</h2>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">{area.text}</p>
-              </div>
-            );
-          })}
-        </div>
-      </Section>
-
-      <Section className="pt-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <section className="profile-scene" aria-labelledby="profile-title">
+        <div className="profile-grid">
           <div>
-            <div className="flex flex-wrap items-center gap-3">
-              <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Ausgewählte Projekte</h2>
-              <Badge className="rounded-md">{t("projects.notice")}</Badge>
-            </div>
-            <p className="mt-2 max-w-2xl text-muted-foreground">
-              Echte Builds, klare technische Tiefe und zwei reservierte Slots für das, was als Nächstes kommt.
-            </p>
+            <p className="scene-chapter">Profil</p>
+            <h2 id="profile-title">Technik mit Klarheit. Ehrgeiz mit Substanz.</h2>
           </div>
-
-          <a
-            href={site.github}
-            target="_blank"
-            rel="noreferrer"
-            className={cn(buttonVariants({ variant: "secondary" }), "rounded-lg")}
-          >
-            {t("projects.allRepos")} <ArrowRight className="ml-2 h-4 w-4" />
-          </a>
+          <div className="profile-story">
+            <p>Ich bin {site.name}, Applikationsentwickler in Ausbildung mit Berufsmaturität Wirtschaft. Frontend, Backend und Datenbanken verbinde ich zu einem sauberen Ganzen.</p>
+            <p>Leistungsfussball und Captain-Erfahrung prägen meine Arbeitsweise: Verantwortung übernehmen, unter Druck ruhig bleiben und konsequent bis zum Ende liefern.</p>
+            <a href={site.cvUrl} target="_blank" rel="noreferrer" className="scene-link">CV öffnen <Download aria-hidden="true" /></a>
+          </div>
         </div>
-
-        <div className="mt-6 grid gap-6 md:grid-cols-2">
-          {homepageProjects.map((p, index) => (
-            <ProjectCard key={p.title} p={p} featured={index === 0} />
-          ))}
+        <div className="stack-rail" aria-label="Technologien">
+          <div>React · Next.js · TypeScript · Python · SQL · Node.js · Web Crypto · IndexedDB · Docker · Product UX · React · Next.js · TypeScript · Python · SQL · Node.js · Web Crypto · IndexedDB · Docker · Product UX ·</div>
         </div>
-      </Section>
-    </>
+      </section>
+
+      <footer className="finale" aria-labelledby="finale-title">
+        <div className="finale-symbol" aria-hidden="true"><span>L</span><span>Z</span></div>
+        <p className="scene-chapter">Nächster Build</p>
+        <h2 id="finale-title">Eine gute Idee verdient eine präzise Umsetzung.</h2>
+        <a className="finale-mail" href={`mailto:${site.email}`}>{site.email}<ArrowUpRight aria-hidden="true" /></a>
+        <div className="finale-meta">
+          <span>Schweiz · Verfügbar für neue Projekte</span>
+          <div><a href={site.github} target="_blank" rel="noreferrer">GitHub</a><a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a><a href={site.cvUrl} target="_blank" rel="noreferrer">CV</a></div>
+        </div>
+      </footer>
+    </div>
   );
 }
