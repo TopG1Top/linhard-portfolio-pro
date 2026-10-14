@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 
 type Chapter = { label: string; title: string; body: string; signal: string };
 
-export function ScrollSequence({ id, eyebrow, chapters, image, endnote }: { id: string; eyebrow: string; chapters: Chapter[]; image?: string; endnote: string }) {
+export function ScrollSequence({ id, eyebrow, chapters, image, endnote, visual = "orbit" }: { id: string; eyebrow: string; chapters: Chapter[]; image?: string; endnote: string; visual?: "orbit" | "pulse" }) {
   const target = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
   const { scrollYProgress } = useScroll({ target, offset: ["start start", "end end"] });
@@ -20,7 +20,7 @@ export function ScrollSequence({ id, eyebrow, chapters, image, endnote }: { id: 
   });
 
   return (
-    <section id={id} ref={target} className="sequence" style={{ height: `${chapters.length * 92 + 100}svh` }} aria-label={eyebrow}>
+    <section id={id} ref={target} className={`sequence sequence-visual-${visual}`} style={{ height: `${chapters.length * 92 + 100}svh` }} aria-label={eyebrow}>
       <div className="sequence-sticky">
         {image && <motion.div className="sequence-image" style={{ scale: imageScale }}><img src={image} alt="" /></motion.div>}
         <div className="sequence-grid" aria-hidden="true" />
@@ -30,10 +30,7 @@ export function ScrollSequence({ id, eyebrow, chapters, image, endnote }: { id: 
             {chapters.map((chapter, index) => <div key={chapter.label} className={index === active ? "is-active" : ""}><span>0{index + 1}</span><strong>{chapter.label}</strong></div>)}
           </div>
           <div className="sequence-instrument" aria-hidden="true">
-            <motion.div className="sequence-orbit sequence-orbit-outer" style={{ rotate: orbit }} />
-            <motion.div className="sequence-orbit sequence-orbit-inner" style={{ rotate: innerOrbit }} />
-            <div className="sequence-cross"><Crosshair strokeWidth={.65} /></div>
-            <span className="sequence-tick sequence-tick-top" /><span className="sequence-tick sequence-tick-right" /><span className="sequence-tick sequence-tick-bottom" /><span className="sequence-tick sequence-tick-left" />
+            {visual === "orbit" ? <><motion.div className="sequence-orbit sequence-orbit-outer" style={{ rotate: orbit }} /><motion.div className="sequence-orbit sequence-orbit-inner" style={{ rotate: innerOrbit }} /><div className="sequence-cross"><Crosshair strokeWidth={.65} /></div><span className="sequence-tick sequence-tick-top" /><span className="sequence-tick sequence-tick-right" /><span className="sequence-tick sequence-tick-bottom" /><span className="sequence-tick sequence-tick-left" /></> : <><div className="sequence-pulse-frame"><div className="sequence-pulse-bars">{Array.from({ length: 17 }, (_, index) => <i key={index} style={{ animationDelay: `${index * -0.12}s` }} />)}</div><span className="sequence-pulse-line" /></div><div className="sequence-pulse-field"><span /><span /><span /><span /></div></>}
             <div className="sequence-instrument-label"><span>INPUT / {String(active + 1).padStart(2, "0")}</span><span>{chapters[active].signal}</span></div>
           </div>
           <div className="sequence-copy" aria-live="polite">
