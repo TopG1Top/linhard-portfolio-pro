@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValueEvent, useTransform, type MotionValue } from "framer-motion";
+import { AnimatePresence, motion, useMotionValueEvent, useTransform, type MotionValue } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Typewriter } from "@/components/kinetic-text";
 
@@ -23,23 +23,65 @@ function EncryptionInstrument({ progress }: Props) {
 }
 
 function CityInstrument({ progress }: Props) {
-  const line = useTransform(progress, [.12, .72], [0, 1]);
-  return <div className="project-instrument project-instrument-city" aria-hidden="true"><div className="instrument-chrome"><span>URBAN SIGNALS</span><span>LIVE SYSTEM MAP</span></div><div className="city-radar"><div className="city-sweep" /><div className="city-rings" /><span className="city-node city-node-a" /><span className="city-node city-node-b" /><span className="city-node city-node-c" /><span className="city-node city-node-d" /><motion.svg viewBox="0 0 400 400"><motion.path d="M80 260 L155 110 L270 155 L330 285 L160 305 Z" fill="none" stroke="currentColor" strokeWidth="1" style={{ pathLength: line }} /></motion.svg><strong>CONTROL ROOM</strong></div><div className="instrument-footer"><span>WETTER</span><span>LUFT</span><span>KARTE</span></div></div>;
+  const [phase, setPhase] = useState(0);
+  const route = useTransform(progress, [.18, .76], [0, 1]);
+  useMotionValueEvent(progress, "change", (value) => setPhase(value < .42 ? 0 : value < .57 ? 1 : 2));
+  const phases = [
+    { code: "01 / LOCATE", title: "Eine Stadt. Ein klares Lagebild.", detail: "Standort und Umgebung werden räumlich geordnet.", metric: "SEARCH → MAP" },
+    { code: "02 / SYNTHESIZE", title: "Signale werden Kontext.", detail: "Wetter, Luft und Verkehr erhalten eine gemeinsame Ebene.", metric: "3 SIGNALS / 1 VIEW" },
+    { code: "03 / DECIDE", title: "Das Wesentliche bleibt.", detail: "Nicht mehr Daten. Die richtige Entscheidungsebene.", metric: "CONTEXT / READY" },
+  ];
+  return <div className={`project-instrument atlas-instrument atlas-phase-${phase}`} aria-hidden="true">
+    <div className="atlas-header"><span>URBAN SIGNALS <i /></span><span>CONTROL ROOM / DEMO</span></div>
+    <div className="atlas-map">
+      <svg viewBox="0 0 600 430" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <g className="atlas-streets"><path d="M-20 315 C90 280 145 302 232 235 S380 165 625 197" /><path d="M-10 112 C94 137 120 194 228 169 S445 56 627 80" /><path d="M45 -15 C68 116 176 177 176 441" /><path d="M390 -20 C350 105 390 224 544 446" /><path d="M560 -20 C496 124 441 216 470 447" /><path d="M-20 397 C130 343 254 369 379 311 S527 304 624 348" /></g>
+        <g className="atlas-blocks"><path d="M91 55 152 84 137 130 74 112Z" /><path d="M251 36 329 19 347 84 272 106Z" /><path d="M250 244 313 228 337 274 278 300Z" /><path d="M370 126 450 111 462 159 386 179Z" /><path d="M67 235 120 225 133 280 82 299Z" /><path d="M466 302 543 307 520 369 453 353Z" /></g>
+        <motion.path className="atlas-route" d="M84 331 C151 309 158 255 225 243 S321 180 389 181 S478 157 524 98" style={{ pathLength: route }} />
+        <circle className="atlas-origin" cx="84" cy="331" r="5" /><circle className="atlas-destination" cx="524" cy="98" r="5" />
+      </svg>
+      <span className="atlas-coordinate atlas-coordinate-a">47°10′N</span><span className="atlas-coordinate atlas-coordinate-b">08°30′E</span>
+      <div className="atlas-beacon atlas-beacon-a" /><div className="atlas-beacon atlas-beacon-b" /><div className="atlas-crosshair" />
+      <div className="atlas-map-label">CITYPULSE <span>SPATIAL / SIGNAL LAYER</span></div>
+    </div>
+    <div className="atlas-readout"><div className="atlas-readout-index"><span>SYS / 02</span><span>0{phase + 1}—03</span></div><AnimatePresence mode="wait"><motion.div key={phase} initial={{ opacity: 0, y: 18, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} exit={{ opacity: 0, y: -13, filter: "blur(5px)" }} transition={{ duration: .55 }}><span className="atlas-code">{phases[phase].code}</span><strong>{phases[phase].title}</strong><p>{phases[phase].detail}</p></motion.div></AnimatePresence><span className="atlas-metric">{phases[phase].metric}</span></div>
+    <div className="atlas-timeline"><span /><span className={phase >= 1 ? "is-active" : ""} /><span className={phase >= 2 ? "is-active" : ""} /></div>
+  </div>;
 }
 
 function CasinoInstrument({ progress }: Props) {
-  const wheel = useTransform(progress, [0, 1], [0, 810]);
-  const reelA = useTransform(progress, [.1, .7], ["-110%", "0%"]);
-  const reelB = useTransform(progress, [.1, .78], ["-170%", "0%"]);
-  const reelC = useTransform(progress, [.1, .86], ["-230%", "0%"]);
-  return <div className="project-instrument project-instrument-casino" aria-hidden="true"><div className="instrument-chrome"><span>LUXE NOIR / TABLE 01</span><span>DEMO EXPERIENCE</span></div><div className="casino-stage"><motion.div className="casino-wheel" style={{ rotate: wheel }}><div className="casino-wheel-inner"><span>0</span><span>17</span><span>32</span><span>8</span></div></motion.div><span className="casino-marker" /><div className="casino-reels"><div><motion.span style={{ y: reelA }}>♠<br />7</motion.span></div><div><motion.span style={{ y: reelB }}>◆<br />7</motion.span></div><div><motion.span style={{ y: reelC }}>♣<br />7</motion.span></div></div></div><div className="instrument-footer"><span>ROULETTE</span><span>BLACKJACK</span><span>SLOTS</span></div></div>;
+  const [phase, setPhase] = useState(0);
+  const wheel = useTransform(progress, [.14, .82], [0, 540]);
+  useMotionValueEvent(progress, "change", (value) => setPhase(value < .42 ? 0 : value < .57 ? 1 : 2));
+  const phases = [
+    { eyebrow: "01 / THE TABLE", title: "Präzision im Spiel.", detail: "Jeder Einsatz beginnt mit einer bewussten Geste." },
+    { eyebrow: "02 / THE HAND", title: "Spannung ohne Lärm.", detail: "Karten, Zustand und Reaktion folgen derselben Logik." },
+    { eyebrow: "03 / THE SESSION", title: "Ein System. Drei Modi.", detail: "Das Erlebnis bleibt vom ersten bis zum letzten Zug konsistent." },
+  ];
+  return <div className={`project-instrument luxe-instrument luxe-phase-${phase}`} aria-hidden="true">
+    <div className="luxe-header"><span className="luxe-monogram">LN</span><span>LUXE NOIR <i /> PRIVATE TABLE</span><span>DEMO / NO WAGER</span></div>
+    <div className="luxe-theatre"><div className="luxe-theatre-rule" />
+      <AnimatePresence mode="wait">
+        {phase === 0 ? <motion.div className="luxe-roulette" key="roulette" initial={{ opacity: 0, scale: .88, filter: "blur(8px)" }} animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }} exit={{ opacity: 0, scale: 1.08, filter: "blur(7px)" }} transition={{ duration: .65 }}><motion.div className="luxe-wheel" style={{ rotate: wheel }}><span>0</span><span>17</span><span>32</span><span>8</span><i /></motion.div><div className="luxe-ball" /><div className="luxe-chip luxe-chip-a"><span>01</span></div><div className="luxe-chip luxe-chip-b"><span>05</span></div></motion.div> : phase === 1 ? <motion.div className="luxe-hand" key="hand" initial={{ opacity: 0, y: 28, filter: "blur(8px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} exit={{ opacity: 0, y: -22, filter: "blur(7px)" }} transition={{ duration: .65 }}><div className="luxe-card"><span>7</span><strong>♠</strong><small>7</small></div><div className="luxe-card"><span>A</span><strong>♠</strong><small>A</small></div><div className="luxe-hand-line" /><p>BLACKJACK / HAND 01</p></motion.div> : <motion.div className="luxe-session" key="session" initial={{ opacity: 0, y: 25, filter: "blur(8px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} exit={{ opacity: 0, y: -20 }} transition={{ duration: .65 }}><span>SESSION / LOCAL</span><div><b>01</b><strong>ROULETTE</strong><i /></div><div><b>02</b><strong>BLACKJACK</strong><i /></div><div><b>03</b><strong>SLOTS</strong><i /></div></motion.div>}
+      </AnimatePresence>
+    </div>
+    <div className="luxe-narrative"><span>{phases[phase].eyebrow}</span><strong>{phases[phase].title}</strong><p>{phases[phase].detail}</p></div><div className="luxe-bottom"><span>INTERACTION / SYSTEM</span><div><i className={phase === 0 ? "is-active" : ""} /><i className={phase === 1 ? "is-active" : ""} /><i className={phase === 2 ? "is-active" : ""} /></div><span>0{phase + 1} / 03</span></div>
+  </div>;
 }
 
 function GradesInstrument({ progress }: Props) {
-  const line = useTransform(progress, [.14, .76], [0, 1]);
-  const [grade, setGrade] = useState("4.2");
-  useMotionValueEvent(progress, "change", (value) => setGrade((4.2 + Math.min(1, Math.max(0, (value - .15) / .6)) * 1.3).toFixed(1)));
-  return <div className="project-instrument project-instrument-grades" aria-hidden="true"><div className="instrument-chrome"><span>SWISS GRADE ENGINE</span><span>TARGET / 6.0</span></div><div className="grades-chart"><div className="grades-grid" /><motion.svg viewBox="0 0 400 250"><motion.path d="M18 213 C90 195 115 200 160 155 S230 165 275 108 S340 95 390 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ pathLength: line }} /></motion.svg><div className="grades-result"><span>ZIELNOTE</span><strong>{grade}</strong><em>/ 6.0</em></div><div className="grades-marker" /></div><div className="instrument-footer"><span>SIMULATION</span><span>PLANUNG</span><span>EXPORT</span></div></div>;
+  const [phase, setPhase] = useState(0);
+  const [nextGrade, setNextGrade] = useState(5);
+  const grade = ((19.5 + nextGrade) / 5).toFixed(1);
+  const scale = useTransform(progress, [.18, .82], [0, 1]);
+  const railY = useTransform(scale, [0, 1], ["31%", "17%"]);
+  useMotionValueEvent(progress, "change", (value) => { setPhase(value < .42 ? 0 : value < .57 ? 1 : 2); setNextGrade(5 + Math.min(1, Math.max(0, (value - .42) / .25))); });
+  const phases = [
+    { code: "01 / IST-ZUSTAND", title: "Gewichtung verstehen.", note: "Beispieldaten · Schweizer Skala" },
+    { code: "02 / SZENARIO", title: "Was wäre, wenn?", note: "Nächste Prüfung simulieren" },
+    { code: "03 / ZIELPLAN", title: "Aus Ziel wird Plan.", note: "Lernschritte + Kalenderexport" },
+  ];
+  return <div className={`project-instrument grade-instrument grade-phase-${phase}`} aria-hidden="true"><div className="grade-header"><span>SWISS GRADE ENGINE</span><span>CH / 1.0—6.0</span></div><div className="grade-main"><div className="grade-rail"><div className="grade-rail-scale"><span>6.0</span><span>5.0</span><span>4.0</span><span>3.0</span><span>2.0</span><span>1.0</span></div><div className="grade-rail-track"><i /><motion.b style={{ y: railY }} /><span>Ø</span></div></div><div className="grade-workspace"><div className="grade-equation"><span>GEWICHTETER DURCHSCHNITT</span><strong>Σ (Note × Gewicht)<i />Σ Gewicht</strong></div><div className="grade-rows"><div><span>MATHEMATIK</span><b>4.5</b><em>× 2</em></div><div><span>DEUTSCH</span><b>5.0</b><em>× 1</em></div><div><span>PROJEKT</span><b>5.5</b><em>× 1</em></div>{phase > 0 && <motion.div className="grade-next-row" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .45 }}><span>NÄCHSTE PRÜFUNG</span><b>{nextGrade.toFixed(1)}</b><em>× 1</em></motion.div>}</div><div className="grade-output"><span>{phase === 0 ? "AKTUELLER Ø" : "SIMULIERTER Ø"}</span><strong>{grade}</strong><em>/ 6.0</em></div></div></div><div className="grade-narrative"><span>{phases[phase].code}</span><strong>{phases[phase].title}</strong><p>{phases[phase].note}</p></div><div className="grade-bottom"><span>ILLUSTRATIVE DEMO</span><div><i className={phase === 0 ? "is-active" : ""} /><i className={phase === 1 ? "is-active" : ""} /><i className={phase === 2 ? "is-active" : ""} /></div><span>0{phase + 1} / 03</span></div></div>;
 }
 
 function GameInstrument({ progress }: Props) {

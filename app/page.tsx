@@ -51,15 +51,15 @@ function ProjectChapter({ project, index }: { project: Project; index: number })
   const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.08, 1, 1.06]);
   const imageY = useTransform(scrollYProgress, [0, 1], ["-3%", "3%"]);
   const imageReveal = useTransform(scrollYProgress, [0, .22, .75, 1], ["inset(14% 9%)", "inset(0% 0%)", "inset(0% 0%)", "inset(10% 7%)"]);
-  const copyY = useTransform(scrollYProgress, [0.16, 0.48, 0.82], [70, 0, -40]);
-  const copyOpacity = useTransform(scrollYProgress, [0.12, 0.32, 0.72, 0.9], [0, 1, 1, 0]);
+  const copyY = useTransform(scrollYProgress, [0.12, 0.35, 0.82], [42, 0, -24]);
+  const copyOpacity = useTransform(scrollYProgress, [0.08, 0.22, 0.84, 0.96], [0, 1, 1, 0]);
   const lineScale = useTransform(scrollYProgress, [0.16, 0.58], [0, 1]);
   const signalScale = useTransform(scrollYProgress, [0.12, .84], [0, 1]);
   const narrative = projectNarratives[project.title];
   const href = project.demo || project.github;
 
   return (
-    <section ref={section} className={`lux-case lux-case-effect-${index}`} aria-labelledby={`case-${index}`}>
+    <section ref={section} className={`lux-case lux-case-effect-${index}${index >= 1 && index <= 3 ? " lux-case-featured-motion" : ""}`} aria-labelledby={`case-${index}`}>
       <div className="lux-case-sticky">
         <motion.div className="lux-case-media" style={{ scale: imageScale, y: imageY, clipPath: imageReveal }}><img src={project.image.src} alt={project.image.alt} decoding="async" /></motion.div>
         <div className="lux-case-shade" />
