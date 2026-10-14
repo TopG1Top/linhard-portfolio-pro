@@ -3,6 +3,7 @@ import "./globals.css"
 import { site } from "@/lib/site"
 import { Navbar } from "@/components/navbar"
 import { LangProvider } from "@/components/lang-provider"
+import { EntryVerification } from "@/components/entry-verification"
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="de" suppressHydrationWarning>
       <body>
         <LangProvider>
+          <EntryVerification />
           <Navbar />
           <main>{children}</main>
         </LangProvider>

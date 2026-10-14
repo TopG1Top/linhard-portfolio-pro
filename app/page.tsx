@@ -1,13 +1,15 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
-import { ArrowDownRight, ArrowRight, ArrowUpRight, Download } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { useRef, useState } from "react";
 import { projects, type Project } from "@/lib/projects";
 import { site } from "@/lib/site";
 import { CyberVault } from "@/components/cyber-vault";
 import { ScrollSequence } from "@/components/scroll-sequence";
 import { Typewriter, WordReveal } from "@/components/kinetic-text";
+import { ProjectInstrument } from "@/components/project-instruments";
+import { ProfileSequence } from "@/components/profile-sequence";
 
 const projectNarratives: Record<string, { eyebrow: string; statement: string; detail: string }> = {
   "Calc — Private Vault": { eyebrow: "Privacy architecture", statement: "Privatsphäre beginnt nicht in den Einstellungen.", detail: "Sie beginnt in der Architektur. Ein Rechner, ein verschlüsselter Vault und kein Weg über fremde Server." },
@@ -53,8 +55,6 @@ function ProjectChapter({ project, index }: { project: Project; index: number })
   const copyOpacity = useTransform(scrollYProgress, [0.12, 0.32, 0.72, 0.9], [0, 1, 1, 0]);
   const lineScale = useTransform(scrollYProgress, [0.16, 0.58], [0, 1]);
   const signalScale = useTransform(scrollYProgress, [0.12, .84], [0, 1]);
-  const fxScale = useTransform(scrollYProgress, [.05, .45, .85], [.65, 1, 1.2]);
-  const fxOpacity = useTransform(scrollYProgress, [.08, .34, .73, .92], [0, .9, .7, 0]);
   const narrative = projectNarratives[project.title];
   const href = project.demo || project.github;
 
@@ -63,7 +63,7 @@ function ProjectChapter({ project, index }: { project: Project; index: number })
       <div className="lux-case-sticky">
         <motion.div className="lux-case-media" style={{ scale: imageScale, y: imageY, clipPath: imageReveal }}><img src={project.image.src} alt={project.image.alt} decoding="async" /></motion.div>
         <div className="lux-case-shade" />
-        <motion.div className="lux-case-effect" style={{ scale: fxScale, opacity: fxOpacity }} aria-hidden="true"><span /><span /><span /><span /></motion.div>
+        <ProjectInstrument index={index} progress={scrollYProgress} />
         <div className="lux-case-data" aria-hidden="true"><span>SYS / {String(index + 1).padStart(2, "0")}</span><span>{narrative.eyebrow}</span><span>ACTIVE</span></div>
         <div className="lux-case-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div>
         <motion.div className="lux-case-copy" style={{ y: copyY, opacity: copyOpacity }}>
@@ -135,10 +135,7 @@ export default function HomePage() {
 
       <ScrollSequence id="arbeitsweise" eyebrow="Arbeitsweise" chapters={principles} endnote="METHOD / 04 PHASES" visual="pulse" />
 
-      <section className="lux-profile" aria-labelledby="profile-title">
-        <div className="lux-profile-image"><img src="/linhard-finale-object.png" alt="Präzises Objekt aus poliertem Metall und optischem Glas" /></div><div className="lux-profile-shade" />
-        <Reveal className="lux-profile-copy"><p className="lux-label"><span />Profil</p><WordReveal id="profile-title" text="Technik mit Klarheit. Ehrgeiz mit Substanz." /><div className="lux-profile-text"><p>Ich bin {site.name}, Applikationsentwickler in Ausbildung mit Berufsmaturität Wirtschaft. Frontend, Backend und Datenbanken verbinde ich zu einem sauberen Ganzen.</p><p>Leistungsfussball und Captain-Erfahrung prägen meine Arbeitsweise: Verantwortung übernehmen, unter Druck ruhig bleiben und konsequent bis zum Ende liefern.</p></div><div className="lux-profile-links"><a className="lux-link" href="/about">Profil lesen <ArrowRight aria-hidden="true" /></a><a className="lux-link" href={site.cvUrl} target="_blank" rel="noreferrer">CV öffnen <Download aria-hidden="true" /></a></div></Reveal>
-      </section>
+      <ProfileSequence />
 
       <footer className="lux-contact" aria-labelledby="contact-title"><div className="lux-contact-top"><p className="lux-label"><span />Nächster Schritt</p><span>Zug · Schweiz</span></div><WordReveal id="contact-title" text="Lassen Sie uns etwas bauen, das Bestand hat." /><a className="lux-contact-mail" href={`mailto:${site.email}`}><span>{site.email}</span><ArrowUpRight aria-hidden="true" /></a><div className="lux-contact-bottom"><span>© 2026 Linhard Zejneli</span><div><a href={site.github} target="_blank" rel="noreferrer">GitHub</a><a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a><a href={site.cvUrl} target="_blank" rel="noreferrer">Curriculum Vitae</a></div></div></footer>
     </div>

@@ -1,135 +1,41 @@
-import { PageIntro } from "@/components/page-intro";
-import { Section } from "@/components/section";
+"use client";
+
+import { motion } from "framer-motion";
+import { ArrowDownRight, ArrowUpRight, Download } from "lucide-react";
+import { Typewriter } from "@/components/kinetic-text";
 import { site } from "@/lib/site";
-import { ArrowUpRight, Braces, Database, ShieldCheck, Trophy } from "lucide-react";
-import { AnimatedCompass } from "@/components/animated-compass";
 
 const principles = [
-  {
-    icon: Braces,
-    number: "01",
-    title: "Build before buzz",
-    text: "Ideen werden schnell zu funktionierenden Prototypen. Erst wenn der Flow stimmt, kommt die Politur.",
-  },
-  {
-    icon: ShieldCheck,
-    number: "02",
-    title: "Details schaffen Vertrauen",
-    text: "Validierung, Performance, Datenschutz und responsive Zustände gehören für mich zum Produkt, nicht zum Nachtrag.",
-  },
-  {
-    icon: Database,
-    number: "03",
-    title: "Komplexität verständlich machen",
-    text: "Gute Interfaces verstecken Technik nicht, sondern übersetzen sie in klare Entscheidungen und ruhige Abläufe.",
-  },
+  { number: "01", title: "Verstehen", signal: "CONTEXT / PURPOSE", body: "Ich beginne nicht beim Effekt. Ich kläre Ziel, Nutzer und Risiko — damit die richtige Frage vor dem ersten Pixel steht." },
+  { number: "02", title: "Verbinden", signal: "INTERFACE / LOGIC / DATA", body: "Oberfläche, Logik und Daten gehören zusammen. Eine gute Idee wird erst stark, wenn sie als ganzes System funktioniert." },
+  { number: "03", title: "Verantworten", signal: "TEST / REFINE / DELIVER", body: "Qualität zeigt sich ausserhalb der Demo: in verständlichen Zuständen, sauberem Code und dem Willen, Details zu Ende zu denken." },
 ];
 
 export default function AboutPage() {
-  return (
-    <Section className="py-12 md:py-16">
-      <PageIntro
-        index="01"
-        eyebrow="Profile"
-        title="Technik mit Klarheit. Ehrgeiz mit Substanz."
-        description="Ich entwickle digitale Produkte, die nicht nur in einer Demo funktionieren, sondern durch Struktur, Tempo und saubere Details überzeugen."
-      />
-
-      <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
-        <article className="glass-panel corner-lines rise-in rounded-lg p-6 md:p-9">
-          <span className="technical-label text-secondary">Who I am</span>
-          <h2 className="mt-4 max-w-3xl text-2xl font-black tracking-tight md:text-4xl">
-            Ich bin {site.name}, Applikationsentwickler in Ausbildung und jemand, der lieber baut als nur darüber spricht.
-          </h2>
-          <div className="mt-7 grid gap-5 text-base leading-8 text-muted-foreground md:grid-cols-2">
-            <p>
-              Mein Fokus liegt auf modernen Web-Apps, datenbasierten Tools und Interfaces, die sich direkt verständlich anfühlen. Dabei verbinde ich Frontend, Backend und Datenbanken zu einem sauberen Gesamtprodukt.
-            </p>
-            <p>
-              Mehrere Jahre Leistungsfussball und Captain-Erfahrung prägen meine Arbeitsweise: Verantwortung übernehmen, unter Druck ruhig bleiben und ein Ziel konsequent bis zum Ende verfolgen.
-            </p>
-          </div>
-          <div className="mt-8 flex flex-wrap gap-x-8 gap-y-4 border-t pt-6">
-            {["Full-Stack", "Privacy-aware", "User-centered", "Swiss precision"].map((item) => (
-              <span key={item} className="inline-flex items-center gap-2 text-sm font-semibold">
-                <ArrowUpRight className="h-4 w-4 text-secondary" /> {item}
-              </span>
-            ))}
-          </div>
-        </article>
-
-        <aside className="rise-in rise-in-delay-1 rounded-lg border bg-slate-950 p-6 text-slate-100 shadow-2xl md:p-8">
-          <div className="flex items-center justify-between">
-            <span className="technical-label text-slate-500">Operator profile</span>
-            <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_16px_rgba(52,211,153,0.8)]" />
-          </div>
-          <div className="mt-8 space-y-6">
-            <div>
-              <span className="text-xs uppercase tracking-[0.14em] text-slate-500">Status</span>
-              <p className="mt-1 font-semibold">EFZ Applikationsentwicklung · BM Wirtschaft</p>
-            </div>
-            <div>
-              <span className="text-xs uppercase tracking-[0.14em] text-slate-500">Core systems</span>
-              <p className="mt-1 font-semibold">React · Next.js · TypeScript · SQL · Python</p>
-            </div>
-            <div>
-              <span className="text-xs uppercase tracking-[0.14em] text-slate-500">Data layer</span>
-              <p className="mt-1 font-semibold">MySQL · MongoDB · CouchDB · IndexedDB</p>
-            </div>
-            <div className="flex items-center gap-3 border-t border-white/10 pt-6 text-sm text-slate-400">
-              <Trophy className="h-5 w-5 text-amber-300" /> Captain-Mentalität trifft Produktfokus.
-            </div>
-          </div>
-        </aside>
+  return <div className="about-cinematic">
+    <section className="about-cinematic-hero" aria-labelledby="about-cinematic-title">
+      <div className="about-cinematic-image"><img src="/linhard-finale-object.png" alt="" /></div>
+      <div className="about-cinematic-grid" aria-hidden="true" />
+      <div className="about-cinematic-top"><span>LINHARD ZEJNELI / PROFIL</span><span>APPLIKATIONSENTWICKLUNG · SCHWEIZ</span><span>01 / 03</span></div>
+      <div className="about-cinematic-orbit" aria-hidden="true"><span /><i /><b /></div>
+      <div className="about-cinematic-main">
+        <motion.p className="lux-label" initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}><span />DER MENSCH HINTER DEN SYSTEMEN</motion.p>
+        <motion.h1 id="about-cinematic-title" initial={{ opacity: 0, y: 55, filter: "blur(12px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 1, delay: .15, ease: [.22, 1, .36, 1] }}>Klar denken.<br /><em>Konsequent bauen.</em></motion.h1>
+        <motion.div className="about-cinematic-intro" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8, delay: .45 }}><p>Ich bin Linhard Zejneli. Mich faszinieren digitale Produkte, die komplexe Technik in einen klaren nächsten Schritt übersetzen.</p><a href="#about-story">Meine Geschichte <ArrowDownRight aria-hidden="true" /></a></motion.div>
       </div>
+      <div className="about-cinematic-bottom"><span>ENGINEERING × DISCIPLINE</span><span>SCROLLEN / ENTDECKEN</span></div>
+    </section>
 
-      <div className="mt-12">
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <div>
-            <span className="technical-label text-muted-foreground">Working principles</span>
-            <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">Wie ich Projekte angehe</h2>
-          </div>
-          <span className="hidden font-mono text-xs text-muted-foreground sm:block">03 PRINCIPLES / 01 STANDARD</span>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {principles.map((principle, index) => {
-            const Icon = principle.icon;
-            return (
-              <article key={principle.title} className={`rise-in rise-in-delay-${index + 1} group rounded-lg border bg-card/70 p-6 transition duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-lg`}>
-                <div className="flex items-center justify-between">
-                  <Icon className="h-6 w-6 text-primary" />
-                  <span className="font-mono text-xs text-muted-foreground">{principle.number}</span>
-                </div>
-                <h3 className="mt-8 text-lg font-bold">{principle.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-muted-foreground">{principle.text}</p>
-              </article>
-            );
-          })}
-        </div>
+    <section className="about-story" id="about-story" aria-labelledby="about-story-title">
+      <div className="about-story-head"><span className="lux-label"><span />01 / WER ICH BIN</span><span>PERSON / PRACTICE / PRINCIPLE</span></div>
+      <div className="about-story-layout">
+        <motion.div className="about-story-statement" initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .35 }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}><h2 id="about-story-title">Ich baue lieber etwas, das bleibt, als etwas, das nur kurz beeindruckt.</h2><div className="about-story-signal" aria-hidden="true"><i /><span>DENKEN → BAUEN → VERBESSERN</span></div></motion.div>
+        <div className="about-story-details"><motion.p initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .75 }}>Als Applikationsentwickler in Ausbildung mit Berufsmaturität Wirtschaft arbeite ich an Web-Apps, Datenwerkzeugen und Interfaces — vom Konzept bis zum funktionierenden Produkt.</motion.p><motion.p initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .75, delay: .12 }}>Leistungsfussball und Captain-Erfahrung haben meine Arbeitsweise geprägt: ruhig bleiben, Verantwortung übernehmen und mit dem Team auch dann eine Lösung finden, wenn es anspruchsvoll wird.</motion.p><div className="about-story-facts"><div><span>01 / AUSBILDUNG</span><strong>EFZ Applikationsentwicklung<br />BM Wirtschaft</strong></div><div><span>02 / FOKUS</span><strong>Web-Apps · Daten · UX<br />Privacy-aware Systeme</strong></div><div><span>03 / HALTUNG</span><strong>Verstehen · Bauen<br />Verantworten</strong></div></div></div>
       </div>
+    </section>
 
-      <section className="mt-12 grid items-center gap-8 overflow-hidden rounded-lg border bg-card/60 p-6 md:grid-cols-[0.72fr_1.28fr] md:p-10">
-        <div className="mx-auto w-full">
-          <AnimatedCompass />
-        </div>
-        <div className="relative">
-          <span className="technical-label text-secondary">Direction protocol</span>
-          <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-tight md:text-5xl">
-            Richtung vor Geschwindigkeit.
-          </h2>
-          <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
-            Schnell entwickeln ist wertvoll. Entscheidend ist aber, ob Produkt, Nutzer und Technik in dieselbe Richtung zeigen. Deshalb prüfe ich bei jedem Build zuerst den Zweck, dann den Flow und erst danach den Effekt.
-          </p>
-          <div className="mt-7 grid grid-cols-3 gap-px overflow-hidden rounded-md border bg-border text-center">
-            {["PURPOSE", "FLOW", "IMPACT"].map((item, index) => (
-              <div key={item} className="bg-background/80 px-2 py-4">
-                <span className="font-mono text-[10px] text-muted-foreground">0{index + 1}</span>
-                <div className="mt-1 text-xs font-bold tracking-[0.12em]">{item}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </Section>
-  );
+    <section className="about-protocol" aria-labelledby="about-protocol-title"><div className="about-protocol-heading"><span className="lux-label"><span />02 / MEIN PROTOKOLL</span><h2 id="about-protocol-title">Drei Schritte.<br /><em>Ein Anspruch.</em></h2><p>Gute Produkte entstehen nicht zufällig. Sie werden durch klare Entscheidungen, verlässliches Handwerk und konsequente Weiterentwicklung gebaut.</p></div><div className="about-protocol-list">{principles.map((item, index) => <motion.article key={item.number} initial={{ opacity: 0, x: 70, filter: "blur(8px)" }} whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }} viewport={{ once: true, amount: .45 }} transition={{ duration: .75, delay: index * .12, ease: [.22, 1, .36, 1] }}><div className="about-protocol-index"><span>{item.number}</span><span>{item.signal}</span></div><div className="about-protocol-content"><h3>{item.title}</h3><p>{item.body}</p></div><div className="about-protocol-trace" aria-hidden="true"><span /></div></motion.article>)}</div></section>
+
+    <section className="about-cinematic-end"><div className="about-cinematic-end-scan" aria-hidden="true"><span /><span /><span /></div><span className="lux-label"><span />03 / NÄCHSTER SCHRITT</span><h2>Die beste Idee<br />ist die, <em>die wir bauen.</em></h2><div className="about-cinematic-typed"><Typewriter text="Klarheit ist kein Zufall. Sie ist eine Entscheidung." delay={250} /></div><div className="about-cinematic-actions"><a href={`mailto:${site.email}`}>Kontakt aufnehmen <ArrowUpRight aria-hidden="true" /></a><a href={site.cvUrl} target="_blank" rel="noreferrer">CV öffnen <Download aria-hidden="true" /></a></div></section>
+  </div>;
 }

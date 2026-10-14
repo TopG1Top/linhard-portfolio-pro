@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, LockKeyhole } from "lucide-react";
+import { ArrowUpRight, Fingerprint, LockKeyhole } from "lucide-react";
 import type { Project } from "@/lib/projects";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +13,7 @@ export function ProjectCard({ p, featured = false, className }: { p: Project; fe
         {!p.placeholder && <img src={p.image.src} alt={p.image.alt} loading="lazy" />}
         <div className="project-tile-grid" aria-hidden="true" />
         <div className="project-tile-orbit" aria-hidden="true"><span /><span /></div>
-        {p.placeholder && <LockKeyhole className="project-tile-lock" aria-hidden="true" />}
+        {p.placeholder && <div className="project-tile-fingerprint" aria-hidden="true"><Fingerprint /><i /><span>SCAN / ACCESS PENDING</span></div>}
         <div className="project-tile-media-meta"><span>{p.category}</span><span>{p.year}</span></div>
       </div>
       <div className="project-tile-body">
