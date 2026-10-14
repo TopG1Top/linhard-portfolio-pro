@@ -5,6 +5,7 @@ import { ArrowDownRight, ArrowRight, ArrowUpRight, Download } from "lucide-react
 import { useRef } from "react";
 import { projects, type Project } from "@/lib/projects";
 import { site } from "@/lib/site";
+import { CyberVault } from "@/components/cyber-vault";
 
 const projectNarratives: Record<string, { eyebrow: string; statement: string; detail: string }> = {
   "Calc — Private Vault": { eyebrow: "Privacy architecture", statement: "Privatsphäre beginnt nicht in den Einstellungen.", detail: "Sie beginnt in der Architektur. Ein Rechner, ein verschlüsselter Vault und kein Weg über fremde Server." },
@@ -37,6 +38,7 @@ function ProjectChapter({ project, index }: { project: Project; index: number })
   const { scrollYProgress } = useScroll({ target: section, offset: ["start end", "end start"] });
   const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.08, 1, 1.06]);
   const imageY = useTransform(scrollYProgress, [0, 1], ["-3%", "3%"]);
+  const imageReveal = useTransform(scrollYProgress, [0, .22, .75, 1], ["inset(14% 9%)", "inset(0% 0%)", "inset(0% 0%)", "inset(10% 7%)"]);
   const copyY = useTransform(scrollYProgress, [0.16, 0.48, 0.82], [70, 0, -40]);
   const copyOpacity = useTransform(scrollYProgress, [0.12, 0.32, 0.72, 0.9], [0, 1, 1, 0]);
   const lineScale = useTransform(scrollYProgress, [0.16, 0.58], [0, 1]);
@@ -46,7 +48,7 @@ function ProjectChapter({ project, index }: { project: Project; index: number })
   return (
     <section ref={section} className="lux-case" aria-labelledby={`case-${index}`}>
       <div className="lux-case-sticky">
-        <motion.div className="lux-case-media" style={{ scale: imageScale, y: imageY }}><img src={project.image.src} alt={project.image.alt} decoding="async" /></motion.div>
+        <motion.div className="lux-case-media" style={{ scale: imageScale, y: imageY, clipPath: imageReveal }}><img src={project.image.src} alt={project.image.alt} decoding="async" /></motion.div>
         <div className="lux-case-shade" />
         <div className="lux-case-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div>
         <motion.div className="lux-case-copy" style={{ y: copyY, opacity: copyOpacity }}>
@@ -99,6 +101,7 @@ export default function HomePage() {
 
       <section id="selected" className="lux-selected" aria-labelledby="selected-title"><Reveal className="lux-selected-heading"><p className="lux-label"><span />Ausgewählte Arbeiten · 2025—2026</p><h2 id="selected-title">Sieben Systeme.<br /><em>Sieben klare Aufgaben.</em></h2><p>Vom verschlüsselten Local-first-Vault über Live-Daten bis zum Browser-Game. Jedes Projekt beginnt bei einem echten Problem und endet in einer funktionierenden Anwendung.</p></Reveal></section>
       <div className="lux-cases">{featured.map((project, index) => <ProjectChapter project={project} index={index} key={project.title} />)}</div>
+      <CyberVault />
 
       <section className="lux-index" aria-labelledby="index-title">
         <Reveal className="lux-index-heading"><p className="lux-label"><span />Projektindex</p><h2 id="index-title">Arbeiten im Überblick.</h2></Reveal>
