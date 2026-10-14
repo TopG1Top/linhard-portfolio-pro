@@ -12,10 +12,10 @@ export function Navbar() {
   return (
     <header className={`site-header ${home ? "site-header--overlay" : ""}`}>
       <Link href="/" className="brand-mark" aria-label={`${site.name} – Startseite`}>
-        <span>L</span><span>Z</span>
+        <span>Linhard</span><span>Zejneli</span>
       </Link>
       <nav aria-label="Hauptnavigation">
-        <Link href={home ? "#work" : "/projects"}>Arbeiten</Link>
+        <Link href={home ? "#selected" : "/projects"}>Arbeiten</Link>
         <Link href="/about">Profil</Link>
         <a className="contact-link" href={`mailto:${site.email}`}>
           Kontakt <ArrowUpRight aria-hidden="true" />

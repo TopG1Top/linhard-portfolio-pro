@@ -1,346 +1,121 @@
 "use client";
 
-import { motion, useMotionValue, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDownRight, ArrowRight, ArrowUpRight, Download } from "lucide-react";
 import { useRef } from "react";
-import { site } from "@/lib/site";
 import { projects, type Project } from "@/lib/projects";
+import { site } from "@/lib/site";
 
-const intro = "Engineering, Daten und Interface-Design werden zu Produkten, die klar funktionieren und sich präzise anfühlen.";
+const projectNarratives: Record<string, { eyebrow: string; statement: string; detail: string }> = {
+  "Calc — Private Vault": { eyebrow: "Privacy architecture", statement: "Privatsphäre beginnt nicht in den Einstellungen.", detail: "Sie beginnt in der Architektur. Ein Rechner, ein verschlüsselter Vault und kein Weg über fremde Server." },
+  "CityPulse Control Room": { eyebrow: "Live intelligence", statement: "Viele Signale. Eine ruhige Entscheidungsebene.", detail: "Wetter, Luftqualität, Karte und lokale Daten werden zu einem klaren Lagebild verdichtet." },
+  "Casino LUXE NOIR": { eyebrow: "Interaction system", statement: "Eine digitale Welt braucht eine eigene Haltung.", detail: "Drei Spielmodi, konsistente Session-Logik und ein Interface, bei dem jede Reaktion bewusst gestaltet ist." },
+  "Noten-Optimizer Pro (CH)": { eyebrow: "Decision tool", statement: "Aus einer Zahl wird ein konkreter nächster Schritt.", detail: "Schweizer Notenlogik, Simulation, Lernplanung und Kalenderexport in einem verständlichen Arbeitsfluss." },
+  "ULTRAKRASS – Shooterball (HTML5)": { eyebrow: "Browser engineering", statement: "Performance ist erst gut, wenn man sie spürt.", detail: "Game-Loops, Partikel, Boss-System und präzises Feedback – vollständig clientseitig im Browser." },
+  "FC Brugg – AFV Ergebnisse & Torschützen": { eyebrow: "Sports data", statement: "Information funktioniert, wenn sie sofort lesbar ist.", detail: "Resultate und Torschützen für Mannschaft, Staff und Fans – ohne Umwege auf einen Screen gebracht." },
+  "Portfolio OS": { eyebrow: "Creative frontend", statement: "Ein Portfolio kann selbst zum Produkt werden.", detail: "Fenster-Manager, Dock, Terminal und Notizen bilden ein interaktives Mini-Betriebssystem im Browser." },
+};
 
-const stories = [
-  {
-    project: projects.find((project) => project.title === "Calc — Private Vault")!,
-    mode: "obsidian",
-    chapter: "Privacy architecture",
-    headline: "Was privat ist, bleibt privat.",
-    text: "Eine Local-first PWA mit doppelter Identität: alltäglich ein präziser Rechner, dahinter ein verschlüsselter Medien-Vault — ohne Cloud und ohne Recovery-Backdoor.",
-    action: "Konzept ansehen",
-  },
-  {
-    project: projects.find((project) => project.title === "CityPulse Control Room")!,
-    mode: "ice",
-    chapter: "Data clarity",
-    headline: "Komplexe Signale. Eine klare Lage.",
-    text: "Wetter, Luftqualität, Karte und lokale Signale werden nicht bloss gesammelt. CityPulse übersetzt sie in eine ruhige, sofort lesbare Entscheidungsebene.",
-    action: "Live-System öffnen",
-    reverse: true,
-  },
-  {
-    project: projects.find((project) => project.title === "Casino LUXE NOIR")!,
-    mode: "noir",
-    chapter: "Interaction design",
-    headline: "Interaktion braucht Haltung.",
-    text: "Roulette, Blackjack und Slots in einer zusammenhängenden Dark-Luxury-Welt. Animation, Session-Logik und Game-Feel folgen derselben Idee: Jede Reaktion muss sich absichtlich anfühlen.",
-    action: "Experience starten",
-  },
-  {
-    project: projects.find((project) => project.title === "Noten-Optimizer Pro (CH)")!,
-    mode: "paper",
-    chapter: "Decision systems",
-    headline: "Aus einer Zahl wird ein nächster Schritt.",
-    text: "Durchschnitt, Simulation und Lernplan greifen ineinander. Das Tool übersetzt Schweizer Notenlogik in konkrete Entscheidungen — bis zum Kalender-Export.",
-    action: "Repository öffnen",
-    reverse: true,
-  },
-  {
-    project: projects.find((project) => project.title === "ULTRAKRASS – Shooterball (HTML5)")!,
-    mode: "arcade",
-    chapter: "Game feel",
-    headline: "Performance muss man fühlen.",
-    text: "Fünf Level, Boss-Kampf, Endless-Modus und ein reaktives Effektsystem. Ein Canvas-Experiment darüber, wie Timing, Feedback und Geschwindigkeit ein Spiel tragen.",
-    action: "Code ansehen",
-  },
-] as const;
+const featured = [
+  "Calc — Private Vault", "CityPulse Control Room", "Casino LUXE NOIR", "Noten-Optimizer Pro (CH)",
+  "ULTRAKRASS – Shooterball (HTML5)", "FC Brugg – AFV Ergebnisse & Torschützen", "Portfolio OS",
+].map((title) => projects.find((project) => project.title === title)!).filter(Boolean);
 
-const archiveProjects = [
-  projects.find((project) => project.title === "FC Brugg – AFV Ergebnisse & Torschützen")!,
-  projects.find((project) => project.title === "Portfolio OS")!,
+const principles = [
+  ["01", "Verstehen", "Ziel, Nutzer und Risiko werden geklärt, bevor die erste Oberfläche entsteht."],
+  ["02", "Verdichten", "Daten, Funktionen und Inhalte werden auf das reduziert, was eine Entscheidung wirklich braucht."],
+  ["03", "Konstruieren", "Interface, Code und Bewegung folgen einem gemeinsamen, belastbaren System."],
+  ["04", "Ausliefern", "Responsive Zustände, Performance und Deployment gehören zur Gestaltung – nicht zum Nachtrag."],
 ];
 
-const capabilityChapters = [
-  { index: "01", label: "Privacy", title: "Sicherheit ist kein Zusatz.", text: "Lokale Datenhaltung, starke Verschlüsselung und bewusst fehlende Backdoors werden von Anfang an in den Produktfluss gebaut.", tech: ["AES-GCM", "PBKDF2", "IndexedDB", "Local-first"] },
-  { index: "02", label: "Data", title: "Daten brauchen eine klare Entscheidung.", text: "APIs, Karten und Messwerte werden nicht bloss angezeigt. Sie werden priorisiert, verdichtet und in einen verständlichen nächsten Schritt übersetzt.", tech: ["REST APIs", "Geocoding", "OpenStreetMap", "SQL"] },
-  { index: "03", label: "Motion", title: "Bewegung erklärt das System.", text: "Animation gibt Feedback, führt Aufmerksamkeit und macht Reaktion spürbar — im Dashboard genauso wie im schnellen Canvas-Game.", tech: ["Framer Motion", "Canvas", "Particles", "Game loops"] },
-  { index: "04", label: "Delivery", title: "Ein Build zählt erst, wenn er läuft.", text: "Von Datenmodell und Oberfläche bis Deployment, Performance und responsiven Zuständen bleibt die Verantwortung in einer Hand.", tech: ["Next.js", "TypeScript", "Python", "Docker"] },
-];
+function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  return <motion.div className={className} initial={{ opacity: 0, y: 36 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.22 }} transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}>{children}</motion.div>;
+}
 
-function ProjectScene({ project, mode, chapter, headline, text, action, reverse = false, index }: {
-  project: Project;
-  mode: string;
-  chapter: string;
-  headline: string;
-  text: string;
-  action: string;
-  reverse?: boolean;
-  index: number;
-}) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const imageY = useTransform(scrollYProgress, [0, 0.5, 1], [150, 0, -120]);
-  const imageScale = useTransform(scrollYProgress, [0, 0.48, 1], [0.82, 1, 0.9]);
-  const imageRotate = useTransform(scrollYProgress, [0, 0.5, 1], [reverse ? -7 : 7, 0, reverse ? 5 : -5]);
-  const copyY = useTransform(scrollYProgress, [0.18, 0.5, 0.82], [70, 0, -45]);
-  const copyOpacity = useTransform(scrollYProgress, [0.17, 0.38, 0.77, 0.92], [0, 1, 1, 0]);
-  const scanY = useTransform(scrollYProgress, [0.22, 0.76], ["-12%", "112%"]);
-  const orbitScale = useTransform(scrollYProgress, [0.12, 0.8], [0.72, 1.18]);
-  const frameReveal = useTransform(scrollYProgress, [0.08, 0.31, 0.82, 0.98], ["inset(18% 13% 18% 13%)", "inset(0% 0% 0% 0%)", "inset(0% 0% 0% 0%)", "inset(12% 9% 12% 9%)"]);
-  const innerScale = useTransform(scrollYProgress, [0.05, 0.48, 0.96], [1.18, 1, 1.11]);
-  const innerX = useTransform(scrollYProgress, [0, 0.5, 1], [reverse ? "4%" : "-4%", "0%", reverse ? "-3%" : "3%"]);
-  const reflectionX = useTransform(scrollYProgress, [0.12, 0.82], ["-120%", "220%"]);
-  const copyClip = useTransform(scrollYProgress, [0.18, 0.39, 0.8, 0.93], ["inset(0 0 100% 0)", "inset(0 0 0% 0)", "inset(0 0 0% 0)", "inset(100% 0 0 0)"]);
+function ProjectChapter({ project, index }: { project: Project; index: number }) {
+  const section = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: section, offset: ["start end", "end start"] });
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.08, 1, 1.06]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-3%", "3%"]);
+  const copyY = useTransform(scrollYProgress, [0.16, 0.48, 0.82], [70, 0, -40]);
+  const copyOpacity = useTransform(scrollYProgress, [0.12, 0.32, 0.72, 0.9], [0, 1, 1, 0]);
+  const lineScale = useTransform(scrollYProgress, [0.16, 0.58], [0, 1]);
+  const narrative = projectNarratives[project.title];
   const href = project.demo || project.github;
 
   return (
-    <section ref={sectionRef} className={`work-scene work-scene--${mode} ${reverse ? "work-scene--reverse" : ""}`}>
-      <div className="work-sticky">
-        <motion.div className="scene-orbit" style={{ scale: orbitScale }} aria-hidden="true" />
-        <div className="scene-counter" aria-hidden="true"><span>0{index + 1}</span><i /><span>05</span></div>
-        <div className="scene-progress" aria-hidden="true"><motion.i style={{ scaleY: scrollYProgress }} /></div>
-        <motion.div className="project-visual" style={{ y: imageY, scale: imageScale, rotateY: imageRotate }}>
-          <div className="project-depth project-depth--back" aria-hidden="true" />
-          <div className="project-depth project-depth--mid" aria-hidden="true" />
-          <motion.div className="project-frame" style={{ clipPath: frameReveal }} whileHover={{ scale: 1.018, rotateX: -1.2 }} transition={{ duration: .55, ease: [0.22, 1, 0.36, 1] }}>
-            <motion.img src={project.image.src} alt={project.image.alt} decoding="async" style={{ scale: innerScale, x: innerX }} />
-            <div className="project-frame-meta" aria-hidden="true"><span>Case 0{index + 1}</span><span>Engineered / {project.year}</span></div>
-            <motion.i className="project-scan" style={{ y: scanY }} aria-hidden="true" />
-            <motion.i className="project-reflection" style={{ x: reflectionX }} aria-hidden="true" />
-          </motion.div>
-          <div className="project-visual-caption" aria-hidden="true"><span>{project.category}</span><span>{project.year}</span></div>
+    <section ref={section} className="lux-case" aria-labelledby={`case-${index}`}>
+      <div className="lux-case-sticky">
+        <motion.div className="lux-case-media" style={{ scale: imageScale, y: imageY }}><img src={project.image.src} alt={project.image.alt} decoding="async" /></motion.div>
+        <div className="lux-case-shade" />
+        <div className="lux-case-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div>
+        <motion.div className="lux-case-copy" style={{ y: copyY, opacity: copyOpacity }}>
+          <p className="lux-label"><span />{narrative.eyebrow}</p>
+          <h2 id={`case-${index}`}>{narrative.statement}</h2>
+          <p className="lux-case-detail">{narrative.detail}</p>
+          <div className="lux-case-facts">{project.highlights.map((item) => <span key={item}>{item}</span>)}</div>
+          {href ? <a className="lux-link" href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined}>Projekt ansehen <ArrowUpRight aria-hidden="true" /></a> : <span className="lux-link lux-link-muted">{project.status}</span>}
         </motion.div>
-        <motion.div className="project-copy" style={{ y: copyY, opacity: copyOpacity, clipPath: copyClip }}>
-          <p className="scene-chapter">{chapter}</p>
-          <h2>{headline}</h2>
-          <p className="scene-description">{text}</p>
-          <div className="project-proof" aria-label="Technische Schwerpunkte">
-            {project.highlights.map((highlight) => <span key={highlight}>{highlight}</span>)}
-          </div>
-          {href ? (
-            <a className="scene-link" href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined}>
-              {action} <ArrowUpRight aria-hidden="true" />
-            </a>
-          ) : <span className="scene-link scene-link--quiet">{project.status}</span>}
-        </motion.div>
+        <motion.div className="lux-case-rule" style={{ scaleX: lineScale }} aria-hidden="true" />
+        <div className="lux-case-meta" aria-hidden="true"><span>{project.category}</span><span>{project.year}</span></div>
       </div>
     </section>
-  );
-}
-
-function ObservatoryScene() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.02, 1.18]);
-  const imageX = useTransform(scrollYProgress, [0, 1], ["0%", "-4%"]);
-  const aperture = useTransform(scrollYProgress, [0, 0.15, 0.84, 1], ["inset(16% 12%)", "inset(0% 0%)", "inset(0% 0%)", "inset(12% 9%)"]);
-  const signalX = useTransform(scrollYProgress, [0.05, 0.88], ["-8%", "105%"]);
-  const beamScale = useTransform(scrollYProgress, [0.05, 0.9], [0, 1]);
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.12, 0.73, 0.9], [0, 1, 1, 0]);
-  const stepOne = useTransform(scrollYProgress, [0.08, 0.2, 0.34], [0.25, 1, 0.35]);
-  const stepTwo = useTransform(scrollYProgress, [0.3, 0.48, 0.63], [0.25, 1, 0.35]);
-  const stepThree = useTransform(scrollYProgress, [0.58, 0.76, 0.92], [0.25, 1, 0.35]);
-
-  return (
-    <section ref={sectionRef} className="observatory" aria-labelledby="method-title">
-      <div className="observatory-sticky">
-        <motion.img className="observatory-image" src="/linhard-data-observatory.png" alt="Architektonischer Datenraum aus Glas, Licht und Metall" style={{ scale: imageScale, x: imageX, clipPath: aperture }} />
-        <div className="observatory-shade" />
-        <motion.div className="observatory-beam" style={{ scaleX: beamScale }} aria-hidden="true" />
-        <motion.div className="observatory-copy" style={{ opacity: titleOpacity }}>
-          <p className="scene-chapter">Arbeitsweise / 03 Phasen</p>
-          <h2 id="method-title">Vom Signal<br />zum System.</h2>
-          <p>Ich beginne nicht mit Effekten, sondern mit der Frage, was ein Produkt wirklich leisten muss. Erst dann werden Struktur, Code und Bewegung sichtbar.</p>
-        </motion.div>
-        <div className="signal-track" aria-hidden="true"><motion.i style={{ x: signalX }} /></div>
-        <div className="method-steps" aria-label="Arbeitsprozess">
-          <motion.div style={{ opacity: stepOne }}><span>01</span><strong>Verstehen</strong><p>Nutzer, Ziel und Risiko präzise lesen.</p></motion.div>
-          <motion.div style={{ opacity: stepTwo }}><span>02</span><strong>Verdichten</strong><p>Flow, Daten und Architektur zu einem System verbinden.</p></motion.div>
-          <motion.div style={{ opacity: stepThree }}><span>03</span><strong>Ausliefern</strong><p>Testen, schärfen und zuverlässig online bringen.</p></motion.div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CapabilityScene() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
-  const trackX = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
-  const numeralRotate = useTransform(scrollYProgress, [0, 1], [-8, 8]);
-
-  return (
-    <section ref={sectionRef} className="capability-scene" aria-labelledby="capability-title">
-      <div className="capability-sticky">
-        <div className="capability-topline"><span>System layers / 04</span><span>Scroll to deconstruct</span></div>
-        <motion.div className="capability-track" style={{ x: trackX }}>
-          {capabilityChapters.map((chapter, index) => (
-            <article className={`capability-panel capability-panel--${index + 1}`} key={chapter.label}>
-              <motion.div className="capability-numeral" style={{ rotate: numeralRotate }} aria-hidden="true">{chapter.index}</motion.div>
-              <div className="capability-panel-copy">
-                <p>{chapter.label}</p>
-                <h2 id={index === 0 ? "capability-title" : undefined}>{chapter.title}</h2>
-                <div className="capability-detail"><p>{chapter.text}</p><div>{chapter.tech.map((item) => <span key={item}>{item}</span>)}</div></div>
-              </div>
-            </article>
-          ))}
-        </motion.div>
-        <div className="capability-meter" aria-hidden="true"><motion.i style={{ scaleX: scrollYProgress }} /></div>
-      </div>
-    </section>
-  );
-}
-
-function FinaleScene() {
-  const finaleRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: finaleRef, offset: ["start end", "end end"] });
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.18, 1]);
-  const imageY = useTransform(scrollYProgress, [0, 1], ["-7%", "0%"]);
-  const copyY = useTransform(scrollYProgress, [0.12, 0.72], [110, 0]);
-  const copyOpacity = useTransform(scrollYProgress, [0.08, 0.42], [0, 1]);
-  const lineScale = useTransform(scrollYProgress, [0.2, 0.86], [0, 1]);
-
-  return (
-    <footer ref={finaleRef} className="finale" aria-labelledby="finale-title">
-      <motion.img src="/linhard-finale-object.png" alt="Polierte Chromkugel in einem präzisen Ring aus optischem Glas" className="finale-image" style={{ scale: imageScale, y: imageY }} />
-      <div className="finale-shade" />
-      <motion.div className="finale-content" style={{ y: copyY, opacity: copyOpacity }}>
-        <p className="scene-chapter">Nächster Build / Gemeinsam</p>
-        <h2 id="finale-title">Eine gute Idee verdient eine präzise Umsetzung.</h2>
-        <p className="finale-lead">Wenn das nächste Produkt klar, schnell und unverwechselbar werden soll, beginnt die Zusammenarbeit hier.</p>
-        <a className="finale-mail" href={`mailto:${site.email}`}><motion.i style={{ scaleX: lineScale }} aria-hidden="true" />{site.email}<ArrowUpRight aria-hidden="true" /></a>
-      </motion.div>
-      <div className="finale-meta">
-        <span>Schweiz · Verfügbar für neue Projekte</span>
-        <div><a href={site.github} target="_blank" rel="noreferrer">GitHub</a><a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a><a href={site.cvUrl} target="_blank" rel="noreferrer">CV</a></div>
-      </div>
-    </footer>
   );
 }
 
 export default function HomePage() {
-  const heroRef = useRef<HTMLElement>(null);
-  const bridgeRef = useRef<HTMLElement>(null);
-  const pointerX = useMotionValue(-400);
-  const pointerY = useMotionValue(-400);
-  const haloX = useSpring(pointerX, { stiffness: 105, damping: 24, mass: .24 });
-  const haloY = useSpring(pointerY, { stiffness: 105, damping: 24, mass: .24 });
+  const hero = useRef<HTMLElement>(null);
   const { scrollYProgress: pageProgress } = useScroll();
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const { scrollYProgress: bridgeProgress } = useScroll({ target: bridgeRef, offset: ["start end", "end start"] });
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.04, 1.24]);
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "13%"]);
-  const copyX = useTransform(scrollYProgress, [0, 0.72], ["0%", "-20%"]);
-  const copyOpacity = useTransform(scrollYProgress, [0, 0.58], [1, 0]);
-  const veilOpacity = useTransform(scrollYProgress, [0, 0.86, 1], [0.05, 0.56, 0.82]);
-  const bridgeTextY = useTransform(bridgeProgress, [0.12, 0.54], [90, 0]);
-  const bridgeTextOpacity = useTransform(bridgeProgress, [0.12, 0.42], [0, 1]);
-  const bridgeNumberY = useTransform(bridgeProgress, [0, 1], ["-14%", "18%"]);
-  const bridgeRotate = useTransform(bridgeProgress, [0, 1], [-8, 9]);
+  const { scrollYProgress: heroProgress } = useScroll({ target: hero, offset: ["start start", "end start"] });
+  const heroScale = useTransform(heroProgress, [0, 1], [1, 1.09]);
+  const heroCopyY = useTransform(heroProgress, [0, 1], [0, -90]);
+  const heroCopyOpacity = useTransform(heroProgress, [0, 0.72], [1, 0]);
 
   return (
-    <div className="portfolio-stage" onPointerMove={(event) => { pointerX.set(event.clientX - 150); pointerY.set(event.clientY - 150); }} onPointerLeave={() => { pointerX.set(-400); pointerY.set(-400); }}>
-      <motion.div className="cursor-halo" style={{ x: haloX, y: haloY }} aria-hidden="true" />
-      <motion.div className="page-progress" style={{ scaleX: pageProgress }} aria-hidden="true" />
-      <motion.div className="entry-shutter" initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 1.15, delay: 0.55, ease: [0.65, 0, 0.35, 1] }} aria-hidden="true">
-        <motion.i initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.8, ease: "easeInOut" }} />
-      </motion.div>
+    <div className="lux-site">
+      <motion.div className="lux-progress" style={{ scaleX: pageProgress }} aria-hidden="true" />
 
-      <section ref={heroRef} className="hero-sequence" aria-labelledby="hero-title">
-        <div className="hero-sticky">
-          <motion.div className="hero-image-wrap" style={{ scale: imageScale, y: imageY }}>
-            <img src="/linhard-monolith-hero.png" alt="Gläserner Monolith in einem dunklen architektonischen Raum" className="hero-image" />
+      <section ref={hero} className="lux-hero" aria-labelledby="hero-title">
+        <div className="lux-hero-sticky">
+          <motion.div className="lux-hero-media" style={{ scale: heroScale }}><img src="/linhard-monolith-hero.png" alt="Gläserner Monolith in einer dunklen architektonischen Umgebung" /></motion.div>
+          <div className="lux-hero-shade" />
+          <motion.div className="lux-hero-copy" style={{ y: heroCopyY, opacity: heroCopyOpacity }}>
+            <motion.p className="lux-label" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.35 }}><span />Linhard Zejneli · Schweiz</motion.p>
+            <h1 id="hero-title"><motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 1.05, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}>Digitale Produkte.</motion.span><motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 1.05, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}>Präzise gebaut.</motion.span></h1>
+            <motion.div className="lux-hero-bottom" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, delay: 0.85 }}>
+              <p>Ich verbinde Engineering, Daten und Interface-Design zu Systemen, die verständlich funktionieren und dauerhaft bestehen.</p>
+              <a href="#selected">Arbeiten ansehen <ArrowDownRight aria-hidden="true" /></a>
+            </motion.div>
           </motion.div>
-          <div className="hero-shade" />
-          <motion.div className="hero-veil" style={{ opacity: veilOpacity }} />
-          <motion.div className="hero-light-sweep" animate={{ x: ["-130%", "170%"] }} transition={{ duration: 8, repeat: Infinity, repeatDelay: 2.5, ease: [0.65, 0, 0.35, 1] }} aria-hidden="true" />
-          <motion.div className="hero-copy" style={{ x: copyX, opacity: copyOpacity }}>
-            <p className="hero-kicker">Digital Product Engineering · Schweiz</p>
-            <motion.h1 id="hero-title" initial={{ clipPath: "inset(0 100% 0 0)" }} animate={{ clipPath: "inset(0 0% 0 0)" }} transition={{ duration: 1.25, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}>
-              Ich baue digitale<span>Systeme, die bleiben.</span>
-            </motion.h1>
-            <div className="hero-intro">
-              <p aria-label={intro}>
-                {intro.split(" ").map((word, index) => <motion.span key={`${word}-${index}`} initial={{ opacity: 0.12 }} animate={{ opacity: 1 }} transition={{ duration: 0.42, delay: 1.05 + index * 0.045 }} aria-hidden="true">{word} </motion.span>)}
-              </p>
-              <a href="#work" className="round-link" aria-label="Zu den ausgewählten Projekten"><ArrowDownRight aria-hidden="true" /></a>
-            </div>
-          </motion.div>
-          <div className="hero-side-note" aria-hidden="true"><span>Scroll to inspect</span><i /></div>
-          <div className="hero-signature" aria-hidden="true"><span>LZ</span><i /><span>Portfolio · 2026</span></div>
+          <div className="lux-hero-status"><span>Applikationsentwicklung</span><span>EFZ · Berufsmaturität</span><span>Verfügbar für neue Projekte</span></div>
         </div>
       </section>
 
-      <section ref={bridgeRef} id="work" className="opening-scene">
-        <motion.div className="bridge-geometry" style={{ y: bridgeNumberY, rotate: bridgeRotate }} aria-hidden="true"><span>07</span><i /><i /><i /></motion.div>
-        <motion.div className="opening-copy" style={{ y: bridgeTextY, opacity: bridgeTextOpacity }}>
-          <div className="opening-line" />
-          <p className="opening-overline">Ausgewählte Systeme · 2025—2026</p>
-          <h2>Kein Schaufenster.<span>Ein Blick in die Maschine.</span></h2>
-          <p className="opening-note">Sieben reale Builds. Fünf davon erzählen ihre Geschichte hier in Bewegung — vom privaten Vault bis zum Browser-Game.</p>
-          <a href="#privacy" className="text-link">Geschichte beginnen <ArrowDownRight aria-hidden="true" /></a>
-        </motion.div>
+      <section className="lux-manifesto" aria-labelledby="manifesto-title">
+        <div className="lux-manifesto-media"><img src="/linhard-data-observatory.png" alt="Dunkler architektonischer Datenraum aus Glas und Metall" /></div><div className="lux-manifesto-shade" />
+        <Reveal className="lux-manifesto-content"><p className="lux-label"><span />Haltung</p><h2 id="manifesto-title">Technologie ist dann stark, wenn sie sich selbstverständlich anfühlt.</h2><div className="lux-manifesto-columns"><p>Gute digitale Produkte stellen ihre Komplexität nicht aus. Sie schaffen Orientierung, reagieren präzise und geben Menschen Vertrauen in den nächsten Schritt.</p><p>Mein Anspruch ist ein vollständiges System: klare Idee, belastbare Architektur, sorgfältige Oberfläche und eine Umsetzung, die auch ausserhalb des perfekten Demo-Moments funktioniert.</p></div></Reveal>
+        <div className="lux-manifesto-stats"><div><strong>07</strong><span>realisierte Systeme</span></div><div><strong>04</strong><span>technische Disziplinen</span></div><div><strong>01</strong><span>Verantwortung von Idee bis Launch</span></div></div>
       </section>
 
-      <div id="privacy">{stories.map((story, index) => <ProjectScene key={story.project.title} {...story} index={index} />)}</div>
+      <section id="selected" className="lux-selected" aria-labelledby="selected-title"><Reveal className="lux-selected-heading"><p className="lux-label"><span />Ausgewählte Arbeiten · 2025—2026</p><h2 id="selected-title">Sieben Systeme.<br /><em>Sieben klare Aufgaben.</em></h2><p>Vom verschlüsselten Local-first-Vault über Live-Daten bis zum Browser-Game. Jedes Projekt beginnt bei einem echten Problem und endet in einer funktionierenden Anwendung.</p></Reveal></section>
+      <div className="lux-cases">{featured.map((project, index) => <ProjectChapter project={project} index={index} key={project.title} />)}</div>
 
-      <ObservatoryScene />
-
-      <section className="archive-scene" aria-labelledby="archive-title">
-        <div className="archive-heading">
-          <div><p className="scene-chapter">Project archive / 02</p><h2 id="archive-title">Zwei weitere<br />Systeme im Feld.</h2></div>
-          <p>Nicht jedes Projekt braucht dieselbe Bühne. Aber jedes braucht eine klare Aufgabe, belastbare Technik und eine Oberfläche, die sofort Orientierung gibt.</p>
-        </div>
-        <div className="archive-runway">
-          {archiveProjects.map((project, index) => {
-            const href = project.demo || project.github;
-            return (
-              <motion.article className="archive-project" key={project.title} initial={{ opacity: 0, y: 120 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .18 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}>
-                <motion.div className="archive-image" whileHover={{ scale: .985 }} transition={{ duration: .6, ease: [0.22, 1, 0.36, 1] }}><motion.img src={project.image.src} alt={project.image.alt} decoding="async" whileHover={{ scale: 1.07 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} /><div /><i aria-hidden="true" /></motion.div>
-                <div className="archive-index" aria-hidden="true">0{index + 6}</div>
-                <div className="archive-copy">
-                  <div><p>{project.category} · {project.year}</p><h3>{project.title}</h3></div>
-                  <p>{project.impact}</p>
-                  {href && <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined} aria-label={`${project.title} öffnen`}><ArrowUpRight /></a>}
-                </div>
-                <div className="archive-tech">{project.tech.map((tech) => <span key={tech}>{tech}</span>)}</div>
-              </motion.article>
-            );
-          })}
-        </div>
+      <section className="lux-index" aria-labelledby="index-title">
+        <Reveal className="lux-index-heading"><p className="lux-label"><span />Projektindex</p><h2 id="index-title">Arbeiten im Überblick.</h2></Reveal>
+        <div className="lux-index-list">{featured.map((project, index) => { const href = project.demo || project.github; const content = <><span>{String(index + 1).padStart(2, "0")}</span><strong>{project.title}</strong><em>{project.category}</em><i>{project.year}</i><ArrowUpRight aria-hidden="true" /></>; return href ? <a key={project.title} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined}>{content}</a> : <div key={project.title}>{content}</div>; })}</div>
       </section>
 
-      <CapabilityScene />
-
-      <section className="experience-scene" aria-labelledby="experience-title">
-        <div className="experience-intro">
-          <p className="scene-chapter">Entwicklung / 2021—heute</p>
-          <h2 id="experience-title">Lernen.<br />Anwenden.<br /><span>Ausliefern.</span></h2>
-        </div>
-        <div className="experience-line">
-          <motion.article initial={{ opacity: 0, y: 55 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }} transition={{ duration: .8 }}><time>2021</time><h3>Erste eigene Builds</h3><p>Web-Apps, Dashboards und Experimente werden vom Konzept bis zum Deployment selbst gebaut.</p></motion.article>
-          <motion.article initial={{ opacity: 0, y: 55 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }} transition={{ duration: .8, delay: .12 }}><time>2023</time><h3>EFZ + Berufsmaturität</h3><p>Applikationsentwicklung trifft Wirtschaft: OOP, Datenbanken, Netzwerke und moderne Webentwicklung.</p></motion.article>
-          <motion.article initial={{ opacity: 0, y: 55 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }} transition={{ duration: .8, delay: .24 }}><time>Heute</time><h3>Sieben Systeme. Ein Standard.</h3><p>Privacy, Daten, Game-Loops und Product UX — dokumentiert, testbar und online erlebbar.</p></motion.article>
-        </div>
-        <div className="experience-statement"><span>7</span><p>realisierte Projekte<br />zwischen Code und Produkt</p></div>
+      <section className="lux-process" aria-labelledby="process-title">
+        <div className="lux-process-intro"><Reveal><p className="lux-label"><span />Arbeitsweise</p><h2 id="process-title">Eine Idee.<br />Vier präzise Ebenen.</h2></Reveal><Reveal delay={0.1}><p>Kein Effekt wird hinzugefügt, nur weil er möglich ist. Jede Entscheidung muss dem Produkt dienen – vom Datenmodell bis zur letzten Bewegung.</p></Reveal></div>
+        <div className="lux-process-grid">{principles.map(([number, title, copy], index) => <Reveal className="lux-process-step" delay={index * 0.08} key={number}><span>{number}</span><h3>{title}</h3><p>{copy}</p></Reveal>)}</div>
       </section>
 
-      <section className="profile-scene" aria-labelledby="profile-title">
-        <div className="profile-grid">
-          <div><p className="scene-chapter">Profil / Linhard Zejneli</p><h2 id="profile-title">Technik mit Klarheit. Ehrgeiz mit Substanz.</h2></div>
-          <div className="profile-story">
-            <p>Ich bin {site.name}, Applikationsentwickler in Ausbildung mit Berufsmaturität Wirtschaft. Frontend, Backend und Datenbanken verbinde ich zu einem sauberen Ganzen.</p>
-            <p>Leistungsfussball und Captain-Erfahrung prägen meine Arbeitsweise: Verantwortung übernehmen, unter Druck ruhig bleiben und konsequent bis zum Ende liefern.</p>
-            <div className="profile-links"><a href="/about" className="scene-link">Mehr über mich <ArrowRight aria-hidden="true" /></a><a href={site.cvUrl} target="_blank" rel="noreferrer" className="scene-link">CV öffnen <Download aria-hidden="true" /></a></div>
-          </div>
-        </div>
-        <div className="profile-principles">
-          <motion.div initial={{ opacity: 0, y: 45 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }}><span>01</span><strong>Build before buzz</strong><p>Ideen werden früh zu funktionierenden Prototypen.</p></motion.div>
-          <motion.div initial={{ opacity: 0, y: 45 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }} transition={{ delay: .12 }}><span>02</span><strong>Details schaffen Vertrauen</strong><p>Performance, Datenschutz und responsive Zustände gehören zum Produkt.</p></motion.div>
-          <motion.div initial={{ opacity: 0, y: 45 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }} transition={{ delay: .24 }}><span>03</span><strong>Komplexität wird Klarheit</strong><p>Technik wird in verständliche Entscheidungen übersetzt.</p></motion.div>
-        </div>
-        <div className="stack-rail" aria-label="Technologien"><div>React · Next.js · TypeScript · Python · SQL · Node.js · Web Crypto · IndexedDB · Docker · Product UX · React · Next.js · TypeScript · Python · SQL · Node.js · Web Crypto · IndexedDB · Docker · Product UX ·</div></div>
+      <section className="lux-profile" aria-labelledby="profile-title">
+        <div className="lux-profile-image"><img src="/linhard-finale-object.png" alt="Präzises Objekt aus poliertem Metall und optischem Glas" /></div><div className="lux-profile-shade" />
+        <Reveal className="lux-profile-copy"><p className="lux-label"><span />Profil</p><h2 id="profile-title">Technik mit Klarheit.<br /><em>Ehrgeiz mit Substanz.</em></h2><div className="lux-profile-text"><p>Ich bin {site.name}, Applikationsentwickler in Ausbildung mit Berufsmaturität Wirtschaft. Frontend, Backend und Datenbanken verbinde ich zu einem sauberen Ganzen.</p><p>Leistungsfussball und Captain-Erfahrung prägen meine Arbeitsweise: Verantwortung übernehmen, unter Druck ruhig bleiben und konsequent bis zum Ende liefern.</p></div><div className="lux-profile-links"><a className="lux-link" href="/about">Profil lesen <ArrowRight aria-hidden="true" /></a><a className="lux-link" href={site.cvUrl} target="_blank" rel="noreferrer">CV öffnen <Download aria-hidden="true" /></a></div></Reveal>
       </section>
 
-      <FinaleScene />
+      <footer className="lux-contact" aria-labelledby="contact-title"><div className="lux-contact-top"><p className="lux-label"><span />Nächster Schritt</p><span>Zug · Schweiz</span></div><h2 id="contact-title">Lassen Sie uns etwas bauen, das Bestand hat.</h2><a className="lux-contact-mail" href={`mailto:${site.email}`}><span>{site.email}</span><ArrowUpRight aria-hidden="true" /></a><div className="lux-contact-bottom"><span>© 2026 Linhard Zejneli</span><div><a href={site.github} target="_blank" rel="noreferrer">GitHub</a><a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a><a href={site.cvUrl} target="_blank" rel="noreferrer">Curriculum Vitae</a></div></div></footer>
     </div>
   );
 }
