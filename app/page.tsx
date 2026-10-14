@@ -81,7 +81,7 @@ export default function HomePage() {
           <div className="lux-hero-shade" />
           <motion.div className="lux-hero-copy" style={{ y: heroCopyY, opacity: heroCopyOpacity }}>
             <motion.p className="lux-label" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.35 }}><span />Linhard Zejneli · Schweiz</motion.p>
-            <h1 id="hero-title"><motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 1.05, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}>Digitale Produkte.</motion.span><motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 1.05, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}>Präzise gebaut.</motion.span></h1>
+            <h1 id="hero-title"><span className="lux-title-line"><motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 1.05, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}>Digitale Produkte.</motion.span></span><span className="lux-title-line"><motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 1.05, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}>Präzise gebaut.</motion.span></span></h1>
             <motion.div className="lux-hero-bottom" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, delay: 0.85 }}>
               <p>Ich verbinde Engineering, Daten und Interface-Design zu Systemen, die verständlich funktionieren und dauerhaft bestehen.</p>
               <a href="#selected">Arbeiten ansehen <ArrowDownRight aria-hidden="true" /></a>

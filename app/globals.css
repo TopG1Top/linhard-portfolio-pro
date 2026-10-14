@@ -64,8 +64,9 @@ img { display: block; max-width: 100%; }
 .lux-hero-shade { position: absolute; z-index: -3; inset: 0; background: linear-gradient(90deg,rgba(7,9,13,.94) 0%,rgba(7,9,13,.72) 42%,rgba(7,9,13,.12) 76%),linear-gradient(0deg,rgba(7,9,13,.82) 0%,transparent 48%); }
 .lux-hero-copy { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 7rem clamp(1.25rem,4.2vw,4.8rem) 6rem; }
 .lux-hero-copy h1 { max-width: 11ch; margin: 2rem 0 0; font-family: var(--serif); font-size: clamp(4rem,7.5vw,8.4rem); font-weight: 400; line-height: .88; letter-spacing: -.055em; }
-.lux-hero-copy h1 > span { display: block; overflow: hidden; }
-.lux-hero-copy h1 > span:last-child { color: rgba(239,235,228,.56); font-family: var(--sans); font-size: .82em; font-weight: 300; letter-spacing: -.06em; }
+.lux-title-line { display: block; overflow: hidden; }
+.lux-title-line > span { display: block; }
+.lux-title-line:last-child > span { color: rgba(239,235,228,.56); font-family: var(--sans); font-size: .82em; font-weight: 300; letter-spacing: -.06em; }
 .lux-hero-bottom { display: flex; align-items: flex-end; gap: clamp(3rem,9vw,9rem); margin-top: clamp(3rem,7vh,5.8rem); }
 .lux-hero-bottom p { max-width: 35rem; margin: 0; color: rgba(239,235,228,.9); text-shadow: 0 1px 18px rgba(0,0,0,.75); font-size: clamp(1rem,1.45vw,1.2rem); line-height: 1.55; }
 .lux-hero-bottom a { display: inline-flex; align-items: center; gap: .65rem; border-bottom: 1px solid rgba(239,235,228,.55); padding-bottom: .55rem; font-size: .86rem; }
