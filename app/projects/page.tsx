@@ -37,7 +37,7 @@ export default function ProjectsPage() {
         </a>
       </div>
 
-      <div className="mt-8 grid gap-6 md:grid-cols-2">
+      <div className="project-grid mt-8 grid gap-6 md:grid-cols-2">
         {projects.map((p, index) => (
           <ProjectCard key={p.title} p={p} featured={index === 0} />
         ))}

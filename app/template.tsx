@@ -13,7 +13,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
         transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
       >
         <motion.div
-          className="fixed inset-x-0 top-0 z-50 h-[2px] origin-left bg-gradient-to-r from-indigo-500 via-sky-400 to-emerald-400"
+          className="fixed inset-x-0 top-0 z-50 h-[2px] origin-left bg-[#b69262]"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1, opacity: [1, 1, 0] }}
           transition={{ duration: 0.7, times: [0, 0.8, 1] }}

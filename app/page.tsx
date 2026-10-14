@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { projects, type Project } from "@/lib/projects";
 import { site } from "@/lib/site";
 import { CyberVault } from "@/components/cyber-vault";
+import { ScrollSequence } from "@/components/scroll-sequence";
 
 const projectNarratives: Record<string, { eyebrow: string; statement: string; detail: string }> = {
   "Calc — Private Vault": { eyebrow: "Privacy architecture", statement: "Privatsphäre beginnt nicht in den Einstellungen.", detail: "Sie beginnt in der Architektur. Ein Rechner, ein verschlüsselter Vault und kein Weg über fremde Server." },
@@ -22,11 +23,17 @@ const featured = [
   "ULTRAKRASS – Shooterball (HTML5)", "FC Brugg – AFV Ergebnisse & Torschützen", "Portfolio OS",
 ].map((title) => projects.find((project) => project.title === title)!).filter(Boolean);
 
+const philosophy = [
+  { label: "Klarheit", title: "Komplexität darf bleiben. Verwirrung nicht.", body: "Gute digitale Produkte zeigen nicht, wie viel Technik in ihnen steckt. Sie geben Menschen Sicherheit im nächsten Schritt — ruhig, präzise und ohne Reibung.", signal: "CLARITY" },
+  { label: "Architektur", title: "Vertrauen entsteht unter der Oberfläche.", body: "Ein Interface ist nur so stark wie das System dahinter. Datenfluss, Performance, Privatsphäre und Zustände denke ich von Anfang an mit.", signal: "STRUCTURE" },
+  { label: "Wirkung", title: "Jedes Detail muss etwas verändern.", body: "Bewegung gibt Orientierung. Gestaltung schafft Hierarchie. Code macht die Idee belastbar. Erst im Zusammenspiel wird daraus ein Produkt mit Substanz.", signal: "IMPACT" },
+];
+
 const principles = [
-  ["01", "Verstehen", "Ziel, Nutzer und Risiko werden geklärt, bevor die erste Oberfläche entsteht."],
-  ["02", "Verdichten", "Daten, Funktionen und Inhalte werden auf das reduziert, was eine Entscheidung wirklich braucht."],
-  ["03", "Konstruieren", "Interface, Code und Bewegung folgen einem gemeinsamen, belastbaren System."],
-  ["04", "Ausliefern", "Responsive Zustände, Performance und Deployment gehören zur Gestaltung – nicht zum Nachtrag."],
+  { label: "Verstehen", title: "Erst das Problem. Dann der Pixel.", body: "Ziel, Nutzer und Risiko werden geklärt, bevor eine Oberfläche entsteht. Der richtige Start spart nicht Zeit — er verhindert die falsche Richtung.", signal: "DISCOVER" },
+  { label: "Verdichten", title: "Alles Überflüssige wird zur Störung.", body: "Daten, Funktionen und Inhalte reduziere ich auf das, was eine Entscheidung wirklich braucht. Weniger Oberfläche. Mehr Orientierung.", signal: "REDUCE" },
+  { label: "Konstruieren", title: "Design und Engineering sprechen dieselbe Sprache.", body: "Interface, Code und Bewegung folgen einem gemeinsamen System. Jede Reaktion hat einen Zweck, jeder Zustand eine klare Antwort.", signal: "BUILD" },
+  { label: "Ausliefern", title: "Fertig ist erst, was draussen besteht.", body: "Responsive Zustände, Performance, Zugänglichkeit und Deployment sind Teil der Gestaltung — nicht der letzte Punkt einer Checkliste.", signal: "SHIP" },
 ];
 
 function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -42,6 +49,8 @@ function ProjectChapter({ project, index }: { project: Project; index: number })
   const copyY = useTransform(scrollYProgress, [0.16, 0.48, 0.82], [70, 0, -40]);
   const copyOpacity = useTransform(scrollYProgress, [0.12, 0.32, 0.72, 0.9], [0, 1, 1, 0]);
   const lineScale = useTransform(scrollYProgress, [0.16, 0.58], [0, 1]);
+  const orbitRotate = useTransform(scrollYProgress, [0, 1], [0, 250]);
+  const signalScale = useTransform(scrollYProgress, [0.12, .84], [0, 1]);
   const narrative = projectNarratives[project.title];
   const href = project.demo || project.github;
 
@@ -50,6 +59,8 @@ function ProjectChapter({ project, index }: { project: Project; index: number })
       <div className="lux-case-sticky">
         <motion.div className="lux-case-media" style={{ scale: imageScale, y: imageY, clipPath: imageReveal }}><img src={project.image.src} alt={project.image.alt} decoding="async" /></motion.div>
         <div className="lux-case-shade" />
+        <motion.div className="lux-case-target" style={{ rotate: orbitRotate }} aria-hidden="true"><span /><span /><span /><span /></motion.div>
+        <div className="lux-case-data" aria-hidden="true"><span>SYS / {String(index + 1).padStart(2, "0")}</span><span>{narrative.eyebrow}</span><span>ACTIVE</span></div>
         <div className="lux-case-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div>
         <motion.div className="lux-case-copy" style={{ y: copyY, opacity: copyOpacity }}>
           <p className="lux-label"><span />{narrative.eyebrow}</p>
@@ -59,6 +70,7 @@ function ProjectChapter({ project, index }: { project: Project; index: number })
           {href ? <a className="lux-link" href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined}>Projekt ansehen <ArrowUpRight aria-hidden="true" /></a> : <span className="lux-link lux-link-muted">{project.status}</span>}
         </motion.div>
         <motion.div className="lux-case-rule" style={{ scaleX: lineScale }} aria-hidden="true" />
+        <motion.div className="lux-case-signal" style={{ scaleX: signalScale }} aria-hidden="true" />
         <div className="lux-case-meta" aria-hidden="true"><span>{project.category}</span><span>{project.year}</span></div>
       </div>
     </section>
@@ -93,11 +105,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="lux-manifesto" aria-labelledby="manifesto-title">
-        <div className="lux-manifesto-media"><img src="/linhard-data-observatory.png" alt="Dunkler architektonischer Datenraum aus Glas und Metall" /></div><div className="lux-manifesto-shade" />
-        <Reveal className="lux-manifesto-content"><p className="lux-label"><span />Haltung</p><h2 id="manifesto-title">Technologie ist dann stark, wenn sie sich selbstverständlich anfühlt.</h2><div className="lux-manifesto-columns"><p>Gute digitale Produkte stellen ihre Komplexität nicht aus. Sie schaffen Orientierung, reagieren präzise und geben Menschen Vertrauen in den nächsten Schritt.</p><p>Mein Anspruch ist ein vollständiges System: klare Idee, belastbare Architektur, sorgfältige Oberfläche und eine Umsetzung, die auch ausserhalb des perfekten Demo-Moments funktioniert.</p></div></Reveal>
-        <div className="lux-manifesto-stats"><div><strong>07</strong><span>realisierte Systeme</span></div><div><strong>04</strong><span>technische Disziplinen</span></div><div><strong>01</strong><span>Verantwortung von Idee bis Launch</span></div></div>
-      </section>
+      <ScrollSequence id="haltung" eyebrow="Haltung" chapters={philosophy} image="/linhard-data-observatory.png" endnote="IDEA / SYSTEM / EXPERIENCE" />
 
       <section id="selected" className="lux-selected" aria-labelledby="selected-title"><Reveal className="lux-selected-heading"><p className="lux-label"><span />Ausgewählte Arbeiten · 2025—2026</p><h2 id="selected-title">Sieben Systeme.<br /><em>Sieben klare Aufgaben.</em></h2><p>Vom verschlüsselten Local-first-Vault über Live-Daten bis zum Browser-Game. Jedes Projekt beginnt bei einem echten Problem und endet in einer funktionierenden Anwendung.</p></Reveal></section>
       <div className="lux-cases">{featured.map((project, index) => <ProjectChapter project={project} index={index} key={project.title} />)}</div>
@@ -108,10 +116,7 @@ export default function HomePage() {
         <div className="lux-index-list">{featured.map((project, index) => { const href = project.demo || project.github; const content = <><span>{String(index + 1).padStart(2, "0")}</span><strong>{project.title}</strong><em>{project.category}</em><i>{project.year}</i><ArrowUpRight aria-hidden="true" /></>; return href ? <a key={project.title} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined}>{content}</a> : <div key={project.title}>{content}</div>; })}</div>
       </section>
 
-      <section className="lux-process" aria-labelledby="process-title">
-        <div className="lux-process-intro"><Reveal><p className="lux-label"><span />Arbeitsweise</p><h2 id="process-title">Eine Idee.<br />Vier präzise Ebenen.</h2></Reveal><Reveal delay={0.1}><p>Kein Effekt wird hinzugefügt, nur weil er möglich ist. Jede Entscheidung muss dem Produkt dienen – vom Datenmodell bis zur letzten Bewegung.</p></Reveal></div>
-        <div className="lux-process-grid">{principles.map(([number, title, copy], index) => <Reveal className="lux-process-step" delay={index * 0.08} key={number}><span>{number}</span><h3>{title}</h3><p>{copy}</p></Reveal>)}</div>
-      </section>
+      <ScrollSequence id="arbeitsweise" eyebrow="Arbeitsweise" chapters={principles} endnote="METHOD / 04 PHASES" />
 
       <section className="lux-profile" aria-labelledby="profile-title">
         <div className="lux-profile-image"><img src="/linhard-finale-object.png" alt="Präzises Objekt aus poliertem Metall und optischem Glas" /></div><div className="lux-profile-shade" />
