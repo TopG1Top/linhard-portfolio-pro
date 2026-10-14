@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowDownRight, ArrowRight, ArrowUpRight, Download } from "lucide-react";
 import { useRef } from "react";
 import { site } from "@/lib/site";
@@ -58,6 +58,13 @@ const archiveProjects = [
   projects.find((project) => project.title === "Portfolio OS")!,
 ];
 
+const capabilityChapters = [
+  { index: "01", label: "Privacy", title: "Sicherheit ist kein Zusatz.", text: "Lokale Datenhaltung, starke Verschlüsselung und bewusst fehlende Backdoors werden von Anfang an in den Produktfluss gebaut.", tech: ["AES-GCM", "PBKDF2", "IndexedDB", "Local-first"] },
+  { index: "02", label: "Data", title: "Daten brauchen eine klare Entscheidung.", text: "APIs, Karten und Messwerte werden nicht bloss angezeigt. Sie werden priorisiert, verdichtet und in einen verständlichen nächsten Schritt übersetzt.", tech: ["REST APIs", "Geocoding", "OpenStreetMap", "SQL"] },
+  { index: "03", label: "Motion", title: "Bewegung erklärt das System.", text: "Animation gibt Feedback, führt Aufmerksamkeit und macht Reaktion spürbar — im Dashboard genauso wie im schnellen Canvas-Game.", tech: ["Framer Motion", "Canvas", "Particles", "Game loops"] },
+  { index: "04", label: "Delivery", title: "Ein Build zählt erst, wenn er läuft.", text: "Von Datenmodell und Oberfläche bis Deployment, Performance und responsiven Zuständen bleibt die Verantwortung in einer Hand.", tech: ["Next.js", "TypeScript", "Python", "Docker"] },
+];
+
 function ProjectScene({ project, mode, chapter, headline, text, action, reverse = false, index }: {
   project: Project;
   mode: string;
@@ -77,6 +84,11 @@ function ProjectScene({ project, mode, chapter, headline, text, action, reverse 
   const copyOpacity = useTransform(scrollYProgress, [0.17, 0.38, 0.77, 0.92], [0, 1, 1, 0]);
   const scanY = useTransform(scrollYProgress, [0.22, 0.76], ["-12%", "112%"]);
   const orbitScale = useTransform(scrollYProgress, [0.12, 0.8], [0.72, 1.18]);
+  const frameReveal = useTransform(scrollYProgress, [0.08, 0.31, 0.82, 0.98], ["inset(18% 13% 18% 13%)", "inset(0% 0% 0% 0%)", "inset(0% 0% 0% 0%)", "inset(12% 9% 12% 9%)"]);
+  const innerScale = useTransform(scrollYProgress, [0.05, 0.48, 0.96], [1.18, 1, 1.11]);
+  const innerX = useTransform(scrollYProgress, [0, 0.5, 1], [reverse ? "4%" : "-4%", "0%", reverse ? "-3%" : "3%"]);
+  const reflectionX = useTransform(scrollYProgress, [0.12, 0.82], ["-120%", "220%"]);
+  const copyClip = useTransform(scrollYProgress, [0.18, 0.39, 0.8, 0.93], ["inset(0 0 100% 0)", "inset(0 0 0% 0)", "inset(0 0 0% 0)", "inset(100% 0 0 0)"]);
   const href = project.demo || project.github;
 
   return (
@@ -84,16 +96,19 @@ function ProjectScene({ project, mode, chapter, headline, text, action, reverse 
       <div className="work-sticky">
         <motion.div className="scene-orbit" style={{ scale: orbitScale }} aria-hidden="true" />
         <div className="scene-counter" aria-hidden="true"><span>0{index + 1}</span><i /><span>05</span></div>
+        <div className="scene-progress" aria-hidden="true"><motion.i style={{ scaleY: scrollYProgress }} /></div>
         <motion.div className="project-visual" style={{ y: imageY, scale: imageScale, rotateY: imageRotate }}>
           <div className="project-depth project-depth--back" aria-hidden="true" />
           <div className="project-depth project-depth--mid" aria-hidden="true" />
-          <div className="project-frame">
-            <img src={project.image.src} alt={project.image.alt} />
+          <motion.div className="project-frame" style={{ clipPath: frameReveal }} whileHover={{ scale: 1.018, rotateX: -1.2 }} transition={{ duration: .55, ease: [0.22, 1, 0.36, 1] }}>
+            <motion.img src={project.image.src} alt={project.image.alt} decoding="async" style={{ scale: innerScale, x: innerX }} />
+            <div className="project-frame-meta" aria-hidden="true"><span>Case 0{index + 1}</span><span>Engineered / {project.year}</span></div>
             <motion.i className="project-scan" style={{ y: scanY }} aria-hidden="true" />
-          </div>
+            <motion.i className="project-reflection" style={{ x: reflectionX }} aria-hidden="true" />
+          </motion.div>
           <div className="project-visual-caption" aria-hidden="true"><span>{project.category}</span><span>{project.year}</span></div>
         </motion.div>
-        <motion.div className="project-copy" style={{ y: copyY, opacity: copyOpacity }}>
+        <motion.div className="project-copy" style={{ y: copyY, opacity: copyOpacity, clipPath: copyClip }}>
           <p className="scene-chapter">{chapter}</p>
           <h2>{headline}</h2>
           <p className="scene-description">{text}</p>
@@ -116,7 +131,9 @@ function ObservatoryScene() {
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
   const imageScale = useTransform(scrollYProgress, [0, 1], [1.02, 1.18]);
   const imageX = useTransform(scrollYProgress, [0, 1], ["0%", "-4%"]);
+  const aperture = useTransform(scrollYProgress, [0, 0.15, 0.84, 1], ["inset(16% 12%)", "inset(0% 0%)", "inset(0% 0%)", "inset(12% 9%)"]);
   const signalX = useTransform(scrollYProgress, [0.05, 0.88], ["-8%", "105%"]);
+  const beamScale = useTransform(scrollYProgress, [0.05, 0.9], [0, 1]);
   const titleOpacity = useTransform(scrollYProgress, [0, 0.12, 0.73, 0.9], [0, 1, 1, 0]);
   const stepOne = useTransform(scrollYProgress, [0.08, 0.2, 0.34], [0.25, 1, 0.35]);
   const stepTwo = useTransform(scrollYProgress, [0.3, 0.48, 0.63], [0.25, 1, 0.35]);
@@ -125,8 +142,9 @@ function ObservatoryScene() {
   return (
     <section ref={sectionRef} className="observatory" aria-labelledby="method-title">
       <div className="observatory-sticky">
-        <motion.img className="observatory-image" src="/linhard-data-observatory.png" alt="Architektonischer Datenraum aus Glas, Licht und Metall" style={{ scale: imageScale, x: imageX }} />
+        <motion.img className="observatory-image" src="/linhard-data-observatory.png" alt="Architektonischer Datenraum aus Glas, Licht und Metall" style={{ scale: imageScale, x: imageX, clipPath: aperture }} />
         <div className="observatory-shade" />
+        <motion.div className="observatory-beam" style={{ scaleX: beamScale }} aria-hidden="true" />
         <motion.div className="observatory-copy" style={{ opacity: titleOpacity }}>
           <p className="scene-chapter">Arbeitsweise / 03 Phasen</p>
           <h2 id="method-title">Vom Signal<br />zum System.</h2>
@@ -143,9 +161,68 @@ function ObservatoryScene() {
   );
 }
 
+function CapabilityScene() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
+  const trackX = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+  const numeralRotate = useTransform(scrollYProgress, [0, 1], [-8, 8]);
+
+  return (
+    <section ref={sectionRef} className="capability-scene" aria-labelledby="capability-title">
+      <div className="capability-sticky">
+        <div className="capability-topline"><span>System layers / 04</span><span>Scroll to deconstruct</span></div>
+        <motion.div className="capability-track" style={{ x: trackX }}>
+          {capabilityChapters.map((chapter, index) => (
+            <article className={`capability-panel capability-panel--${index + 1}`} key={chapter.label}>
+              <motion.div className="capability-numeral" style={{ rotate: numeralRotate }} aria-hidden="true">{chapter.index}</motion.div>
+              <div className="capability-panel-copy">
+                <p>{chapter.label}</p>
+                <h2 id={index === 0 ? "capability-title" : undefined}>{chapter.title}</h2>
+                <div className="capability-detail"><p>{chapter.text}</p><div>{chapter.tech.map((item) => <span key={item}>{item}</span>)}</div></div>
+              </div>
+            </article>
+          ))}
+        </motion.div>
+        <div className="capability-meter" aria-hidden="true"><motion.i style={{ scaleX: scrollYProgress }} /></div>
+      </div>
+    </section>
+  );
+}
+
+function FinaleScene() {
+  const finaleRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: finaleRef, offset: ["start end", "end end"] });
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.18, 1]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-7%", "0%"]);
+  const copyY = useTransform(scrollYProgress, [0.12, 0.72], [110, 0]);
+  const copyOpacity = useTransform(scrollYProgress, [0.08, 0.42], [0, 1]);
+  const lineScale = useTransform(scrollYProgress, [0.2, 0.86], [0, 1]);
+
+  return (
+    <footer ref={finaleRef} className="finale" aria-labelledby="finale-title">
+      <motion.img src="/linhard-finale-object.png" alt="Polierte Chromkugel in einem präzisen Ring aus optischem Glas" className="finale-image" style={{ scale: imageScale, y: imageY }} />
+      <div className="finale-shade" />
+      <motion.div className="finale-content" style={{ y: copyY, opacity: copyOpacity }}>
+        <p className="scene-chapter">Nächster Build / Gemeinsam</p>
+        <h2 id="finale-title">Eine gute Idee verdient eine präzise Umsetzung.</h2>
+        <p className="finale-lead">Wenn das nächste Produkt klar, schnell und unverwechselbar werden soll, beginnt die Zusammenarbeit hier.</p>
+        <a className="finale-mail" href={`mailto:${site.email}`}><motion.i style={{ scaleX: lineScale }} aria-hidden="true" />{site.email}<ArrowUpRight aria-hidden="true" /></a>
+      </motion.div>
+      <div className="finale-meta">
+        <span>Schweiz · Verfügbar für neue Projekte</span>
+        <div><a href={site.github} target="_blank" rel="noreferrer">GitHub</a><a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a><a href={site.cvUrl} target="_blank" rel="noreferrer">CV</a></div>
+      </div>
+    </footer>
+  );
+}
+
 export default function HomePage() {
   const heroRef = useRef<HTMLElement>(null);
   const bridgeRef = useRef<HTMLElement>(null);
+  const pointerX = useMotionValue(-400);
+  const pointerY = useMotionValue(-400);
+  const haloX = useSpring(pointerX, { stiffness: 105, damping: 24, mass: .24 });
+  const haloY = useSpring(pointerY, { stiffness: 105, damping: 24, mass: .24 });
   const { scrollYProgress: pageProgress } = useScroll();
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const { scrollYProgress: bridgeProgress } = useScroll({ target: bridgeRef, offset: ["start end", "end start"] });
@@ -156,9 +233,12 @@ export default function HomePage() {
   const veilOpacity = useTransform(scrollYProgress, [0, 0.86, 1], [0.05, 0.56, 0.82]);
   const bridgeTextY = useTransform(bridgeProgress, [0.12, 0.54], [90, 0]);
   const bridgeTextOpacity = useTransform(bridgeProgress, [0.12, 0.42], [0, 1]);
+  const bridgeNumberY = useTransform(bridgeProgress, [0, 1], ["-14%", "18%"]);
+  const bridgeRotate = useTransform(bridgeProgress, [0, 1], [-8, 9]);
 
   return (
-    <div className="portfolio-stage">
+    <div className="portfolio-stage" onPointerMove={(event) => { pointerX.set(event.clientX - 150); pointerY.set(event.clientY - 150); }} onPointerLeave={() => { pointerX.set(-400); pointerY.set(-400); }}>
+      <motion.div className="cursor-halo" style={{ x: haloX, y: haloY }} aria-hidden="true" />
       <motion.div className="page-progress" style={{ scaleX: pageProgress }} aria-hidden="true" />
       <motion.div className="entry-shutter" initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 1.15, delay: 0.55, ease: [0.65, 0, 0.35, 1] }} aria-hidden="true">
         <motion.i initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.8, ease: "easeInOut" }} />
@@ -171,6 +251,7 @@ export default function HomePage() {
           </motion.div>
           <div className="hero-shade" />
           <motion.div className="hero-veil" style={{ opacity: veilOpacity }} />
+          <motion.div className="hero-light-sweep" animate={{ x: ["-130%", "170%"] }} transition={{ duration: 8, repeat: Infinity, repeatDelay: 2.5, ease: [0.65, 0, 0.35, 1] }} aria-hidden="true" />
           <motion.div className="hero-copy" style={{ x: copyX, opacity: copyOpacity }}>
             <p className="hero-kicker">Digital Product Engineering · Schweiz</p>
             <motion.h1 id="hero-title" initial={{ clipPath: "inset(0 100% 0 0)" }} animate={{ clipPath: "inset(0 0% 0 0)" }} transition={{ duration: 1.25, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}>
@@ -189,7 +270,7 @@ export default function HomePage() {
       </section>
 
       <section ref={bridgeRef} id="work" className="opening-scene">
-        <div className="bridge-geometry" aria-hidden="true"><span>07</span><i /><i /><i /></div>
+        <motion.div className="bridge-geometry" style={{ y: bridgeNumberY, rotate: bridgeRotate }} aria-hidden="true"><span>07</span><i /><i /><i /></motion.div>
         <motion.div className="opening-copy" style={{ y: bridgeTextY, opacity: bridgeTextOpacity }}>
           <div className="opening-line" />
           <p className="opening-overline">Ausgewählte Systeme · 2025—2026</p>
@@ -212,8 +293,8 @@ export default function HomePage() {
           {archiveProjects.map((project, index) => {
             const href = project.demo || project.github;
             return (
-              <article className="archive-project" key={project.title}>
-                <div className="archive-image"><img src={project.image.src} alt={project.image.alt} /><div /></div>
+              <motion.article className="archive-project" key={project.title} initial={{ opacity: 0, y: 120 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .18 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}>
+                <motion.div className="archive-image" whileHover={{ scale: .985 }} transition={{ duration: .6, ease: [0.22, 1, 0.36, 1] }}><motion.img src={project.image.src} alt={project.image.alt} decoding="async" whileHover={{ scale: 1.07 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} /><div /><i aria-hidden="true" /></motion.div>
                 <div className="archive-index" aria-hidden="true">0{index + 6}</div>
                 <div className="archive-copy">
                   <div><p>{project.category} · {project.year}</p><h3>{project.title}</h3></div>
@@ -221,11 +302,13 @@ export default function HomePage() {
                   {href && <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined} aria-label={`${project.title} öffnen`}><ArrowUpRight /></a>}
                 </div>
                 <div className="archive-tech">{project.tech.map((tech) => <span key={tech}>{tech}</span>)}</div>
-              </article>
+              </motion.article>
             );
           })}
         </div>
       </section>
+
+      <CapabilityScene />
 
       <section className="experience-scene" aria-labelledby="experience-title">
         <div className="experience-intro">
@@ -233,9 +316,9 @@ export default function HomePage() {
           <h2 id="experience-title">Lernen.<br />Anwenden.<br /><span>Ausliefern.</span></h2>
         </div>
         <div className="experience-line">
-          <article><time>2021</time><h3>Erste eigene Builds</h3><p>Web-Apps, Dashboards und Experimente werden vom Konzept bis zum Deployment selbst gebaut.</p></article>
-          <article><time>2023</time><h3>EFZ + Berufsmaturität</h3><p>Applikationsentwicklung trifft Wirtschaft: OOP, Datenbanken, Netzwerke und moderne Webentwicklung.</p></article>
-          <article><time>Heute</time><h3>Sieben Systeme. Ein Standard.</h3><p>Privacy, Daten, Game-Loops und Product UX — dokumentiert, testbar und online erlebbar.</p></article>
+          <motion.article initial={{ opacity: 0, y: 55 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }} transition={{ duration: .8 }}><time>2021</time><h3>Erste eigene Builds</h3><p>Web-Apps, Dashboards und Experimente werden vom Konzept bis zum Deployment selbst gebaut.</p></motion.article>
+          <motion.article initial={{ opacity: 0, y: 55 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }} transition={{ duration: .8, delay: .12 }}><time>2023</time><h3>EFZ + Berufsmaturität</h3><p>Applikationsentwicklung trifft Wirtschaft: OOP, Datenbanken, Netzwerke und moderne Webentwicklung.</p></motion.article>
+          <motion.article initial={{ opacity: 0, y: 55 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }} transition={{ duration: .8, delay: .24 }}><time>Heute</time><h3>Sieben Systeme. Ein Standard.</h3><p>Privacy, Daten, Game-Loops und Product UX — dokumentiert, testbar und online erlebbar.</p></motion.article>
         </div>
         <div className="experience-statement"><span>7</span><p>realisierte Projekte<br />zwischen Code und Produkt</p></div>
       </section>
@@ -250,27 +333,14 @@ export default function HomePage() {
           </div>
         </div>
         <div className="profile-principles">
-          <div><span>01</span><strong>Build before buzz</strong><p>Ideen werden früh zu funktionierenden Prototypen.</p></div>
-          <div><span>02</span><strong>Details schaffen Vertrauen</strong><p>Performance, Datenschutz und responsive Zustände gehören zum Produkt.</p></div>
-          <div><span>03</span><strong>Komplexität wird Klarheit</strong><p>Technik wird in verständliche Entscheidungen übersetzt.</p></div>
+          <motion.div initial={{ opacity: 0, y: 45 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }}><span>01</span><strong>Build before buzz</strong><p>Ideen werden früh zu funktionierenden Prototypen.</p></motion.div>
+          <motion.div initial={{ opacity: 0, y: 45 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }} transition={{ delay: .12 }}><span>02</span><strong>Details schaffen Vertrauen</strong><p>Performance, Datenschutz und responsive Zustände gehören zum Produkt.</p></motion.div>
+          <motion.div initial={{ opacity: 0, y: 45 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: .6 }} transition={{ delay: .24 }}><span>03</span><strong>Komplexität wird Klarheit</strong><p>Technik wird in verständliche Entscheidungen übersetzt.</p></motion.div>
         </div>
         <div className="stack-rail" aria-label="Technologien"><div>React · Next.js · TypeScript · Python · SQL · Node.js · Web Crypto · IndexedDB · Docker · Product UX · React · Next.js · TypeScript · Python · SQL · Node.js · Web Crypto · IndexedDB · Docker · Product UX ·</div></div>
       </section>
 
-      <footer className="finale" aria-labelledby="finale-title">
-        <img src="/linhard-finale-object.png" alt="Polierte Chromkugel in einem präzisen Ring aus optischem Glas" className="finale-image" />
-        <div className="finale-shade" />
-        <div className="finale-content">
-          <p className="scene-chapter">Nächster Build / Gemeinsam</p>
-          <h2 id="finale-title">Eine gute Idee verdient eine präzise Umsetzung.</h2>
-          <p className="finale-lead">Wenn das nächste Produkt klar, schnell und unverwechselbar werden soll, beginnt die Zusammenarbeit hier.</p>
-          <a className="finale-mail" href={`mailto:${site.email}`}>{site.email}<ArrowUpRight aria-hidden="true" /></a>
-        </div>
-        <div className="finale-meta">
-          <span>Schweiz · Verfügbar für neue Projekte</span>
-          <div><a href={site.github} target="_blank" rel="noreferrer">GitHub</a><a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a><a href={site.cvUrl} target="_blank" rel="noreferrer">CV</a></div>
-        </div>
-      </footer>
+      <FinaleScene />
     </div>
   );
 }
