@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw } from "lucide-react";
 
 /**
- * ULTRAKRASS – Runner (Single-File)
+ * ULTRAKRASS Runner (Single-File)
  * Saubere Canvas-Engine (Endless-Runner) für deine Portfolio-Seite.
  * - 60 FPS, fixed timestep; konsistentes Physikgefühl
  * - Responsive + Retina-scharf (DPR-Scaling)
@@ -86,7 +86,7 @@ export default function GamePage() {
     setDead(false);
   }
 
-  /** Responsive Canvas: CSS-Größe und Pixel-Größe (DPR) sauber setzen. */
+  /** Responsive Canvas: CSS-Grösse und Pixel-Grösse (DPR) sauber setzen. */
   function resizeCanvas() {
     const c = canvasRef.current!;
     const parent = c.parentElement!;
@@ -345,9 +345,9 @@ export default function GamePage() {
       <div className="mx-auto max-w-4xl">
         <header className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">ULTRAKRASS – Runner</h1>
+            <h1 className="text-2xl font-bold tracking-tight">ULTRAKRASS Runner</h1>
             <p className="text-sm text-muted-foreground">
-              Springe über Fußbälle.{" "}
+              Springe über Fussbälle.{" "}
               <kbd className="rounded border px-1 py-0.5">Space</kbd> /
               <span className="ml-1 rounded border px-1 py-0.5">Tap</span> = Sprung,
               <kbd className="ml-2 rounded border px-1 py-0.5">P</kbd> Pause.

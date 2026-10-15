@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { heading } from "@/lib/typography";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useRef, useState } from "react";
 import type { Project } from "@/lib/projects";
@@ -44,7 +45,7 @@ export function ProjectExperience({ project, index }: { project: Project; index:
           <div className="story-text-stage" aria-live="polite">
             <AnimatePresence mode="wait" initial={false}>
               <motion.article key={act} data-act={act} initial={reduced ? false : { opacity: 0, clipPath: index % 2 ? "inset(0 0 100% 0)" : "inset(0 100% 0 0)", x: index % 2 ? 0 : 18, y: index % 2 ? 16 : 0 }} animate={{ opacity: 1, clipPath: "inset(0 0% 0% 0)", x: 0, y: 0 }} exit={{ opacity: 0, transition: { duration: .16 } }} transition={{ duration: reduced ? 0 : .75, ease: [.19, 1, .22, 1] }}>
-                <h2 id={`story-title-${index}`}>{scene.title}</h2><p className="story-description">{scene.body}</p>
+                <h2 id={`story-title-${index}`}>{heading(scene.title)}</h2><p className="story-description">{scene.body}</p>
                 <div className="story-notes">{scene.notes.map((note, i) => { const [key, value] = note.split(" / "); return <motion.div key={note} initial={reduced ? false : { opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: reduced ? 0 : .1 + i * .09 }}><span>{key}</span><strong>{value}</strong></motion.div>; })}</div>
               </motion.article>
             </AnimatePresence>

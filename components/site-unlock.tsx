@@ -70,7 +70,7 @@ export function SiteUnlock() {
                 </div>
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">Linhard Zejneli</p>
-                  <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl">Portfolio wird freigeschaltet.</h2>
+                  <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl">Portfolio wird freigeschaltet</h2>
                 </div>
               </div>
 

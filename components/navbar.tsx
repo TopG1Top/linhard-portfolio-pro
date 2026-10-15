@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { LogoMark } from "@/components/logo-mark";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 import { site } from "@/lib/site";
@@ -11,8 +12,8 @@ export function Navbar() {
 
   return (
     <header className={`site-header ${home ? "site-header--overlay" : ""}`}>
-      <Link href="/" className="brand-mark" aria-label={`${site.name} – Startseite`}>
-        <span>Linhard</span><span>Zejneli</span>
+      <Link href="/" className="brand-mark" aria-label={`${site.name} Startseite`}>
+        <LogoMark /><span>Linhard</span><span>Zejneli</span>
       </Link>
       <nav aria-label="Hauptnavigation">
         <Link href={home ? "#selected" : "/projects"}>Arbeiten</Link>

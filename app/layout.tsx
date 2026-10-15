@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import "./experience.css"
+import "./identity.css"
 import { site } from "@/lib/site"
 import { Navbar } from "@/components/navbar"
 import { LangProvider } from "@/components/lang-provider"
@@ -8,10 +9,10 @@ import { EntryVerification } from "@/components/entry-verification"
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  title: `${site.name} — Digital Product Engineer`,
+  title: `${site.name} | Digital Product Engineer`,
   description: "Portfolio von Linhard Zejneli — Webentwicklung, datenbasierte Tools und digitale Produkte aus der Schweiz.",
   openGraph: {
-    title: `${site.name} — Digital Product Engineer`,
+    title: `${site.name} | Digital Product Engineer`,
     description: "Webentwicklung, datenbasierte Tools und digitale Produkte aus der Schweiz.",
     url: "/",
     siteName: site.name,
@@ -19,12 +20,12 @@ export const metadata: Metadata = {
     locale: "de_CH",
     type: "website",
   },
-  icons: [{ rel: "icon", url: "/favicon.svg" }],
+  icons: [{ rel: "icon", url: "/favicon-lz.svg" }],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" suppressHydrationWarning>
+    <html lang="de-CH" suppressHydrationWarning>
       <body>
         <LangProvider>
           <EntryVerification />

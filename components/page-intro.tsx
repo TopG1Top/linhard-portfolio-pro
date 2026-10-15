@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { heading } from "@/lib/typography";
 import { ArrowDownRight } from "lucide-react";
 
 export function PageIntro({
@@ -31,7 +32,7 @@ export function PageIntro({
           {eyebrow}
         </div>
         <div className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-          <h1 className="max-w-4xl text-4xl leading-[1.02] tracking-tight md:text-6xl">{title}</h1>
+          <h1 className="max-w-4xl text-4xl leading-[1.02] tracking-tight md:text-6xl">{heading(title)}</h1>
           <div className="flex items-start gap-3 lg:justify-end">
             <ArrowDownRight className="mt-1 h-5 w-5 shrink-0 text-primary" />
             <p className="max-w-xl text-base leading-7 text-muted-foreground md:text-lg">{description}</p>

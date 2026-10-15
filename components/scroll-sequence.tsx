@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { heading } from "@/lib/typography";
 import { ArrowDownRight, Crosshair } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -38,7 +39,7 @@ export function ScrollSequence({ id, eyebrow, chapters, image, endnote, visual =
             <AnimatePresence mode="wait">
               <motion.div key={active} initial={{ opacity: 0, y: 38, filter: "blur(8px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} exit={{ opacity: 0, y: -30, filter: "blur(8px)" }} transition={{ duration: .55, ease: [.22, 1, .36, 1] }}>
                 <p className="lux-label"><span />{eyebrow} / 0{active + 1}</p>
-                <h2>{chapters[active].title}</h2>
+                <h2>{heading(chapters[active].title)}</h2>
                 <p>{chapters[active].body}</p>
               </motion.div>
             </AnimatePresence>

@@ -35,7 +35,7 @@ export const projects: Project[] = [
     demo: "https://casinoluxe.netlify.app/",
   },
   {
-    title: "Calc — Private Vault",
+    title: "Calc Private Vault",
     category: "Privacy PWA",
     year: "2026",
     image: {
@@ -80,7 +80,7 @@ export const projects: Project[] = [
     demo: "/citypulse",
   },
   {
-    title: "FC Brugg – AFV Ergebnisse & Torschützen",
+    title: "FC Brugg AFV Ergebnisse & Torschützen",
     category: "Sports Dashboard",
     year: "2026",
     image: {
@@ -95,7 +95,7 @@ export const projects: Project[] = [
     github: "https://github.com/TopG1Top/fcbrugg-afv-app",
   },
   {
-    title: "ULTRAKRASS – Shooterball (HTML5)",
+    title: "ULTRAKRASS Shooterball (HTML5)",
     category: "Browser Game",
     year: "2025",
     image: {
@@ -125,33 +125,27 @@ export const projects: Project[] = [
     demo: "/portfolio-os",
   },
   {
-    title: "PROJECT_08 // CLASSIFIED",
-    category: "Encrypted Build Slot",
-    year: "NEXT",
-    image: {
-      src: "/og.svg",
-      alt: "Reservierter Projektplatz mit klassifiziertem Status.",
-    },
-    impact: "Ein reservierter Platz für das nächste Projekt mit echtem technischen Anspruch und einer Demo, die im Gedächtnis bleibt.",
-    highlights: ["Briefing verschlüsselt", "Systemarchitektur in Arbeit", "Reveal folgt nach Launch"],
-    blurb: "Die Spezifikation bleibt vorerst unter Verschluss. Freigabe erst, wenn Idee, Engineering und Präsentation dem Portfolio-Standard entsprechen.",
-    tech: ["CLASSIFIED", "BUILDING", "SOON"],
-    status: "Access restricted",
+    title: "AEGIS Security Lab",
+    category: "Cybersecurity / Kali Linux",
+    year: "KONZEPT",
+    image: { src: "/og.svg", alt: "Private Konzeptstudie für ein isoliertes Security-Lab" },
+    impact: "Sicherheit verstehen, Risiken einordnen und Prüfabläufe nachvollziehbar machen.",
+    highlights: ["Isolierte Testumgebung", "Autorisierte Sicherheitsanalyse", "Einblick auf Anfrage"],
+    blurb: "Projektkonzept für ein Kali-Linux-Lab mit Netzwerkübersicht, dokumentierten Prüfabläufen und risikobasierter Auswertung. Keine öffentliche Demo oder Testzugänge.",
+    tech: ["Kali Linux", "Netzwerkanalyse", "Dokumentation"],
+    status: "Privates Projektkonzept",
     placeholder: true,
   },
   {
-    title: "PROJECT_09 // SIGNAL PENDING",
-    category: "Reserved Project Slot",
-    year: "NEXT",
-    image: {
-      src: "/og.svg",
-      alt: "Reservierter Projektplatz mit ausstehendem Signal.",
-    },
-    impact: "Freier Raum für ein kommendes Produkt, Experiment oder Tool — bewusst sichtbar, damit das Portfolio weiter wachsen kann.",
-    highlights: ["Konzept nicht veröffentlicht", "Launch-Sequenz offline", "Nächster Build wird vorbereitet"],
-    blurb: "Noch kein austauschbarer Platzhalter, sondern eine klare Ankündigung: Hier erscheint das nächste Projekt erst dann, wenn es wirklich etwas Neues zeigt.",
-    tech: ["RESERVED", "R&D", "TBA"],
-    status: "Awaiting signal",
+    title: "NEXUS Application Platform",
+    category: "App Development / Full Stack",
+    year: "KONZEPT",
+    image: { src: "/og.svg", alt: "Private Architekturstudie einer modularen Full-Stack-Plattform" },
+    impact: "Ein umfangreiches Produktkonzept, das App, Geschäftslogik und Daten als ein System denkt.",
+    highlights: ["Modulare Architektur", "App, API & Datenhaltung", "Vorstellung auf Anfrage"],
+    blurb: "Architekturstudie für eine grosse Full-Stack-Anwendung mit Rollen, Workflows und Hintergrundaufgaben. Technische Details werden im persönlichen Austausch besprochen, ohne öffentliche Demo oder Repository.",
+    tech: ["Full Stack", "API Design", "Datenmodelle"],
+    status: "Privates Projektkonzept",
     placeholder: true,
   },
 ]

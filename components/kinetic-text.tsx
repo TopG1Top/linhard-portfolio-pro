@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useInView, useReducedMotion } from "framer-motion";
+import { heading } from "@/lib/typography";
 import { useEffect, useRef, useState } from "react";
 
 export function Typewriter({ text, delay = 400, className = "" }: { text: string; delay?: number; className?: string }) {
@@ -28,6 +29,7 @@ export function Typewriter({ text, delay = 400, className = "" }: { text: string
 }
 
 export function WordReveal({ text, id, className = "", active }: { text: string; id?: string; className?: string; active?: boolean }) {
+  text = heading(text);
   const reduced = useReducedMotion();
   return <h2 id={id} className={`word-reveal ${className}`} aria-label={text}>{text.split(" ").map((word, index) => <span className="word-reveal-mask" key={`${word}-${index}`} aria-hidden="true"><motion.span initial={reduced ? false : { y: "110%", opacity: 0 }} animate={active === undefined ? undefined : active ? { y: 0, opacity: 1 } : { y: "110%", opacity: 0 }} whileInView={active === undefined ? { y: 0, opacity: 1 } : undefined} viewport={{ once: true, amount: 0, margin: "18% 0px 18% 0px" }} transition={{ duration: .8, delay: Math.min(index * .055, .5), ease: [.22, 1, .36, 1] }}>{word}&nbsp;</motion.span></span>)}</h2>;
 }

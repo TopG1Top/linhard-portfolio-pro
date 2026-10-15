@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { heading } from "@/lib/typography";
 import { ArrowRight, ArrowUpRight, Check, LockKeyhole, X } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { site } from "@/lib/site";
@@ -134,7 +135,7 @@ export function CyberVault() {
               <AnimatePresence mode="wait">
                 <motion.div key={phase} initial={{ opacity: 0, y: 26, filter: "blur(8px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} exit={{ opacity: 0, y: -18, filter: "blur(6px)" }} transition={{ duration: prefersReducedMotion ? 0 : .5, ease: [0.22, 1, 0.36, 1] }}>
                   <p className="lux-label"><span />{phases[phase].label}</p>
-                  <h2 id="cyber-title">{phases[phase].title}</h2>
+                  <h2 id="cyber-title">{heading(phases[phase].title)}</h2>
                   <p>{phases[phase].text}</p>
                 </motion.div>
               </AnimatePresence>
@@ -154,7 +155,7 @@ export function CyberVault() {
             <button className="cyber-close" type="button" aria-label="Schliessen" onClick={() => setDialog(null)}><X /></button>
             <p className="lux-label"><span />{dialog === "request" ? "Persönliche Freigabe" : "Secure access"}</p>
             {dialog === "request" ? <>
-              <h2>Der Zugang beginnt mit einem Gespräch.</h2>
+              <h2>Der Zugang beginnt mit einem Gespräch</h2>
               <p className="cyber-dialog-intro">Beschreibe kurz, warum du das technische Dossier sehen möchtest. Die Nachricht wird in deinem Mailprogramm vorbereitet. Nach dem Absenden kann ich dir den Freigabecode persönlich schicken.</p>
               <form onSubmit={requestAccess}>
                 <label>Name<input name="name" autoComplete="name" required placeholder="Dein Name" /></label>
@@ -164,7 +165,7 @@ export function CyberVault() {
               </form>
               {mailOpened && <p className="cyber-feedback"><Check /> Bitte sende die vorbereitete E-Mail in deinem Mailprogramm ab. Erst danach erreicht mich deine Anfrage.</p>}
             </> : <>
-              <h2>Freigabe verifizieren.</h2>
+              <h2>Freigabe verifizieren</h2>
               <p className="cyber-dialog-intro">Gib den persönlich erhaltenen Code ein. Das Dossier wird lokal in deinem Browser entschlüsselt.</p>
               <form onSubmit={unlock}>
                 <label>Persönlicher Zugangscode<input type="password" value={code} onChange={(event) => setCode(event.target.value)} autoComplete="off" required placeholder="Freigabecode" /></label>
@@ -182,9 +183,9 @@ export function CyberVault() {
           <div className="cyber-dossier" role="dialog" aria-modal="true" aria-label="Cybersecurity-Dossier">
             <button className="cyber-close" type="button" aria-label="Dossier schliessen" onClick={() => setDossier(null)}><X /></button>
             <p className="lux-label"><span />{dossier.eyebrow}</p>
-            <h2>{dossier.title}</h2>
+            <h2>{heading(dossier.title)}</h2>
             <p className="cyber-dossier-lead">{dossier.lead}</p>
-            <div className="cyber-dossier-sections">{dossier.sections.map((item) => <article key={item.number}><span>{item.number}</span><h3>{item.title}</h3><p>{item.body}</p></article>)}</div>
+            <div className="cyber-dossier-sections">{dossier.sections.map((item) => <article key={item.number}><span>{item.number}</span><h3>{heading(item.title)}</h3><p>{item.body}</p></article>)}</div>
             <p className="cyber-dossier-closing">{dossier.closing}</p>
             <a href={`mailto:${site.email}?subject=Gespräch%20zum%20Cybersecurity-Dossier`}>Gespräch beginnen <ArrowUpRight /></a>
           </div>

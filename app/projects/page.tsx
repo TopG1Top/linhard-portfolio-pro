@@ -24,8 +24,8 @@ export default function ProjectsPage() {
       />
       <div className="flex flex-col gap-4 border-b pb-6 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-wrap items-center gap-3">
-          <Badge className="rounded-md">7 released</Badge>
-          <Badge className="rounded-md bg-transparent text-muted-foreground">2 classified slots</Badge>
+          <Badge className="rounded-md">7 Arbeiten</Badge>
+          <Badge className="rounded-md bg-transparent text-muted-foreground">2 private Projektkonzepte</Badge>
         </div>
         <a
           href={site.github}
