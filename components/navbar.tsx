@@ -17,7 +17,7 @@ export function Navbar() {
       <nav aria-label="Hauptnavigation">
         <Link href={home ? "#selected" : "/projects"}>Arbeiten</Link>
         <Link href={home ? "#cybersecurity" : "/#cybersecurity"}>Cybersecurity</Link>
-        <Link href="/about">Profil</Link>
+        <Link href={home ? "#profil" : "/about"}>Profil</Link>
         <a className="contact-link" href={`mailto:${site.email}`}>
           Kontakt <ArrowUpRight aria-hidden="true" />
         </a>

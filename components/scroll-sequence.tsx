@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDownRight, Crosshair } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -8,6 +8,7 @@ type Chapter = { label: string; title: string; body: string; signal: string };
 
 export function ScrollSequence({ id, eyebrow, chapters, image, endnote, visual = "orbit" }: { id: string; eyebrow: string; chapters: Chapter[]; image?: string; endnote: string; visual?: "orbit" | "pulse" }) {
   const target = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
   const { scrollYProgress } = useScroll({ target, offset: ["start start", "end end"] });
   const orbit = useTransform(scrollYProgress, [0, 1], [0, 310]);
@@ -20,7 +21,7 @@ export function ScrollSequence({ id, eyebrow, chapters, image, endnote, visual =
   });
 
   return (
-    <section id={id} ref={target} className={`sequence sequence-visual-${visual}`} style={{ height: `${chapters.length * 92 + 100}svh` }} aria-label={eyebrow}>
+    <section id={id} ref={target} className={`sequence sequence-visual-${visual}`} style={{ height: `${chapters.length * (reduced ? 65 : 125) + 100}svh` }} aria-label={eyebrow}>
       <div className="sequence-sticky">
         {image && <motion.div className="sequence-image" style={{ scale: imageScale }}><img src={image} alt="" /></motion.div>}
         <div className="sequence-grid" aria-hidden="true" />

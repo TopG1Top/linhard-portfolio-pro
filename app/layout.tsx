@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import "./experience.css"
 import { site } from "@/lib/site"
 import { Navbar } from "@/components/navbar"
 import { LangProvider } from "@/components/lang-provider"

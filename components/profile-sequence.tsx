@@ -1,38 +1,30 @@
 "use client";
 
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Download } from "lucide-react";
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { ArrowRight, Download, Fingerprint } from "lucide-react";
 import { useRef, useState } from "react";
-import { Typewriter } from "@/components/kinetic-text";
 import { site } from "@/lib/site";
 
 const phases = [
-  { label: "Haltung", title: "Technik mit Klarheit. Verantwortung mit Tiefe.", body: "Ich bin Linhard Zejneli, Applikationsentwickler in Ausbildung mit Berufsmaturität Wirtschaft. Mich interessiert nicht nur, ob ein System funktioniert — sondern ob es Menschen Orientierung gibt.", signal: "01 / PURPOSE" },
-  { label: "Handwerk", title: "Frontend. Backend. Daten. Ein System.", body: "Ich verbinde Oberfläche, Logik und Datenhaltung zu einem Ganzen. Der Anspruch: eine Idee so sauber zu bauen, dass sie ausserhalb des perfekten Demo-Moments besteht.", signal: "02 / CRAFT" },
-  { label: "Charakter", title: "Unter Druck ruhig. Bis zum Ende präzise.", body: "Leistungsfussball und Captain-Erfahrung prägen meine Arbeitsweise: Verantwortung übernehmen, gemeinsam denken und dann konsequent liefern.", signal: "03 / DELIVERY" },
+  { label: "Haltung", title: "Ein Kopf für Systeme. Ein Blick für Menschen.", body: "Ich bin Linhard Zejneli, Applikationsentwickler in Ausbildung mit Berufsmaturität Wirtschaft. Mich interessiert nicht nur, ob ein System funktioniert — sondern ob es Menschen Orientierung gibt.", note: "Technik wird dann interessant, wenn sie eine echte Aufgabe löst.", facts: ["APPLIKATIONSENTWICKLUNG / EFZ", "BERUFSMATURITÄT / WIRTSCHAFT", "STANDORT / SCHWEIZ"] },
+  { label: "Handwerk", title: "Die Verbindung ist das eigentliche Handwerk.", body: "Oberfläche, Logik und Datenhaltung gehören für mich zusammen. Ich arbeite an Web-Anwendungen, datenbasierten Werkzeugen und interaktiven Experimenten — von der ersten Struktur bis zur benutzbaren Anwendung.", note: "Nicht im perfekten Demo-Moment aufhören. Die Zustände dazwischen mitdenken.", facts: ["FRONTEND / INTERAKTION", "BACKEND / LOGIK", "DATEN / STRUKTUR"] },
+  { label: "Charakter", title: "Verantwortung lässt sich nicht delegieren.", body: "Leistungsfussball und Captain-Erfahrung prägen meine Arbeitsweise. Ruhe bewahren, gemeinsam denken, Entscheidungen tragen. Was auf dem Platz zählt, gilt für mich auch im Projekt: Verantwortung übernehmen und dranbleiben.", note: "Klar kommunizieren. Verantwortung tragen. Gemeinsam weiterkommen.", facts: ["HALTUNG / DISZIPLIN", "TEAM / CAPTAIN-ERFAHRUNG", "ANSPRUCH / BIS ZUM ENDE"] },
 ];
+
+function CraftLayer({ progress, index }: { progress: MotionValue<number>; index: number }) {
+  const y = useTransform(progress, [.3, .6], [`${index * 40}%`, `${index * 130}%`]);
+  const x = useTransform(progress, [.3, .6], [0, index * 14]);
+  return <motion.div className="identity-craft-layer" style={{ x, y, zIndex: 3 - index }}><span>0{index + 1}</span><strong>{["INTERFACE", "LOGIC", "DATA"][index]}</strong><i /></motion.div>;
+}
 
 export function ProfileSequence() {
   const target = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
-  const { scrollYProgress } = useScroll({ target, offset: ["start start", "end end"] });
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.06, 1.23]);
-  const imageX = useTransform(scrollYProgress, [0, 1], ["0%", "-8%"]);
-  const trace = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const stackY = useTransform(scrollYProgress, [0, 1], ["-9%", "10%"]);
-  useMotionValueEvent(scrollYProgress, "change", (value) => setActive(Math.min(2, Math.floor(Math.min(value, .9999) * 3))));
-
-  return <section ref={target} className="profile-sequence" style={{ height: "370svh" }} aria-label="Profil von Linhard Zejneli">
-    <div className="profile-sequence-sticky">
-      <motion.div className="profile-sequence-image" style={{ scale: imageScale, x: imageX }}><img src="/linhard-finale-object.png" alt="" /></motion.div>
-      <div className="profile-sequence-shade" /><div className="profile-sequence-grid" aria-hidden="true" />
-      <div className="profile-sequence-top"><span>PROFIL / LINHARD ZEJNELI</span><span>ENGINEERING × DISCIPLINE</span><span>0{active + 1} / 03</span></div>
-      <div className="profile-sequence-layout">
-        <div className="profile-sequence-steps">{phases.map((phase, index) => <div key={phase.label} className={index === active ? "is-active" : ""}><span>0{index + 1}</span><strong>{phase.label}</strong></div>)}</div>
-        <div className={`profile-instrument profile-instrument-${active}`} aria-hidden="true"><motion.div className="profile-instrument-stack" style={{ y: stackY }}><span /><span /><span /></motion.div><svg viewBox="0 0 400 400"><motion.path d="M22 245 H104 L135 155 L176 305 L213 209 L237 247 H304 L336 140 L371 246 H398" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ pathLength: trace }} /></svg><div className="profile-instrument-point" /><div className="profile-instrument-caption"><span>HUMAN / SYSTEM</span><span>{phases[active].signal}</span></div></div>
-        <div className="profile-sequence-copy" aria-live="polite"><AnimatePresence mode="wait"><motion.div key={active} initial={{ opacity: 0, y: 40, filter: "blur(9px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} exit={{ opacity: 0, y: -35, filter: "blur(8px)" }} transition={{ duration: .63, ease: [.22, 1, .36, 1] }}><p className="lux-label"><span />PROFIL / {phases[active].label}</p><h2>{phases[active].title}</h2><p>{phases[active].body}</p>{active === 2 && <div className="profile-sequence-signature"><Typewriter text="Verantwortung ist eine Entscheidung." delay={150} /></div>}</motion.div></AnimatePresence><div className="profile-sequence-links"><a href="/about">Profil lesen <ArrowRight aria-hidden="true" /></a><a href={site.cvUrl} target="_blank" rel="noreferrer">CV öffnen <Download aria-hidden="true" /></a></div></div>
-      </div>
-      <div className="profile-sequence-bottom"><span>KLARHEIT / HANDWERK / CHARAKTER</span><div><motion.i style={{ scaleX: trace }} /></div><span>MEHR ERFAHREN <ArrowUpRight aria-hidden="true" /></span></div>
-    </div>
-  </section>;
+  const reduced = useReducedMotion();
+  const { scrollYProgress: progress } = useScroll({ target, offset: ["start start", "end end"] });
+  const scan = useTransform(progress, [0, .3], ["0%", "100%"]);
+  const trace = useTransform(progress, [.66, .95], [0, 1]);
+  useMotionValueEvent(progress, "change", value => setActive(Math.min(2, Math.floor(value * 3))));
+  const phase = phases[active];
+  return <section id="profil" ref={target} className={`identity-sequence identity-phase-${active}`} aria-labelledby="profile-title"><div className="identity-sticky"><header className="identity-top"><span>DER MENSCH HINTER DEM SYSTEM</span><span>LINHARD ZEJNELI / 0{active + 1}—03</span></header><div className="identity-layout"><div className="identity-visual" aria-hidden="true"><div className="identity-visual-corners"><i /><i /><i /><i /></div><div className="identity-visual-header"><span>LZ / PERSONAL FILE</span><span>0{active + 1}</span></div><AnimatePresence mode="wait">{active === 0 ? <motion.div className="identity-fingerprint" key="fingerprint" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><Fingerprint strokeWidth={.42} /><motion.i style={{ top: scan }} /><span>INDIVIDUAL BY DESIGN</span></motion.div> : active === 1 ? <motion.div className="identity-craft" key="craft" initial={reduced ? false : { opacity: 0, y: 35 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>{[0, 1, 2].map(index => <CraftLayer key={index} index={index} progress={progress} />)}</motion.div> : <motion.div className="identity-team" key="team" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><svg viewBox="0 0 400 340"><path className="identity-team-field" d="M30 40 H370 V300 H30Z M200 40 V300 M160 170 A40 40 0 1 0 240 170 A40 40 0 1 0 160 170" /><motion.path className="identity-team-route" d="M70 235 L150 130 L250 210 L330 95" style={{ pathLength: trace }} />{[[70, 235], [150, 130], [250, 210], [330, 95]].map(([cx, cy], i) => <g key={i}><circle cx={cx} cy={cy} r="15" /><text x={cx} y={cy + 4}>{i === 1 ? "C" : `0${i + 1}`}</text></g>)}</svg><span>ONE TEAM / SHARED RESPONSIBILITY</span></motion.div>}</AnimatePresence><div className="identity-visual-footer"><span>{["HALTUNG / EINZIGARTIG", "HANDWERK / VERBUNDEN", "CHARAKTER / VERANTWORTLICH"][active]}</span><span>VISUELLE STUDIE</span></div></div><div className="identity-copy"><p className="lux-label"><span />PROFIL / {phase.label}</p><AnimatePresence mode="wait" initial={false}><motion.div key={active} initial={reduced ? false : { opacity: 0, x: 22 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -15 }} transition={{ duration: .5 }}><h2 id="profile-title">{phase.title}</h2><p className="identity-body">{phase.body}</p><blockquote>{phase.note}</blockquote><div className="identity-facts">{phase.facts.map(fact => <span key={fact}>{fact}</span>)}</div></motion.div></AnimatePresence><div className="identity-links"><a href="/about">Mein Profil <ArrowRight size={14} /></a><a href={site.cvUrl} target="_blank" rel="noreferrer">Curriculum Vitae <Download size={14} /></a></div></div></div><footer className="identity-bottom">{phases.map((p, i) => <span key={p.label} className={active === i ? "is-active" : ""}><small>0{i + 1}</small>{p.label}</span>)}<div><motion.i style={{ scaleX: progress }} /></div></footer></div></section>;
 }
