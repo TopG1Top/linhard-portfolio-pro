@@ -9,10 +9,10 @@ import { EntryVerification } from "@/components/entry-verification"
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  title: `${site.name} | Digital Product Engineer`,
+  title: site.name,
   description: "Portfolio von Linhard Zejneli — Webentwicklung, datenbasierte Tools und digitale Produkte aus der Schweiz.",
   openGraph: {
-    title: `${site.name} | Digital Product Engineer`,
+    title: site.name,
     description: "Webentwicklung, datenbasierte Tools und digitale Produkte aus der Schweiz.",
     url: "/",
     siteName: site.name,
