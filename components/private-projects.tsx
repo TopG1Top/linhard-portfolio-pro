@@ -44,7 +44,7 @@ function StackVisual({ progress, act }: { progress: MotionValue<number>; act: nu
   </div>;
 }
 
-function PrivateDossier({ index }: { index: number }) {
+function PrivateDossier({ index, startIndex }: { index: number; startIndex: number }) {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const inView = useInView(ref, { margin: "100px" });
@@ -55,11 +55,11 @@ function PrivateDossier({ index }: { index: number }) {
   const scene = data.chapters[act];
   function seek(i: number) { const element = ref.current; if(element)window.scrollTo({top:element.offsetTop+(element.offsetHeight-innerHeight)*(i/3+.12),behavior:reduced?"instant":"smooth"}); }
   return <section ref={ref} id={`private-${index+1}`} className={`private-dossier dossier-${index} ${inView?"is-inview":""}`} data-act={act} aria-labelledby={`private-title-${index}`}><div className="private-sticky">
-    <header className="private-top"><span>0{index+8} / PRIVATE COLLECTION</span><span>PROJEKTKONZEPT · EINBLICK AUF ANFRAGE</span></header>
+    <header className="private-top"><span>{String(startIndex + index + 1).padStart(2, "0")} / PRIVATE COLLECTION</span><span>PROJEKTKONZEPT · EINBLICK AUF ANFRAGE</span></header>
     <div className="private-layout"><div className="private-copy"><p className="lux-label"><span />{data.category}</p><p className="private-project-name">{data.name}</p><motion.div key={act} initial={reduced?false:{opacity:0,y:14}} animate={{opacity:1,y:0}} transition={{duration:.6}}><h2 id={`private-title-${index}`}>{scene.title}</h2><p className="private-description">{scene.text}</p><ul>{scene.notes.map(note=><li key={note}>{note}</li>)}</ul></motion.div><a className="private-request" href={`mailto:${site.email}?subject=${encodeURIComponent(`Einblick anfragen: ${data.name}`)}`}>Persönlichen Einblick anfragen <ArrowUpRight size={16} /></a></div>
     <div className="private-instrument" aria-hidden="true"><div className="private-instrument-top"><span>{index===0?"AEGIS / ISOLATED ENVIRONMENT":"NEXUS / SYSTEM BLUEPRINT"}</span><LockKeyhole size={13} /></div>{index===0?<LabVisual progress={progress} act={act}/>:<StackVisual progress={progress} act={act}/>}<div className="private-seal"><div className="private-print"><Fingerprint strokeWidth={.75}/><i /></div><div><strong>PRIVATE BY INTENT</strong><span>SCHEMATISCHE KONZEPTSTUDIE / KEIN LIVE-SYSTEM</span></div><LockKeyhole size={18}/></div></div></div>
     <nav className="private-timeline" aria-label={`${data.name} Kapitel`}>{data.chapters.map((s,i)=><button key={s.label} onClick={()=>seek(i)} aria-current={act===i?"step":undefined}><small>0{i+1}</small>{s.label}<span/></button>)}</nav><motion.div className="private-progress" style={{scaleX:progress}}/>
   </div></section>;
 }
 
-export function PrivateProjects() { return <div className="private-collection"><PrivateDossier index={0}/><PrivateDossier index={1}/></div>; }
+export function PrivateProjects({ startIndex }: { startIndex: number }) { return <div className="private-collection"><PrivateDossier index={0} startIndex={startIndex}/><PrivateDossier index={1} startIndex={startIndex}/></div>; }

@@ -165,3 +165,15 @@ export const projects: Project[] = [
     placeholder: true,
   },
 ]
+
+// Keep the established case-study anchors stable when adding a new project.
+export const featuredProjects = [
+  "Calc Private Vault",
+  "CityPulse Control Room",
+  "Casino LUXE NOIR",
+  "Noten-Optimizer Pro (CH)",
+  "ULTRAKRASS Shooterball (HTML5)",
+  "FC Brugg AFV Ergebnisse & Torschützen",
+  "Portfolio OS",
+  "SIGNAL",
+].flatMap(title => projects.filter(project => project.title === title));

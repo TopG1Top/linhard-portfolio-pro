@@ -3,6 +3,9 @@
 import { AnimatePresence, motion, useMotionValueEvent, useTransform, type MotionValue } from "framer-motion";
 import { Fingerprint, LockKeyhole, Check, Terminal, Minus, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+const SignalInstrument = dynamic(() => import("@/components/signal-instrument"), { ssr: false });
 
 type Props = { progress: MotionValue<number> };
 function usePhase(progress: MotionValue<number>) {
@@ -122,5 +125,5 @@ function OsInstrument({ progress }: Props) {
 
 export function ProjectInstrument({ index, progress }: Props & { index: number }) {
   const props = { progress };
-  return <div className="visual-shell">{index === 0 ? <EncryptionInstrument {...props} /> : index === 1 ? <CityInstrument {...props} /> : index === 2 ? <CasinoInstrument {...props} /> : index === 3 ? <GradesInstrument {...props} /> : index === 4 ? <GameInstrument {...props} /> : index === 5 ? <SportsInstrument {...props} /> : <OsInstrument {...props} />}</div>;
+  return <div className="visual-shell">{index === 0 ? <EncryptionInstrument {...props} /> : index === 1 ? <CityInstrument {...props} /> : index === 2 ? <CasinoInstrument {...props} /> : index === 3 ? <GradesInstrument {...props} /> : index === 4 ? <GameInstrument {...props} /> : index === 5 ? <SportsInstrument {...props} /> : index === 7 ? <SignalInstrument {...props} /> : <OsInstrument {...props} />}</div>;
 }

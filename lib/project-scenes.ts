@@ -40,4 +40,9 @@ export const projectScenes: ProjectScene[][] = [
     { title: "Mehr als eine Fenster-Illusion.", body: "Command Palette und Terminal eröffnen weitere Wege durch das Interface. Notizen und Themes ergänzen den Desktop. Dahinter stehen Fensterzustände, Fokus und zusammenhängende Interaktionen.", notes: ["Schnellzugriff / Command Palette", "Eingabe / Terminal", "Persönlich / Notizen & Themes"] },
     { title: "Eine Spielwiese mit echtem Handwerk.", body: "Vanilla-JavaScript, HTML, CSS und ein Canvas-Wallpaper tragen die gesamte Oberfläche. Das Projekt bleibt statisch hostbar und zeigt, wie weit ein Browser mit einer konsequenten Idee kommen kann.", notes: ["Stack / Vanilla JavaScript", "Bildwelt / Canvas-Wallpaper", "Delivery / Static Hosting"] },
   ],
+  [
+    { title: "Die Welt sendet Du erkennst das Muster", body: "SIGNAL macht globale Ereignisse räumlich erfahrbar. Weltkarte, Ereignisfeed und Themenfilter bilden einen gemeinsamen Arbeitsraum für Politik, Wirtschaft und Technologie. Aus einzelnen Meldungen entsteht ein erkundbares Lagebild.", notes: ["Perspektive / Globale Ereignisse", "Orientierung / Karte & Themen", "Produkt / Event Intelligence"] },
+    { title: "Ein genauer Blick verändert alles", body: "Vom globalen Überblick zum ausgewählten Land. Filter für die Schweiz und Deutschland verdichten den sichtbaren Kontext. Karte, Timeline und Analytics eröffnen unterschiedliche Perspektiven auf dieselben Ereignisse.", notes: ["Fokus / Schweiz & Deutschland", "Zeit / Interaktive Timeline", "Analyse / ECharts & MapLibre"] },
+    { title: "Aus Ereignissen wird Verständnis", body: "Eine Oberfläche, in der sich Zusammenhänge selbst erkunden lassen. Die öffentliche Portfolio-Demo zeigt originale synthetische Szenarien und ist direkt im Browser zugänglich. Ohne Registrierung, mit klarer Kennzeichnung der Beispieldaten.", notes: ["Erlebnis / Öffentlich im Browser", "Inhalt / Synthetische Szenarien", "Umsetzung / Next.js & TypeScript"] },
+  ],
 ];

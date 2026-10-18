@@ -15,7 +15,7 @@ function ActProgress({ progress, index }: { progress: MotionValue<number>; index
   return <span className="story-timeline-track"><motion.i style={{ scaleX: fill }} /></span>;
 }
 
-export function ProjectExperience({ project, index }: { project: Project; index: number }) {
+export function ProjectExperience({ project, index, total }: { project: Project; index: number; total: number }) {
   const section = useRef<HTMLElement>(null);
   const [act, setAct] = useState(0);
   const reduced = useReducedMotion();
@@ -38,7 +38,7 @@ export function ProjectExperience({ project, index }: { project: Project; index:
     <div className="story-sticky">
       <motion.div className="story-backdrop" style={reduced ? {} : { scale: imageScale, x: imageX, clipPath: aperture }}><img src={project.image.src} alt="" loading="lazy" decoding="async" /></motion.div>
       <div className="story-vignette" /><div className="story-hairline" aria-hidden="true" />
-      <header className="story-header"><a href="#selected" className="story-project-name"><span>{String(index + 1).padStart(2, "0")} / 07</span>{project.title}</a><span>{project.category} · {project.year}</span></header>
+      <header className="story-header"><a href="#selected" className="story-project-name"><span>{String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>{project.title}{project.title === "SIGNAL" && <small className="signal-new-label">NEU</small>}</a><span>{project.category} · {project.year}</span></header>
       <div className="story-body">
         <div className="story-editorial">
           <div className="story-act-label"><span>0{act + 1}</span><i /><span>{actNames[act]}</span></div>
@@ -52,7 +52,7 @@ export function ProjectExperience({ project, index }: { project: Project; index:
           </div>
           <div className="story-actions">{href ? <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined}>{project.demo ? "Live erleben" : "Code entdecken"}<ArrowUpRight size={15} /></a> : <a href="mailto:linhard79@hotmail.com?subject=Anfrage%20Calc%20Private%20Vault">Einblick anfragen<ArrowUpRight size={15} /></a>}<span>{project.tech.slice(0, 3).join(" / ")}</span></div>
         </div>
-        <div className="story-visual"><span className="story-visual-caption">{["CRYPTOGRAPHIC STUDY", "SPATIAL INTELLIGENCE", "THE INTERACTION THEATRE", "A STUDY IN PROGRESSION", "KINETIC PLAYGROUND", "THE MATCH OBSERVATORY", "A DESKTOP IN THE BROWSER"][index]}</span><ProjectInstrument index={index} progress={reduced ? progress : visualProgress} /><div className="story-visual-foot"><span>INTERAKTIVE VISUALISIERUNG</span><span>SCROLL TO EXPLORE <ArrowDown size={11} /></span></div></div>
+        <div className="story-visual"><span className="story-visual-caption">{["CRYPTOGRAPHIC STUDY", "SPATIAL INTELLIGENCE", "THE INTERACTION THEATRE", "A STUDY IN PROGRESSION", "KINETIC PLAYGROUND", "THE MATCH OBSERVATORY", "A DESKTOP IN THE BROWSER", "THE WORLD IN CONTEXT"][index]}</span><ProjectInstrument index={index} progress={reduced ? progress : visualProgress} /><div className="story-visual-foot"><span>{project.title === "SIGNAL" ? "GLOBAL → REGIONAL → CONTEXT" : "INTERAKTIVE VISUALISIERUNG"}</span><span>SCROLL TO EXPLORE <ArrowDown size={11} /></span></div></div>
       </div>
       <nav className="story-timeline" aria-label={`Kapitel ${project.title}`}>{actNames.map((name, i) => <button key={name} onClick={() => seek(i)} aria-current={act === i ? "step" : undefined}><span>0{i + 1}</span><strong>{name}</strong><ActProgress progress={progress} index={i} /></button>)}</nav>
       <motion.div className="story-total-progress" style={{ scaleX: progress }} aria-hidden="true" />

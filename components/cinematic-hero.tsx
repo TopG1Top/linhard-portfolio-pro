@@ -4,11 +4,12 @@ import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScro
 import { heading } from "@/lib/typography";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { useRef, useState } from "react";
+import { featuredProjects } from "@/lib/projects";
 
 const scenes = [
   { label: "Linhard Zejneli / Applikationsentwicklung", title: ["Digitale Produkte.", "Mit Substanz."], body: "Ich verbinde Engineering, Daten und Interface-Design. Für Anwendungen, die nicht nur beeindrucken, sondern verständlich funktionieren.", note: "SCHWEIZ", caption: "01 / DIE IDEE", detail: "Ein guter Anfang ist eine präzise Frage." },
   { label: "Unter der Oberfläche", title: ["Durchdacht.", "Bis ins System."], body: "Vom lokalen, verschlüsselten Vault bis zum City-Dashboard: Datenfluss, Zustände und Oberfläche werden zusammen gedacht — und zusammen gebaut.", note: "CODE / CONTEXT / CRAFT", caption: "02 / DAS HANDWERK", detail: "Architektur wird sichtbar, wenn alles zusammenpasst." },
-  { label: "Selected work / 2025—2026", title: ["Nicht nur zeigen.", "Erlebbar machen."], body: "Sieben Projekte. Sieben unterschiedliche Aufgaben. Entdecke die Idee, die technische Entscheidung und das Erlebnis dahinter.", note: "SIEBEN PROJEKTE / EIN ANSPRUCH", caption: "03 / DIE WIRKUNG", detail: "Scroll weiter. Die Details machen den Unterschied." },
+  { label: "Selected work / 2025—2026", title: ["Nicht nur zeigen.", "Erlebbar machen."], body: `${featuredProjects.length} Projekte. Unterschiedliche Aufgaben. Entdecke die Idee, die technische Entscheidung und das Erlebnis dahinter.`, note: `${featuredProjects.length} PROJEKTE / EIN ANSPRUCH`, caption: "03 / DIE WIRKUNG", detail: "Scroll weiter. Die Details machen den Unterschied." },
 ];
 
 function MonolithSlice({ index, progress }: { index: number; progress: MotionValue<number> }) {
