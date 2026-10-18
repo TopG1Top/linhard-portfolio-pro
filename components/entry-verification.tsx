@@ -1,23 +1,21 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Check, ShieldCheck, X } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { LogoMark } from "@/components/logo-mark";
 import { EntryIdentityField } from "@/components/entry-identity-field";
 
 const stages = [
-  { title: "Einmaligkeit erzeugen", detail: "16 zufällige Bytes / nur für diesen Aufruf" },
-  { title: "Den Moment verdichten", detail: "SHA 256 / ein neuer Hash nimmt Form an" },
-  { title: "Die Bühne freigeben", detail: "Initialisierung abgeschlossen / das Erlebnis beginnt" },
+  { title: "Aus Fragmenten wird Identität", label: "ASSEMBLE", detail: "Ein Moment der nur einmal existiert" },
+  { title: "Präzision hinterlässt eine Signatur", label: "RESOLVE", detail: "Eine einzigartige Signatur nimmt Form an" },
+  { title: "Das ist erst der Anfang", label: "ENTER", detail: "Willkommen in meiner digitalen Welt" },
 ];
 
 export function EntryVerification() {
   const reduced = useReducedMotion() === true;
   const [progress, setProgress] = useState(0);
-  const [result, setResult] = useState<"pending" | "ready" | "limited">("pending");
   const [digest, setDigest] = useState("");
-  const [nonce, setNonce] = useState("");
   const [open, setOpen] = useState(true);
   const skipRef = useRef<HTMLButtonElement>(null);
 
@@ -25,23 +23,24 @@ export function EntryVerification() {
     if (!open) return;
     let active = true;
     let closing: ReturnType<typeof setTimeout>;
-    const runCheck = async () => {
+    const createSignature = async () => {
       try {
-        if (!window.isSecureContext || !window.crypto?.subtle) throw new Error("Web Crypto unavailable");
         const challenge = window.crypto.getRandomValues(new Uint8Array(16));
         const hash = await window.crypto.subtle.digest("SHA-256", challenge);
-        const hex = (bytes: Uint8Array) => Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("").toUpperCase();
-        if (active) { setNonce(hex(challenge)); setDigest(hex(new Uint8Array(hash))); setResult("ready"); }
-      } catch { if (active) setResult("limited"); }
+        if (active) setDigest(Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2, "0")).join("").toUpperCase());
+      } catch { /* The entrance remains available without Web Crypto. */ }
     };
-    void runCheck();
-    const total = reduced ? 600 : 4300;
+    void createSignature();
+    const total = reduced ? 450 : 4800;
     const started = performance.now();
     const interval = window.setInterval(() => {
       const next = Math.min(100, Math.round(((performance.now() - started) / total) * 100));
       setProgress(next);
-      if (next >= 100) { window.clearInterval(interval); closing = setTimeout(() => { if (active) setOpen(false); }, reduced ? 80 : 400); }
-    }, reduced ? 50 : 40);
+      if (next >= 100) {
+        window.clearInterval(interval);
+        closing = setTimeout(() => { if (active) setOpen(false); }, reduced ? 50 : 350);
+      }
+    }, 40);
     return () => { active = false; window.clearInterval(interval); clearTimeout(closing); };
   }, [reduced, open]);
 
@@ -59,25 +58,38 @@ export function EntryVerification() {
       if (event.key === "Tab") { event.preventDefault(); skipRef.current?.focus(); }
     };
     window.addEventListener("keydown", skip);
-    return () => { document.body.style.overflow = previous; roots.forEach((el,i) => { el.inert = prior[i]; }); window.removeEventListener("keydown", skip); focused?.focus({ preventScroll: true }); };
+    return () => {
+      document.body.style.overflow = previous;
+      roots.forEach((el, i) => { el.inert = prior[i]; });
+      window.removeEventListener("keydown", skip);
+      focused?.focus({ preventScroll: true });
+    };
   }, [open]);
 
-  const stage = Math.min(2, Math.floor(progress / (100 / 3)));
-  const exitDuration = reduced ? .08 : .7;
-  return <AnimatePresence>{open && <motion.div className={`entry-verification entry-v4 entry-stage-${stage}`} role="dialog" aria-modal="true" aria-label="Lokaler Systemcheck" initial="initial" animate="visible" exit="exit" variants={{ initial: { opacity: 1 }, visible: { opacity: 1 }, exit: { opacity: 0, transition: { duration: reduced ? .08 : .2, delay: reduced ? 0 : .5 } } }}>
-    <motion.div className="entry-vault-veil entry-vault-veil-left" aria-hidden="true" variants={{ initial: { x: "0%" }, exit: { x: reduced ? "0%" : "-100%", transition: { duration: exitDuration, ease: [.76, 0, .24, 1] } } }} />
-    <motion.div className="entry-vault-veil entry-vault-veil-right" aria-hidden="true" variants={{ initial: { x: "0%" }, exit: { x: reduced ? "0%" : "100%", transition: { duration: exitDuration, ease: [.76, 0, .24, 1] } } }} />
-    <motion.div className="entry-v4-content" variants={{ exit: { opacity: 0, y: reduced ? 0 : -12, transition: { duration: reduced ? .05 : .25 } } }}>
-      <header className="entry-top"><span><LogoMark /> LINHARD ZEJNELI <small>SECURE EXPERIENCE</small></span><span className="entry-counter" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-label={`Initialisierung ${progress} Prozent`}><small>INITIALISIERUNG</small><b aria-hidden="true">{String(progress).padStart(3, "0").split("").map((digit, index) => <span className="entry-counter-column" key={index}><motion.i animate={{ y: `${-Number(digit) * 10}%` }} transition={{ duration: reduced ? 0 : .15 }}>{Array.from({ length: 10 }, (_, n) => <em key={n}>{n}</em>)}</motion.i></span>)}<span className="entry-counter-percent">%</span></b></span></header>
-      <div className="entry-body">
-        <EntryIdentityField progress={progress} digest={digest} nonce={nonce} ready={result === "ready"} />
-        <div className="entry-copy"><p className="lux-label"><span />PRÄZISION / VOM ERSTEN MOMENT</p><h2>Jeder Anfang<br /> hat eine Signatur</h2><p className="entry-description">Ein flüchtiger Zufallswert wird zu einem einzigartigen Hash. Direkt in deinem Browser. Ohne Speicherung oder Übertragung.</p>
-          <div className="entry-v4-current"><span>0{stage + 1} / 03</span><div><motion.strong key={stage} initial={reduced ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .25 }}>{stages[stage].title}</motion.strong><p>{stages[stage].detail}</p></div></div>
-          <div className="entry-v4-checkpoints">{["ENTROPIE", "HASH", "FREIGABE"].map((label, index) => <div key={label} className={stage > index || progress === 100 ? "is-complete" : stage === index ? "is-active" : ""}><span>{stage > index || progress === 100 ? <Check size={10} /> : `0${index + 1}`}</span><strong>{label}</strong><i /></div>)}</div>
-          <div className="entry-progress"><motion.div style={{ scaleX: progress / 100 }} /></div><div className="entry-v4-receipt"><span>{result === "limited" ? "BASISMODUS / BEREIT" : stage === 2 ? "LOCAL FINGERPRINT / READY" : "LOCAL FINGERPRINT / COMPUTING"}</span><code>{stage === 2 && digest ? `${digest.slice(0, 8)} · ${digest.slice(-8)}` : "········ · ········"}</code></div>
-        </div>
-      </div>
-      <footer className="entry-bottom"><span><ShieldCheck aria-hidden="true" />{result === "limited" ? "BASISMODUS / SEITE BLEIBT NUTZBAR" : "LOKALER SYSTEMCHECK"}</span><span>ERZEUGTES IDENTITÄTSMUSTER / KEINE BIOMETRISCHE ERFASSUNG</span><button ref={skipRef} type="button" onClick={() => setOpen(false)} aria-label="Startsequenz überspringen">Überspringen <X aria-hidden="true" /></button></footer>
+  const stage = progress < 31 ? 0 : progress < 68 ? 1 : 2;
+  const resolved = Math.round(Math.min(1, Math.max(0, (progress - 22) / 48)) * 64);
+  return <AnimatePresence>{open && <motion.div
+    className={`entry-verification entry-v5 entry-stage-${stage}`}
+    role="dialog" aria-modal="true" aria-label="Willkommen bei Linhard Zejneli"
+    initial="initial" animate="visible" exit="exit"
+    variants={{ initial: { opacity: 1 }, visible: { opacity: 1 }, exit: { opacity: 0, transition: { delay: reduced ? 0 : .65, duration: .15 } } }}
+  >
+    {["left", "right"].map(side => <motion.div key={side} className={`entry-door entry-door-${side}`} aria-hidden="true" variants={{
+      initial: { x: "0%" }, exit: { x: reduced ? "0%" : side === "left" ? "-101%" : "101%", transition: { duration: reduced ? .1 : .8, ease: [.76, 0, .24, 1] } },
+    }} />)}
+    <motion.div className="entry-cinema" variants={{ exit: { opacity: 0, scale: reduced ? 1 : 1.08, filter: reduced ? "blur(0px)" : "blur(5px)", transition: { duration: reduced ? .05 : .45 } } }}>
+      <div className="entry-architecture" aria-hidden="true"><i /><i /><i /><i /></div>
+      <header className="entry-masthead"><span className="entry-brand"><LogoMark /><span>LINHARD ZEJNELI<small>INDEPENDENT DIGITAL CRAFT</small></span></span><span className="entry-edition"><i />SCHWEIZ<span>PERSONAL EDITION / 01</span></span></header>
+
+      <div className="entry-stage-art"><EntryIdentityField progress={progress} reduced={reduced} /></div>
+
+      <aside className="entry-telemetry" aria-hidden="true"><span className="entry-micro-label">SESSION SIGNATURE</span><div className="entry-hash-matrix">{Array.from({ length: 8 }, (_, i) => <code key={i} className={resolved > i * 8 ? "is-written" : ""}>{digest.slice(i * 8, i * 8 + Math.max(0, Math.min(8, resolved - i * 8))).padEnd(8, "·")}</code>)}</div><span className="entry-telemetry-rule" /><span className="entry-micro-label">LOCAL / EPHEMERAL</span><span className="entry-telemetry-count">{String(resolved).padStart(2, "0")}<small> / 64</small></span></aside>
+
+      <aside className="entry-chapters" aria-hidden="true">{stages.map((item, i) => <div key={item.label} className={stage === i ? "is-current" : stage > i ? "is-past" : ""}><span>0{i + 1}</span><i /><strong>{item.label}</strong></div>)}</aside>
+
+      <div className="entry-title-block"><p className="entry-overline">DIGITAL CRAFT / HUMAN SIGNATURE</p><h2><span>Linhard</span> <span>Zejneli</span></h2><div className="entry-stage-caption"><AnimatePresence mode="wait"><motion.p key={stage} initial={reduced ? false : { opacity: 0, y: 13, filter: "blur(4px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} exit={{ opacity: 0, y: -10, filter: "blur(3px)" }} transition={{ duration: reduced ? 0 : .22 }}>{stages[stage].title}<span>{stages[stage].detail}</span></motion.p></AnimatePresence></div></div>
+
+      <footer className="entry-console"><div className="entry-console-progress" role="progressbar" aria-label={`Startsequenz ${progress} Prozent`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><span className="entry-progress-number">{String(progress).padStart(3, "0")}<small>%</small></span><div><span>{progress === 100 ? "BEREIT FÜR MEHR" : "DAS ERLEBNIS ENTSTEHT"}</span><div className="entry-segment-track" aria-hidden="true">{Array.from({ length: 32 }, (_, i) => <i key={i} className={progress >= (i + 1) / 32 * 100 ? "is-lit" : ""} />)}</div></div></div><p className="entry-privacy">Eine inszenierte Signatur<span>Keine biometrische Erfassung</span></p><button ref={skipRef} type="button" onClick={() => setOpen(false)} aria-label="Startsequenz überspringen">Direkt eintreten <ArrowUpRight size={14} aria-hidden="true" /></button></footer>
     </motion.div>
   </motion.div>}</AnimatePresence>;
 }
