@@ -19,6 +19,22 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    title: "SIGNAL",
+    category: "Event Intelligence Dashboard",
+    year: "2026",
+    image: {
+      src: "/projects/signal-portfolio.webp",
+      alt: "SIGNAL-Dashboard mit Weltkarte, Länderfiltern und klar gekennzeichneten synthetischen Beispielen.",
+    },
+    impact: "Macht globale Ereignisse mit Karte, Länderfiltern und interaktiven Auswertungen erkundbar.",
+    highlights: ["Schweiz & Deutschland filtern", "Karte, Timeline & Analytics", "Originale synthetische Szenarien"],
+    blurb: "Öffentliche Portfolio-Demo einer Event-Intelligence-Plattform für Politik, Wirtschaft, IT und weitere Themen. Alle Inhalte sind ausdrücklich fiktive Beispiele; die Demo läuft ohne externe Datenbank und ohne Registrierung.",
+    tech: ["Next.js", "TypeScript", "MapLibre", "ECharts", "Vercel"],
+    status: "Portfolio-Demo · synthetische Daten",
+    github: "https://github.com/TopG1Top/signal-portfolio",
+    demo: "https://signal-portfolio-five.vercel.app",
+  },
+  {
     title: "Casino LUXE NOIR",
     category: "Interactive Demo",
     year: "2025",
