@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { heading } from "@/lib/typography";
+import { heading, prose } from "@/lib/typography";
 import { ArrowRight, ArrowUpRight, Check, LockKeyhole, X } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { site } from "@/lib/site";
@@ -22,7 +22,7 @@ type Dossier = {
 };
 
 const phases = [
-  { index: "01", label: "Die Oberfläche", title: "Jedes System zeigt eine Tür.", text: "Nicht jede Tür ist sichtbar. Jede Eingabe, jede Freigabe und jede Abhängigkeit definiert, wo Vertrauen beginnt — und wo es endet." },
+  { index: "01", label: "Die Oberfläche", title: "Jedes System zeigt eine Tür.", text: "Nicht jede Tür ist sichtbar. Jede Eingabe, jede Freigabe und jede Abhängigkeit definiert, wo Vertrauen beginnt und wo es endet." },
   { index: "02", label: "Die Identität", title: "Der Schlüssel ist ein Mensch.", text: "Sicherheit entscheidet sich an Identitäten, Gewohnheiten und Berechtigungen. Ein starkes System macht den richtigen Weg leicht und den falschen schwer." },
   { index: "03", label: "Die Daten", title: "Was nie geteilt wird, kann nicht abfliessen.", text: "Lokale Datenhaltung und Verschlüsselung reduzieren Angriffsflächen bereits in der Produktarchitektur. Weniger gespeicherte Daten bedeuten weniger Risiko." },
   { index: "04", label: "Der Zugang", title: "Vertrauen wird persönlich erteilt.", text: "Hinter dieser Schwelle liegt ein technisches Dossier. Eine persönliche Anfrage öffnet den Weg; den Zugangscode vergebe ich anschliessend direkt." },
@@ -42,10 +42,11 @@ async function decryptDossier(code: string): Promise<Dossier> {
     ["decrypt"],
   );
   const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: fromBase64(sealed.iv) }, key, fromBase64(sealed.data));
-  return JSON.parse(new TextDecoder().decode(plain)) as Dossier;
+  // Apply the same editorial punctuation to text that is only available after decryption.
+  return JSON.parse(new TextDecoder().decode(plain), (_key, value) => typeof value === "string" ? prose(value) : value) as Dossier;
 }
 
-export function CyberVault() {
+export function CyberVault({ position }: { position?: number }) {
   const ref = useRef<HTMLElement>(null);
   const [phase, setPhase] = useState(0);
   const [dialog, setDialog] = useState<"request" | "code" | null>(null);
@@ -117,7 +118,7 @@ export function CyberVault() {
       <section ref={ref} id="cybersecurity" className="cyber-vault" aria-labelledby="cyber-title">
         <div className="cyber-vault-sticky">
           <motion.div className="cyber-grid" style={prefersReducedMotion ? undefined : { y: gridY }} aria-hidden="true" />
-          <div className="cyber-vault-top"><span>CYBERSECURITY / RESTRICTED AREA</span><span>SECURITY BY DESIGN</span></div>
+          <div className="cyber-vault-top"><span>{position ? `${String(position).padStart(2, "0")} / ` : ""}CYBERSECURITY / RESTRICTED AREA</span><span>SECURITY BY DESIGN</span></div>
           <div className="cyber-vault-layout">
             <div className="cyber-phase-list" aria-label="Sicherheitsprinzipien">
               {phases.map((item, index) => <div className={phase === index ? "is-active" : ""} key={item.index}><span>{item.index}</span><strong>{item.label}</strong><i /></div>)}

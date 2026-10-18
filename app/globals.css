@@ -108,7 +108,7 @@ img { display: block; max-width: 100%; }
 .lux-case-detail { max-width: 31rem; margin: 2rem 0 0; color: rgba(239,235,228,.68); font-size: 1rem; line-height: 1.7; }
 .lux-case-facts { display: flex; flex-wrap: wrap; gap: .5rem 1.2rem; margin-top: 2rem; }
 .lux-case-facts span { color: rgba(239,235,228,.52); font-size: .72rem; }
-.lux-case-facts span::before { content: "—"; margin-right: .5rem; color: var(--bronze); }
+.lux-case-facts span::before { content: "·"; margin-right: .5rem; color: var(--bronze); }
 .lux-link { display: inline-flex; align-items: center; gap: .65rem; margin-top: 3rem; border-bottom: 1px solid rgba(239,235,228,.5); padding-bottom: .55rem; color: var(--paper); font-size: .84rem; }
 .lux-link svg { width: 1rem; transition: transform .3s ease; }
 .lux-link:hover svg { transform: translate(3px,-3px); }

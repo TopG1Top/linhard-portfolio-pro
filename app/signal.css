@@ -8,7 +8,7 @@
 .work-prelude-strip .work-link-signal { color: #b2e4ec; }
 .work-prelude-strip .work-link-signal > span { display: flex; gap: .8rem; align-items: center; }
 .work-link-signal small { font-size: .38rem; padding: .15rem .3rem; }
-.work-prelude-strip { grid-template-columns: repeat(10,minmax(0,1fr)); }
+.work-prelude-strip { grid-template-columns: repeat(11,minmax(0,1fr)); }
 .work-prelude-strip > a > span { min-height: .9rem; }
 .project-story .visual-signal { border-color: #8fd4e33b; background: #080f16; color: #acd9e2; box-shadow: 0 2rem 6rem #0008,0 0 4rem #5abbd10a; }
 .signal-topbar { min-height: 4.3rem; display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 1.5rem; border-bottom: 1px solid #a0d8e51f; background: #0a131c; }

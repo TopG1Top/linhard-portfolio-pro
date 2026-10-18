@@ -222,7 +222,7 @@ export default function SignalInstrument({ progress }: { progress: MotionValue<n
   return <div className={`project-instrument visual-signal signal-phase-${phase}`} aria-hidden="true">
     <div className="signal-topbar">
       <div className="signal-wordmark"><span className="signal-logowave">{[0, 1, 2, 3, 4].map(i => <i key={i} />)}</span>SIGNAL<span>.</span></div>
-      <div className="signal-channel"><i />EVENT INTELLIGENCE<span>OBSERVATORY / 08</span></div>
+      <div className="signal-channel"><i />EVENT INTELLIGENCE<span>OBSERVATORY / LZ</span></div>
     </div>
     <div className="signal-observatory">
       <SignalGlobe progress={progress} />

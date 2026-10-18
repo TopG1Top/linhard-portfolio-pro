@@ -1,7 +1,7 @@
 "use client";
 
 import { Section } from "@/components/section";
-import { projects } from "@/lib/projects";
+import { orderedProjects, projects } from "@/lib/projects";
 import { ProjectCard } from "@/components/project-card";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -20,7 +20,7 @@ export default function ProjectsPage() {
         index="02"
         eyebrow="Selected systems"
         title="Projekte mit echter Funktion, nicht nur Oberfläche."
-        description="Von Games und Live-Dashboards bis zu einer verschlüsselten Privacy-PWA — jedes Projekt zeigt eine andere Seite meines Engineerings."
+        description="Von Games und Live-Dashboards bis zu einer verschlüsselten Privacy-PWA, jedes Projekt zeigt eine andere Seite meines Engineerings."
       />
       <div className="flex flex-col gap-4 border-b pb-6 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-wrap items-center gap-3">
@@ -38,7 +38,7 @@ export default function ProjectsPage() {
       </div>
 
       <div className="project-grid mt-8 grid gap-6 md:grid-cols-2">
-        {projects.map((p, index) => (
+        {orderedProjects.map((p, index) => (
           <ProjectCard key={p.title} p={p} featured={index === 0} />
         ))}
       </div>

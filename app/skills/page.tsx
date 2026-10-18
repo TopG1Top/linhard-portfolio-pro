@@ -17,7 +17,7 @@ export default function SkillsPage() {
         index="04"
         eyebrow="Capabilities"
         title="Ein Stack, der Ideen in Produkte übersetzt."
-        description="Nicht möglichst viele Logos, sondern Werkzeuge, die zusammen funktionieren — vom ersten Interface bis zu Daten, Testing und Deployment."
+        description="Nicht möglichst viele Logos, sondern Werkzeuge, die zusammen funktionieren, vom ersten Interface bis zu Daten, Testing und Deployment."
       />
 
       <div className="overflow-hidden rounded-lg border bg-card/55">

@@ -6,7 +6,7 @@ const EXPERIENCE = [
   {
     role: "Applikationsentwickler EFZ · Berufsmaturität Wirtschaft",
     company: "Ausbildung",
-    period: "2023 — heute",
+    period: "2023 bis heute",
     points: [
       "OOP, Datenbanken, Netzwerke und moderne Webentwicklung in Theorie und Praxis",
       "Arbeit mit MySQL, MongoDB, CouchDB, JavaScript, TypeScript, PHP und Python",
@@ -16,7 +16,7 @@ const EXPERIENCE = [
   {
     role: "Eigene Produkte & Kundenlösungen",
     company: "Independent",
-    period: "2021 — heute",
+    period: "2021 bis heute",
     points: [
       "Web-Apps, Dashboards, PWA-Prototypen und interaktive Browser-Experiences",
       "Von UI-Konzept und Datenmodell bis Deployment, Domain und laufender Verbesserung",

@@ -15,7 +15,7 @@ function ActProgress({ progress, index }: { progress: MotionValue<number>; index
   return <span className="story-timeline-track"><motion.i style={{ scaleX: fill }} /></span>;
 }
 
-export function ProjectExperience({ project, index, total }: { project: Project; index: number; total: number }) {
+export function ProjectExperience({ project, index, position, total }: { project: Project; index: number; position: number; total: number }) {
   const section = useRef<HTMLElement>(null);
   const [act, setAct] = useState(0);
   const reduced = useReducedMotion();
@@ -38,7 +38,7 @@ export function ProjectExperience({ project, index, total }: { project: Project;
     <div className="story-sticky">
       <motion.div className="story-backdrop" style={reduced ? {} : { scale: imageScale, x: imageX, clipPath: aperture }}><img src={project.image.src} alt="" loading="lazy" decoding="async" /></motion.div>
       <div className="story-vignette" /><div className="story-hairline" aria-hidden="true" />
-      <header className="story-header"><a href="#selected" className="story-project-name"><span>{String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>{project.title}{project.title === "SIGNAL" && <small className="signal-new-label">NEU</small>}</a><span>{project.category} · {project.year}</span></header>
+      <header className="story-header"><a href="#selected" className="story-project-name"><span>{String(position).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>{project.title}{project.title === "SIGNAL" && <small className="signal-new-label">NEU</small>}</a><span>{project.category} · {project.year}</span></header>
       <div className="story-body">
         <div className="story-editorial">
           <div className="story-act-label"><span>0{act + 1}</span><i /><span>{actNames[act]}</span></div>

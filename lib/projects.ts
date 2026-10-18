@@ -61,7 +61,7 @@ export const projects: Project[] = [
     impact: "Versteckt einen vollständig lokalen, verschlüsselten Medien-Vault hinter einem echten, unauffälligen Rechner.",
     highlights: ["AES-GCM 256-bit & PBKDF2", "Auto-Lock, Alben & Favoriten", "Verschlüsselte .cvault-Backups"],
     blurb:
-      "Eine Local-first PWA mit doppelter Identität: Im Alltag ein vollwertiger Calculator, nach geheimer PIN-Eingabe ein privater Foto- und Video-Vault — ohne Cloud, Tracker oder Recovery-Backdoor.",
+      "Eine Local-first PWA mit doppelter Identität: Im Alltag ein vollwertiger Calculator, nach geheimer PIN-Eingabe ein privater Foto- und Video-Vault, ohne Cloud, Tracker oder Recovery-Backdoor.",
     tech: ["React", "TypeScript", "Web Crypto", "IndexedDB", "Dexie", "PWA"],
     status: "Private by design",
   },
@@ -76,7 +76,7 @@ export const projects: Project[] = [
     impact: "Macht Notenplanung konkret: Zielnote, Lernplan und Kalender-Export in einem Flow.",
     highlights: ["Was-wäre-wenn-Simulator", "Zielnote-Rechner", "ICS-Kalender-Export"],
     blurb:
-      "Gewichteter Noten-Ø (Schweizer Skala 1.0–6.0), Was-wäre-wenn-Simulator, Zielnote → benötigte nächste Note je Fach sowie Lernplan-Generator inkl. ICS-Kalender-Export.",
+      "Gewichteter Noten-Ø (Schweizer Skala 1.0 bis 6.0), Was-wäre-wenn-Simulator, Zielnote → benötigte nächste Note je Fach sowie Lernplan-Generator inkl. ICS-Kalender-Export.",
     tech: ["Python", "Streamlit", "Pandas", "ICS", "Docker"],
     github: "https://github.com/TopG1Top/noten-optimizer-pro",
   },
@@ -106,7 +106,7 @@ export const projects: Project[] = [
     impact: "Bringt Resultate und Torschützen schnell lesbar auf einen Screen für Fans und Staff.",
     highlights: ["1. Mannschaft & Junioren B1", "Resultat-Übersicht", "Fanfreundliche Darstellung"],
     blurb:
-      "Kleine Streamlit-App, die die Resultate und Torschützen (1. Mannschaft & Junioren B1) übersichtlich zeigt – ideal für Fans & Staff.",
+      "Kleine Streamlit-App, die die Resultate und Torschützen (1. Mannschaft & Junioren B1) übersichtlich zeigt, ideal für Fans & Staff.",
     tech: ["Python", "Streamlit"],
     github: "https://github.com/TopG1Top/fcbrugg-afv-app",
   },
@@ -121,7 +121,7 @@ export const projects: Project[] = [
     impact: "Zeigt Game-Feel im Browser: schnelle Loops, Effekte und saubere Canvas-Interaktion.",
     highlights: ["5-Level-Kampagne", "Boss & Endless-Modus", "Particles, Shake, Slow-Mo"],
     blurb:
-      "Arcade-Shooter im Browser: 5-Level-Kampagne + Boss, Endless-Modus, Perks, Partikeleffekte, Screen-Shake/Slow-Mo, Neon-Look – 100% clientseitig.",
+      "Arcade-Shooter im Browser: 5-Level-Kampagne + Boss, Endless-Modus, Perks, Partikeleffekte, Screen-Shake/Slow-Mo, Neon-Look, 100% clientseitig.",
     tech: ["JavaScript", "HTML5 Canvas", "CSS"],
     github: "https://github.com/TopG1Top/Shooterballgame",
   },
@@ -166,7 +166,7 @@ export const projects: Project[] = [
   },
 ]
 
-// Keep the established case-study anchors stable when adding a new project.
+// These indices identify the existing animation, scene and deep link, not display order.
 export const featuredProjects = [
   "Calc Private Vault",
   "CityPulse Control Room",
@@ -177,3 +177,23 @@ export const featuredProjects = [
   "Portfolio OS",
   "SIGNAL",
 ].flatMap(title => projects.filter(project => project.title === title));
+
+const showcaseOrder = [
+  { kind: "project", title: "Calc Private Vault", label: "Private Vault", index: 0, anchor: "project-1" },
+  { kind: "project", title: "SIGNAL", label: "SIGNAL", index: 7, anchor: "project-8" },
+  { kind: "private", title: "AEGIS Security Lab", label: "Kali Linux", index: 0, anchor: "private-1" },
+  { kind: "cybersecurity", title: "Cybersecurity", label: "Cybersecurity", index: 0, anchor: "cybersecurity" },
+  { kind: "project", title: "CityPulse Control Room", label: "CityPulse", index: 1, anchor: "project-2" },
+  { kind: "project", title: "Casino LUXE NOIR", label: "Luxe Noir", index: 2, anchor: "project-3" },
+  { kind: "project", title: "Noten-Optimizer Pro (CH)", label: "Grade Engine", index: 3, anchor: "project-4" },
+  { kind: "project", title: "ULTRAKRASS Shooterball (HTML5)", label: "Shooterball", index: 4, anchor: "project-5" },
+  { kind: "project", title: "FC Brugg AFV Ergebnisse & Torschützen", label: "FC Brugg", index: 5, anchor: "project-6" },
+  { kind: "project", title: "Portfolio OS", label: "Portfolio OS", index: 6, anchor: "project-7" },
+  { kind: "private", title: "NEXUS Application Platform", label: "NEXUS App", index: 1, anchor: "private-2" },
+] as const;
+
+export const showcaseEntries = showcaseOrder.map(entry => ({
+  ...entry,
+  project: projects.find(project => project.title === entry.title),
+}));
+export const orderedProjects = showcaseEntries.flatMap(entry => entry.project ? [entry.project] : []);
